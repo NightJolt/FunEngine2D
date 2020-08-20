@@ -2,24 +2,29 @@
 
 
 
-#define INIT_SCREEN_SIZE VideoMode(1712, 964)
-#define INIT_VIEW_SIZE Vector2f(1712, 964)
+#define INIT_SCREEN_SIZE sf::VideoMode(1712, 964)
+#define INIT_VIEW_SIZE sf::Vector2f(1712, 964)
 #define INIT_VIEW_ORIGIN Vector2f(0, 0)
 
 #define CHUNK_SIZE 16
 
-#define TILE_SIZE 30.f
+#define TILE_SIZE 8.f
 
 
 
 template <typename T>
-std::string to_string(const sf::Vector2<T>& a) {
+std::string to_string_unformatted(const sf::Vector2<T>& a) {
     return std::to_string(a.x) + ' ' + std::to_string(a.y);
 }
 
 template <typename T>
+std::string to_string(const sf::Vector2<T>& a) {
+    return "Vector2(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ")";
+}
+
+template <typename T>
 std::ostream& operator <<(std::ostream& out, const sf::Vector2<T>& a) {
-    return out << "Vector2(" << a.x << ", " << a.y << ")";
+    return out << to_string(a);
 }
 
 template <typename T>
@@ -28,7 +33,7 @@ sf::Vector2<T> operator *(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
 }
 
 template <typename T>
-sf::Vector2<T> operator *=(sf::Vector2<T>& a, const sf::Vector2<T>& b) {
+void operator *=(sf::Vector2<T>& a, const sf::Vector2<T>& b) {
     a = a * b;
 }
 
@@ -38,7 +43,7 @@ sf::Vector2<T> operator /(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
 }
 
 template <typename T>
-sf::Vector2<T> operator /=(sf::Vector2<T>& a, const sf::Vector2<T>& b) {
+void operator /=(sf::Vector2<T>& a, const sf::Vector2<T>& b) {
     a = a / b;
 }
 
@@ -48,7 +53,7 @@ sf::Vector2<T> operator +(const sf::Vector2<T>& a, const T& b) {
 }
 
 template <typename T>
-sf::Vector2<T> operator +=(sf::Vector2<T>& a, const T& b) {
+void operator +=(sf::Vector2<T>& a, const T& b) {
     a = a + b;
 }
 
@@ -58,8 +63,28 @@ sf::Vector2<T> operator -(const sf::Vector2<T>& a, const T& b) {
 }
 
 template <typename T>
-sf::Vector2<T> operator -=(sf::Vector2<T>& a, const T& b) {
+void operator -=(sf::Vector2<T>& a, const T& b) {
     a = a - b;
+}
+
+template <typename T>
+bool operator <(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
+    return a.x < b.x && a.y < b.y;
+}
+
+template <typename T>
+bool operator <=(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
+    return a.x <= b.x && a.y <= b.y;
+}
+
+template <typename T>
+bool operator >(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
+    return b < a;
+}
+
+template <typename T>
+bool operator >=(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
+    return b <= a;
 }
 
 template <class T>

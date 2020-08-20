@@ -11,6 +11,10 @@ void FTime::Recalculate() {
 }
 
 float FTime::DeltaTime() {
+    return delta_time / time_slow;
+}
+
+float FTime::UnscaledDeltaTime() {
     return delta_time;
 }
 

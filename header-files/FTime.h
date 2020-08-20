@@ -8,6 +8,7 @@ class FTime {
 public:
     static void Recalculate();
     static float DeltaTime();
+    static float UnscaledDeltaTime();
     static float TimeElapsed();
 
     static float time_slow;
