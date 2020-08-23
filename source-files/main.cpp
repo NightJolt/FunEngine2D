@@ -23,23 +23,20 @@ int main() {
 
     R::LoadResources();
 
-    Text key_a, key_b, key_c;
-    key_a.setFont(R::fonts[0]);
-    key_a.setCharacterSize(72);
-    key_a.setPosition(10, 10);
-    key_b.setFont(R::fonts[0]);
-    key_b.setCharacterSize(72);
-    key_b.setPosition(10, -40);
-    key_c.setFont(R::fonts[0]);
-    key_c.setCharacterSize(72);
-    key_c.setPosition(10, -90);
-
-    Sprite sp;
-    sp.setScale(2, 2);
-    sp.setTexture(R::textures[0]);
-    sp.setPosition(100, 100);
-
     View view(Vector2f(0, 0), Vector2f(1920, 1440));
+
+    RectangleShape r1;
+    r1.setPosition(Vector2f(-125, -150));
+    r1.setSize(Vector2f(250, 300));
+    r1.setFillColor(Color::Transparent);
+    r1.setOutlineColor(Color::Blue);
+    r1.setOutlineThickness(2);
+    Collider::Rect c1(Vector2f(0, 0), Vector2f(250, 300));
+
+    Vertex line[] = {
+            Vertex(Vector2f(-960.f, -720.f)),
+            Vertex(Vector2f(0, 0))
+    };
 
     while (window.isOpen()) {
         Input::Listen();
@@ -57,30 +54,42 @@ int main() {
         }
 
         view.move(Input::K2D(
-                Keyboard::Key::A,
-                Keyboard::Key::D,
-                Keyboard::Key::S,
-                Keyboard::Key::W
+            Keyboard::Key::A,
+            Keyboard::Key::D,
+            Keyboard::Key::S,
+            Keyboard::Key::W
         ) * .3f * view.getSize() * Vector2f(1, -1) * FTime::DeltaTime());
 
-        if (Input::Pressed(Keyboard::Space)) {
-            View v = window.getView();
-            v.zoom(2);
-            window.setView(v);
+        line[0].position += Input::K2D(
+                Keyboard::Key::J,
+                Keyboard::Key::L,
+                Keyboard::Key::K,
+                Keyboard::Key::I
+            ) * .3f * view.getSize() * Vector2f(1, -1) * FTime::DeltaTime();
+        line[1].position = Math::ScreenToWorld(sf::Mouse::getPosition(window), window);
+
+        if (Collider::RayVsRect(Collider::Ray(line[0].position, line[1].position - line[0].position), c1)) {
+             line[0].color = Color::Green;
+             line[1].color = Color::Green;
+        } else {
+            line[0].color = Color::Red;
+            line[1].color = Color::Red;
         }
 
-        key_a.setString(to_string(Mouse::getPosition(window)));
-        key_b.setString(to_string(Math::ScreenToWorld(Mouse::getPosition(window), window)));
-        key_c.setString(to_string(Math::WorldToScreen(Math::ScreenToWorld(Mouse::getPosition(window), window), window)));
+        Vertex aim_line[] = {
+                line[0],
+                line[1]
+        };
+
+        aim_line[0].color = aim_line[1].color = Color(255, 150, 0, 200);
+        aim_line[1].position = aim_line[0].position + Math::Direction(aim_line[0].position, aim_line[1].position) * 5000.f;
 
         window.setView(view);
         window.clear();
 
-        //ImGui::SFML::Render(window);
-        window.draw(key_a);
-        window.draw(key_b);
-        window.draw(key_c);
-        window.draw(sp);
+        window.draw(r1);
+        window.draw(aim_line, 2, Lines);
+        window.draw(line, 2, Lines);
 
         window.display();
     }
