@@ -8,7 +8,7 @@
 
 class Math {
 public:
-    static int Random(int, int);
+    static int Random(int, int); // TODO change to C++11 random
     static float Random(float, float);
     static bool RandPerc(const int&);
     static int Mod(const int&, const unsigned int&);

@@ -34,6 +34,7 @@ int main() {
     ParticleSystem particle_system(Vector2f(0, 0));
     particle_system.PushTexture(&R::textures[0], FloatRect(sf::Vector2f(0, 0), sf::Vector2f(914, 914)));
     particle_system.settings.gravity = sf::Vector2f(0, 10.f);
+    particle_system.settings.render_type = ParticleSystem::RenderType::Sprite;
 
     while (window.isOpen()) {
         Input::Listen();
@@ -64,7 +65,7 @@ int main() {
         }
 
         particle_system.SetPosition(Math::ScreenToWorld(sf::Mouse::getPosition(window), window));
-        particle_system.Emit(1);
+        particle_system.Emit(5);
 
         particle_system.Update();
 

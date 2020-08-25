@@ -11,8 +11,13 @@
 
 class ParticleSystem {
 public:
+    enum RenderType {
+        Pixel,
+        Sprite
+    };
+
     struct Settings {
-        Settings() : is_static(false), global_gravity_modifier(1), emitter_mass(0), particles_gravity(false), fade_over_time(true), gravity(sf::Vector2f(0, 0)) {}
+        Settings() : is_static(false), global_gravity_modifier(1), emitter_mass(0), particles_gravity(false), fade_over_time(true), gravity(sf::Vector2f(0, 0)), render_type(RenderType::Pixel) {}
 
         bool is_static;
         float global_gravity_modifier;
@@ -20,6 +25,8 @@ public:
         bool particles_gravity;
         bool fade_over_time;
         sf::Vector2f gravity;
+
+        RenderType render_type;
     };
 
     explicit ParticleSystem(sf::Vector2f = sf::Vector2f(0, 0));
@@ -42,12 +49,9 @@ public:
     void SetPosition(sf::Vector2f);
     void Move(sf::Vector2f);
     void PushTexture(sf::Texture*, sf::FloatRect);
-    void ClearTexture();
+    void PopTexture();
 
     Settings settings;
-
-    sf::Texture* texture;
-    std::vector <sf::FloatRect> texture_rects;
 
 private:
     void EmitPixels(int);
@@ -58,4 +62,7 @@ private:
 
     std::vector <Particle> particles;
     std::vector <sf::Vertex> vertices;
+
+    sf::Texture* texture;
+    std::vector <sf::FloatRect> texture_rects;
 };

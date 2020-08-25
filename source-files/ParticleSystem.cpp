@@ -5,7 +5,11 @@ ParticleSystem::ParticleSystem(sf::Vector2f p) : position(p), texture(nullptr) {
 ParticleSystem::~ParticleSystem() = default;
 
 void ParticleSystem::Draw(sf::RenderWindow& window) {
-    window.draw(&vertices[0], vertices.size(), texture ? sf::Quads : sf::Points, sf::RenderStates(texture));
+    if (settings.render_type == RenderType::Sprite) {
+        window.draw(&vertices[0], vertices.size(), sf::Quads, sf::RenderStates(texture));
+    } else {
+        window.draw(&vertices[0], vertices.size(), sf::Points);
+    }
 }
 
 void ParticleSystem::Update() {
@@ -48,7 +52,7 @@ void ParticleSystem::Update() {
 }
 
 void ParticleSystem::Emit(int count) {
-    if (texture) {
+    if (settings.render_type == RenderType::Sprite) {
         EmitSprites(count);
     } else {
         EmitPixels(count);
@@ -122,7 +126,7 @@ void ParticleSystem::PushTexture(sf::Texture* t, sf::FloatRect texture_rect) {
     texture_rects.push_back(texture_rect);
 }
 
-void ParticleSystem::ClearTexture() {
+void ParticleSystem::PopTexture() {
     texture = nullptr;
     texture_rects.clear();
 }
