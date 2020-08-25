@@ -2,8 +2,8 @@
 
 
 
-#define INIT_SCREEN_SIZE sf::VideoMode(1712, 964)
-#define INIT_VIEW_SIZE sf::Vector2f(1712, 964)
+#define INIT_SCREEN_SIZE sf::VideoMode(1920, 1440)
+#define INIT_VIEW_SIZE sf::Vector2f(1920, 1440)
 #define INIT_VIEW_ORIGIN Vector2f(0, 0)
 
 #define CHUNK_SIZE 16

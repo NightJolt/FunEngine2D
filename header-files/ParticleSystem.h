@@ -11,26 +11,22 @@
 
 class ParticleSystem {
 public:
-    enum RenderType {
-        Pixel,
-        Sprite
-    };
-
     struct Settings {
-        Settings() : GlobalGravityModifier(1), EmitterMass(0), ParticlesGravity(false), fade_over_time(true) {}
+        Settings() : is_static(false), global_gravity_modifier(1), emitter_mass(0), particles_gravity(false), fade_over_time(true), gravity(sf::Vector2f(0, 0)) {}
 
-        float GlobalGravityModifier;
-        float EmitterMass;
-        bool ParticlesGravity;
-
+        bool is_static;
+        float global_gravity_modifier;
+        float emitter_mass;
+        bool particles_gravity;
         bool fade_over_time;
+        sf::Vector2f gravity;
     };
 
     explicit ParticleSystem(sf::Vector2f = sf::Vector2f(0, 0));
     ~ParticleSystem();
 
     struct Particle {
-        Particle() : lifetime(0), velocity(sf::Vector2f(0, 0)), mass(1) {}
+        Particle() : lifetime(0), init_lifetime(0), velocity(sf::Vector2f(0, 0)), mass(1) {}
         ~Particle() = default;
 
         float lifetime;
@@ -43,10 +39,19 @@ public:
     void Update();
     void Emit(int);
     int Count();
+    void SetPosition(sf::Vector2f);
+    void Move(sf::Vector2f);
+    void PushTexture(sf::Texture*, sf::FloatRect);
+    void ClearTexture();
 
     Settings settings;
 
+    sf::Texture* texture;
+    std::vector <sf::FloatRect> texture_rects;
+
 private:
+    void EmitPixels(int);
+    void EmitSprites(int);
 
     sf::Clock time_elapsed;
     sf::Vector2f position;
