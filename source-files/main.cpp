@@ -8,6 +8,7 @@
 #include "R.h"
 #include "FTime.h"
 #include "Collider.h"
+#include "ParticleSystem.h"
 
 #include <iostream>
 
@@ -25,18 +26,12 @@ int main() {
 
     View view(Vector2f(0, 0), Vector2f(1920, 1440));
 
-    RectangleShape r1;
-    r1.setPosition(Vector2f(-125, -150));
-    r1.setSize(Vector2f(250, 300));
-    r1.setFillColor(Color::Transparent);
-    r1.setOutlineColor(Color::Blue);
-    r1.setOutlineThickness(2);
-    Collider::Rect c1(Vector2f(0, 0), Vector2f(250, 300));
+    ParticleSystem particle_system(Vector2f(0, 0));
 
-    Vertex line[] = {
-            Vertex(Vector2f(-960.f, -720.f)),
-            Vertex(Vector2f(0, 0))
-    };
+    Text fps_display;
+    fps_display.setFont(R::fonts[0]);
+    fps_display.setCharacterSize(24);
+    fps_display.setPosition(-700, -600);
 
     while (window.isOpen()) {
         Input::Listen();
@@ -53,43 +48,24 @@ int main() {
             }
         }
 
-        view.move(Input::K2D(
-            Keyboard::Key::A,
-            Keyboard::Key::D,
-            Keyboard::Key::S,
-            Keyboard::Key::W
-        ) * .3f * view.getSize() * Vector2f(1, -1) * FTime::DeltaTime());
+        view.move(Input::K2D() * .3f * view.getSize() * Vector2f(1, -1) * FTime::DeltaTime());
+        view.move(Input::J2D() * .3f * view.getSize() * FTime::DeltaTime());
 
-        line[0].position += Input::K2D(
-                Keyboard::Key::J,
-                Keyboard::Key::L,
-                Keyboard::Key::K,
-                Keyboard::Key::I
-            ) * .3f * view.getSize() * Vector2f(1, -1) * FTime::DeltaTime();
-        line[1].position = Math::ScreenToWorld(sf::Mouse::getPosition(window), window);
+        fps_display.setString(to_string((int)FTime::FPS()) + " " + to_string(particle_system.Count()) + " " + to_string(particle_system.settings.EmitterMass));
 
-        if (Collider::RayVsRect(Collider::Ray(line[0].position, line[1].position - line[0].position), c1)) {
-             line[0].color = Color::Green;
-             line[1].color = Color::Green;
-        } else {
-            line[0].color = Color::Red;
-            line[1].color = Color::Red;
+        if (Input::Hold(Keyboard::Space)) {
+            particle_system.Emit(100);
         }
 
-        Vertex aim_line[] = {
-                line[0],
-                line[1]
-        };
+        particle_system.Emit(5);
 
-        aim_line[0].color = aim_line[1].color = Color(255, 150, 0, 200);
-        aim_line[1].position = aim_line[0].position + Math::Direction(aim_line[0].position, aim_line[1].position) * 5000.f;
+        particle_system.Update();
 
         window.setView(view);
         window.clear();
 
-        window.draw(r1);
-        window.draw(aim_line, 2, Lines);
-        window.draw(line, 2, Lines);
+        window.draw(fps_display);
+        particle_system.Draw(window);
 
         window.display();
     }

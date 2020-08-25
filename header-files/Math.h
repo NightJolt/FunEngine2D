@@ -8,6 +8,8 @@
 
 class Math {
 public:
+    static int Random(int, int);
+    static float Random(float, float);
     static bool RandPerc(const int&);
     static int Mod(const int&, const unsigned int&);
     static float MapValue(const float&, const float&, const float&, const float&, const float&);
@@ -20,6 +22,9 @@ public:
     static sf::Vector2f GridToWorld(const sf::Vector2i&);
     static sf::Vector2i GridToChunk(const sf::Vector2i&);
     static sf::Vector2i GridToTile(const sf::Vector2i&);
+
+    static sf::Vector2f GravitationalAcceleration(sf::Vector2f, sf::Vector2f, float);
+    static sf::Vector2f GravitationalPull(sf::Vector2f, float, sf::Vector2f, float);
 
     template <class T>
     static T Min(const sf::Vector2<T>& a) {
@@ -58,6 +63,16 @@ public:
 
     template <class T>
     static sf::Vector2<T> Lerp(const sf::Vector2<T>& a, const sf::Vector2<T>& b, const float& v) {
-        return Vector2<T>(Lerp(a.x, b.x, v), Lerp(a.y, b.y, v));
+        return sf::Vector2<T>(Lerp(a.x, b.x, v), Lerp(a.y, b.y, v));
+    }
+
+    template <class T>
+    static T Clamp(const T& v, const T& a, const float& b) {
+        return v < a ? a : v > b ? b : v;
+    }
+
+    template <class T>
+    static bool InBounds(const T& a, const sf::Vector2<T>& b) {
+        return a >= b.x && a <= b.y;
     }
 };

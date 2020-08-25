@@ -2,8 +2,16 @@
 
 #include <cmath>
 
+int Math::Random(int a, int b) {
+    return rand() % (b - a) + a;
+}
+
+float Math::Random(float, float) {
+    return 0;
+}
+
 bool Math::RandPerc(const int& chance) {
-    return rand() % 100 + 1 <= chance;
+    return Random(1, 100) <= chance;
 }
 
 int Math::Mod(const int& a, const unsigned int& m) {
@@ -68,4 +76,16 @@ sf::Vector2i Math::GridToChunk(const sf::Vector2i& p) {
 
 sf::Vector2i Math::GridToTile(const sf::Vector2i& p) {
     return sf::Vector2i(Math::Mod(p.x, CHUNK_SIZE), Math::Mod(p.y, CHUNK_SIZE));
+}
+
+
+
+sf::Vector2f Math::GravitationalAcceleration(sf::Vector2f p1, sf::Vector2f p2, float m2) {
+    sf::Vector2f segment = p2 - p1;
+
+    return Normalize(segment) * m2 / Scalar(segment, segment);
+}
+
+sf::Vector2f Math::GravitationalPull(sf::Vector2f p1, float m1, sf::Vector2f p2, float m2) {
+    return GravitationalAcceleration(p1, p2, m2) * m1;
 }

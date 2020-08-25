@@ -1,5 +1,17 @@
 #include "Collider.h"
 
+const sf::Vector2f Collider::ContactDirVal[] = {
+        sf::Vector2f(0, -1),
+        sf::Vector2f(1, 0),
+        sf::Vector2f(0, 1),
+        sf::Vector2f(-1, 0),
+        sf::Vector2f(0, 0),
+};
+
+Collider::ContactDir Collider::GetContactDir(sf::Vector2f t, sf::Vector2f d) {
+    return t.x > t.y ? d.x < 0 ? ContactDir::Right : ContactDir::Left : d.y < 0 ? ContactDir::Up : ContactDir::Down;
+}
+
 bool Collider::PointVsCircle(const sf::Vector2f& p, const Circle& c) {
     return Math::Distance(sf::Vector2f(1, 1), sf::Vector2f(2, 2)) <= c.radius;
 }
@@ -16,50 +28,56 @@ bool Collider::RectVsRect(const Rect& r1, const Rect& r2) {
     return (r1.center - r1.size * .5f) < (r2.center + r2.size * .5f) && (r1.center + r1.size * .5f) > (r2.center - r2.size * .5f);
 }
 
-bool Collider::LinearVsRect(const Collider::Line& line, const Collider::Rect& rect, float& t1, float& t2) {
-    sf::Vector2f dir = line.end - line.start;
+Collider::Collision Collider::LinearVsRect(const Collider::Line& line, const Collider::Rect& rect) {
+    Collision collision;//(t_n.x < t_f.y && t_n.y < t_f.x, Math::Max(t_n), Math::Min(t_f));
 
-    sf::Vector2f t_n = (rect.center - rect.size * .5f - line.start) / dir;
-    sf::Vector2f t_f = (rect.center + rect.size * .5f - line.start) / dir;
+    sf::Vector2f directed_segment = line.end - line.start;
+
+    sf::Vector2f t_n = (rect.center - rect.size * .5f - line.start) / directed_segment;
+    sf::Vector2f t_f = (rect.center + rect.size * .5f - line.start) / directed_segment;
 
     if (t_n.x > t_f.x) std::swap(t_n.x, t_f.x);
     if (t_n.y > t_f.y) std::swap(t_n.y, t_f.y);
 
-    t1 = Math::Max(t_n);
-    t2 = Math::Min(t_f);
+    collision.result = t_n.x < t_f.y && t_n.y < t_f.x;
+    collision.near_t = Math::Max(t_n);
+    collision.far_t = Math::Min(t_f);
+    collision.near_p = Math::Lerp(line.start, line.end, collision.near_t);
+    collision.far_p = Math::Lerp(line.start, line.end, collision.far_t);
+    collision.near_contact_direction = GetContactDir(t_n, directed_segment);
+    collision.near_contact_direction = GetContactDir(t_f, directed_segment);
 
-    return t_n.x < t_f.y && t_n.y < t_f.x;
+
+    return collision;
 }
 
-bool Collider::LineVsRect(const Collider::Line& line, const Collider::Rect& rect, float* t_n, float* t_f) {
-    bool d_t_n = t_n, d_t_f = t_f;
+Collider::Collision Collider::LineVsRect(const Collider::Line& line, const Collider::Rect& rect) {
+    Collision linear_collision = LinearVsRect(line, rect);
+    sf::Vector2f bounds(0, 1);
 
-    if (!d_t_n) t_n = new float;
-    if (!d_t_f) t_f = new float;
+    linear_collision.result = linear_collision && (Math::InBounds(linear_collision.near_t, bounds) || Math::InBounds(linear_collision.far_t, bounds));
 
-    if (!LinearVsRect(line, rect, *t_n, *t_f)) return false;
-
-    bool result = (*t_n >= 0 && *t_n <= 1) || (*t_f >= 0 && *t_f <= 1);
-
-    if (!d_t_n) delete t_n;
-    if (!d_t_f) delete t_f;
-
-    return result;
+    return linear_collision;
 }
 
 
-bool Collider::RayVsRect(const Collider::Ray& ray, const Collider::Rect& rect, float* t_n, float* t_f) {
-    bool d_t_n = t_n, d_t_f = t_f;
+Collider::Collision Collider::RayVsRect(const Collider::Ray& ray, const Collider::Rect& rect) {
+    Collision linear_collision = LinearVsRect(Collider::Line(ray.start, ray.start + ray.dir), rect);
 
-    if (!d_t_n) t_n = new float;
-    if (!d_t_f) t_f = new float;
+    linear_collision.result = linear_collision && (linear_collision.near_t >= 0 || linear_collision.far_t >= 0);
 
-    if (!LinearVsRect(Collider::Line(ray.start, ray.start + ray.dir), rect, *t_n, *t_f)) return false;
+    return linear_collision;
+}
 
-    bool result = *t_n >= 0 || *t_f >= 0;
+Collider::Collision Collider::DynamicRectVsRect(const Collider::Rect& r1, const Collider::Rect& r2) {
+    Collision dynamic_collision;
 
-    if (!d_t_n) delete t_n;
-    if (!d_t_f) delete t_f;
+    if (!r1.vel.x && !r1.vel.y) return dynamic_collision;
 
-    return result;
+    Rect expanded_r2 = r2;
+    expanded_r2.size += r1.size;
+
+    dynamic_collision = LineVsRect(Line(r1.center, r1.vel), expanded_r2);
+
+    return dynamic_collision;
 }
