@@ -31,10 +31,10 @@ int main() {
     fps_display.setCharacterSize(24);
     fps_display.setPosition(-700, -600);
 
-    ParticleSystem particle_system(Vector2f(0, 0));
-    particle_system.PushTexture(&R::textures[0], FloatRect(sf::Vector2f(0, 0), sf::Vector2f(914, 914)));
-    particle_system.settings.gravity = sf::Vector2f(0, 10.f);
-    particle_system.settings.render_type = ParticleSystem::RenderType::Sprite;
+    ParticleSystem particle_system(ParticleSystem::Sprite, ParticleSystem::Loop, 10, 0.5f);
+    particle_system.PushTexture(&R::textures[0]);
+    particle_system.PushTextureRect(FloatRect(sf::Vector2f(0, 0), sf::Vector2f(900, 900)));
+    particle_system.settings.emission_radius = 100.f;
 
     while (window.isOpen()) {
         Input::Listen();
@@ -54,18 +54,7 @@ int main() {
         view.move(Input::K2D() * .3f * view.getSize() * Vector2f(1, -1) * FTime::DeltaTime());
         view.move(Input::J2D() * .3f * view.getSize() * FTime::DeltaTime());
 
-        fps_display.setString(to_string((int)FTime::FPS()) + " " + to_string(particle_system.Count()));
-
-        if (Input::Hold(Keyboard::Space)) {
-            particle_system.Emit(100);
-        }
-
-        if (Input::Pressed(Keyboard::G)) {
-            particle_system.settings.is_static = !particle_system.settings.is_static;
-        }
-
-        particle_system.SetPosition(Math::ScreenToWorld(sf::Mouse::getPosition(window), window));
-        particle_system.Emit(5);
+        fps_display.setString(to_string((int)FTime::FPS())/* + " " + to_string(particle_system.Count())*/);
 
         particle_system.Update();
 

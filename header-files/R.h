@@ -11,7 +11,7 @@ public:
 
     static std::vector <sf::Texture> textures;
     static std::vector <sf::Font> fonts;
-    //static std::vector <sf::Shader> shaders;
+    static std::vector <sf::Shader*> shaders;
 
     // audio
     // lua scripts
@@ -19,7 +19,7 @@ public:
 private:
     static const std::string textures_to_load[];
     static const std::string fonts_to_load[];
-    //static const std::string shaders_to_load[];
+    static const std::string shaders_to_load[];
 
     static const std::string resources_directory;
     static const std::string textures_directory;

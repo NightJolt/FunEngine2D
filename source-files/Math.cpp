@@ -6,8 +6,8 @@ int Math::Random(int a, int b) {
     return rand() % (b - a) + a;
 }
 
-float Math::Random(float, float) {
-    return 0;
+float Math::Random(float a, float b) {
+    return Random((int)a, (int)b); // temp;
 }
 
 bool Math::RandPerc(const int& chance) {

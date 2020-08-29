@@ -12,6 +12,20 @@
 
 
 
+
+struct UniqueKey {
+    UniqueKey(void* p, std::string k) : ptr(p), key(k) {}
+
+    void* ptr;
+    std::string key;
+
+    bool operator <(const UniqueKey& u_k) const {
+        return key < u_k.key;
+    }
+};
+
+
+
 template <typename T>
 std::string to_string_unformatted(const sf::Vector2<T>& a) {
     return std::to_string(a.x) + ' ' + std::to_string(a.y);

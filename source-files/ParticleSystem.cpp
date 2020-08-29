@@ -1,66 +1,139 @@
 #include "ParticleSystem.h"
 
-ParticleSystem::ParticleSystem(sf::Vector2f p) : position(p), texture(nullptr) {}
-
-ParticleSystem::~ParticleSystem() = default;
+ParticleSystem::ParticleSystem(ParticleSystem::RenderType rt, ParticleSystem::EmissionType et, int c, float t) :
+position(sf::Vector2f(0, 0)),
+texture(nullptr),
+left_to_emit(c),
+emission_delay(t),
+render_type(rt),
+emission_type(et)
+{}
 
 void ParticleSystem::Draw(sf::RenderWindow& window) {
-    if (settings.render_type == RenderType::Sprite) {
-        window.draw(&vertices[0], vertices.size(), sf::Quads, sf::RenderStates(texture));
-    } else {
+    if (render_type == RenderType::Pixel) {
         window.draw(&vertices[0], vertices.size(), sf::Points);
+    } else {
+        window.draw(&vertices[0], vertices.size(), sf::Quads, sf::RenderStates(texture));
     }
 }
 
 void ParticleSystem::Update() {
-    for (int i = 0; i < Count(); i++) {
-        particles[i].lifetime -= FTime::DeltaTime();
+    if (left_to_emit > 0) {
+        if (emission_current_delay <= 0) {
+            Emit();
 
-        if (particles[i].lifetime <= 0) {
-            particles.erase(particles.begin() + i);
-            vertices.erase(vertices.begin() + i);
-
-            i--;
+            left_to_emit--;
+            emission_current_delay = emission_delay;
+        } else {
+            emission_current_delay -= FTime::DeltaTime();
         }
     }
 
-    if (!settings.is_static) {
-        for (int i = 0; i < Count(); i++) {
-            if (settings.emitter_mass) {
-                particles[i].velocity += Math::GravitationalAcceleration(vertices[i].position, position, settings.emitter_mass) * settings.global_gravity_modifier * FTime::DeltaTime();
-            }
+    for (int i = 0; i < particles.size(); i++) {
+        if (particles[i].lifetime > 0) {
+            particles[i].lifetime -= FTime::DeltaTime();
 
-            if (settings.particles_gravity) {
-                for (int j = 0; j < Count(); j++) {
-                    if (i != j) {
-                        particles[i].velocity += Math::GravitationalAcceleration(vertices[i].position, vertices[j].position, particles[j].mass) * settings.global_gravity_modifier * FTime::DeltaTime();
-                    }
+            if (particles[i].lifetime < 0) {
+                if (emission_type == EmissionType::Single) {
+                    vertices[i].color = sf::Color::Transparent;
+                } else {
+                    Revive(i);
                 }
-            }
 
-            particles[i].velocity += settings.gravity * FTime::DeltaTime();
-
-            if (settings.fade_over_time) {
-                vertices[i].color.a = Math::MapValue(particles[i].lifetime, 0, particles[i].init_lifetime, 0, 255);
+                if (render_type == RenderType::Sprite) i += 3;
             }
         }
+    }
 
-        for (int i = 0; i < Count(); i++) {
+    for (int i = 0; i < particles.size(); i++) {
+        if (particles[i].lifetime > 0 && settings.fade_over_time) {
+            vertices[i].color.a = Math::MapValue(particles[i].lifetime, 0, particles[i].init_lifetime, 0, 255);
+        }
+    }
+
+    for (int i = 0; i < particles.size(); i++) {
+        if (particles[i].lifetime > 0) {
             vertices[i].position += particles[i].velocity * FTime::DeltaTime();
         }
     }
 }
 
-void ParticleSystem::Emit(int count) {
-    if (settings.render_type == RenderType::Sprite) {
-        EmitSprites(count);
+void ParticleSystem::Revive(int i) {
+    sf::Vector2f rand_velocity = Math::Normalize(sf::Vector2f((float)Math::Random(-100, 100), (float)Math::Random(-100, -50))) * (float)Math::Random(50, 100);
+    float rand_mass = Math::Random(settings.particle_mass.x, settings.particle_mass.y);
+
+    sf::Vector2f n_position;
+    if (settings.emission_radius != 0)
+        n_position = position + Math::Normalize(sf::Vector2f((float)Math::Random(-100, 100), (float)Math::Random(-100, 100))) * settings.emission_radius;
+    else
+        n_position = position;
+
+    if (render_type == RenderType::Pixel) {
+        particles[i].lifetime = particles[i].init_lifetime;
+        particles[i].mass = rand_mass;
+        particles[i].velocity = rand_velocity;
+
+        vertices[i].position = n_position;
     } else {
-        EmitPixels(count);
+        sf::FloatRect rand_texture = texture_rects[Math::Random(0, texture_rects.size())];
+        float rand_size = Math::Random(settings.sprite_size.x, settings.sprite_size.y);
+
+        for (int j = i; j < i + 4; j++) {
+            particles[j].lifetime = particles[i].init_lifetime;
+            particles[j].mass = rand_mass;
+            particles[j].velocity = rand_velocity;
+        }
+
+        vertices[i].position = n_position + sf::Vector2f(-rand_size, -rand_size) * .5f;
+        vertices[i].texCoords = sf::Vector2f(rand_texture.left, rand_texture.top);
+
+        vertices[i + 1].position = n_position + sf::Vector2f(rand_size, -rand_size) * .5f;
+        vertices[i + 1].texCoords = sf::Vector2f(rand_texture.left + rand_texture.width, rand_texture.top);
+
+        vertices[i + 2].position = n_position + sf::Vector2f(rand_size, rand_size) * .5f;
+        vertices[i + 2].texCoords = sf::Vector2f(rand_texture.left + rand_texture.width, rand_texture.top + rand_texture.height);
+
+        vertices[i + 3].position = n_position + sf::Vector2f(-rand_size, rand_size) * .5f;
+        vertices[i + 3].texCoords = sf::Vector2f(rand_texture.left, rand_texture.top + rand_texture.height);
     }
 }
 
-int ParticleSystem::Count() {
-    return particles.size();
+void ParticleSystem::Emit() {
+    float random_lifetime = Math::Random(settings.particle_lifetime.x, settings.particle_lifetime.y);
+
+    if (render_type == RenderType::Pixel) {
+        Particle particle(random_lifetime);
+        particles.push_back(particle);
+
+        sf::Vertex vertex(position, sf::Color(Math::Random(0, 256), Math::Random(0, 256), Math::Random(0, 256)));
+        vertices.push_back(vertex);
+
+        Revive(particles.size() - 1);
+    } else {
+        Particle particle(random_lifetime);
+
+        particles.push_back(particle);
+        particles.push_back(particle);
+        particles.push_back(particle);
+        particles.push_back(particle);
+
+        sf::Vertex vertex;
+
+        vertices.push_back(vertex);
+        vertices.push_back(vertex);
+        vertices.push_back(vertex);
+        vertices.push_back(vertex);
+
+        Revive(particles.size() - 4);
+    }
+}
+
+void ParticleSystem::PushTexture(sf::Texture* t) {
+    texture = t;
+}
+
+void ParticleSystem::PushTextureRect(sf::FloatRect texture_rect) {
+    texture_rects.push_back(texture_rect);
 }
 
 void ParticleSystem::SetPosition(sf::Vector2f p) {
@@ -69,64 +142,4 @@ void ParticleSystem::SetPosition(sf::Vector2f p) {
 
 void ParticleSystem::Move(sf::Vector2f p) {
     SetPosition(position + p);
-}
-
-void ParticleSystem::EmitPixels(int count) {
-    for (int i = 0; i < count; i++) {
-        Particle particle;
-        particle.lifetime = particle.init_lifetime = Math::Random(3, 10);;
-        particle.velocity = Math::Normalize(sf::Vector2f((float)Math::Random(-100, 100), (float)Math::Random(-100, 100))) * (float)Math::Random(5, 10);
-        particle.mass = Math::Random(1, 20);
-        particles.push_back(particle);
-
-        sf::Vertex vertex(position, sf::Color(Math::Random(0, 256), Math::Random(0, 256), Math::Random(0, 256)));
-        vertices.push_back(vertex);
-    }
-}
-
-void ParticleSystem::EmitSprites(int count) {
-    for (int i = 0; i < count; i++) {
-        sf::FloatRect rand_texture = texture_rects[Math::Random(0, texture_rects.size())];
-        float rand_lifetime = Math::Random(3, 10);
-        sf::Vector2f rand_velocity = Math::Normalize(sf::Vector2f((float)Math::Random(-100, 100), (float)Math::Random(-100, 100))) * (float)Math::Random(5, 10);
-        float rand_mass = Math::Random(1, 20);
-
-        for (int j = 0; j < 4; j++) {
-            Particle particle;
-            particle.lifetime = particle.init_lifetime = rand_lifetime;
-            particle.velocity = rand_velocity;
-            particle.mass = rand_mass;
-            particles.push_back(particle);
-        }
-
-        float rand_size = Math::Random(4, 8);
-
-        sf::Vertex vertex;
-
-        vertex.position = position + sf::Vector2f(-rand_size, -rand_size) * .5f;
-        vertex.texCoords = sf::Vector2f(rand_texture.left, rand_texture.top);
-        vertices.push_back(vertex);
-
-        vertex.position = position + sf::Vector2f(rand_size, -rand_size) * .5f;
-        vertex.texCoords = sf::Vector2f(rand_texture.left + rand_texture.width, rand_texture.top);
-        vertices.push_back(vertex);
-
-        vertex.position = position + sf::Vector2f(rand_size, rand_size) * .5f;
-        vertex.texCoords = sf::Vector2f(rand_texture.left + rand_texture.width, rand_texture.top + rand_texture.height);
-        vertices.push_back(vertex);
-
-        vertex.position = position + sf::Vector2f(-rand_size, rand_size) * .5f;
-        vertex.texCoords = sf::Vector2f(rand_texture.left, rand_texture.top + rand_texture.height);
-        vertices.push_back(vertex);
-    }
-}
-
-void ParticleSystem::PushTexture(sf::Texture* t, sf::FloatRect texture_rect) {
-    texture = t;
-    texture_rects.push_back(texture_rect);
-}
-
-void ParticleSystem::PopTexture() {
-    texture = nullptr;
-    texture_rects.clear();
 }

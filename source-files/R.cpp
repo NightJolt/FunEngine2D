@@ -15,20 +15,33 @@ const std::string R::fonts_to_load[] = {
         "andy_bold.ttf"
 };
 
+std::vector <sf::Shader*> R::shaders = std::vector <sf::Shader*> ();
+const std::string R::shaders_to_load[] = {
+        "test"
+};
+
 void R::LoadResources() {
     for (const auto& texture_path : textures_to_load) {
-        sf::Texture* c_texture = &textures.emplace_back(sf::Texture());
+        sf::Texture* texture = &textures.emplace_back(sf::Texture());
 
-        if (!c_texture->loadFromFile(textures_directory + texture_path)) {
+        if (!texture->loadFromFile(textures_directory + texture_path)) {
             textures.pop_back();
         }
     }
 
     for (const auto& font_path : fonts_to_load) {
-        sf::Font* c_font = &fonts.emplace_back(sf::Font());
+        sf::Font* font = &fonts.emplace_back(sf::Font());
 
-        if (!c_font->loadFromFile(fonts_directory + font_path)) {
+        if (!font->loadFromFile(fonts_directory + font_path)) {
             fonts.pop_back();
+        }
+    }
+
+    for (const auto& shader_path : shaders_to_load) {
+        sf::Shader* shader = shaders.emplace_back(new sf::Shader());
+
+        if (!shader->loadFromFile(shaders_directory + shader_path + ".vert", shaders_directory + shader_path + ".frag")) {
+            shaders.pop_back();
         }
     }
 }

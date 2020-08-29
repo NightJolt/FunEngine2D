@@ -2,8 +2,6 @@
 
 #include "SFML/Graphics.hpp"
 
-#include <vector>
-
 #include "Math.h"
 #include "FTime.h"
 
@@ -11,30 +9,33 @@
 
 class ParticleSystem {
 public:
-    enum RenderType {
-        Pixel,
-        Sprite
-    };
+    enum RenderType { Pixel, Sprite };
+    enum EmissionType { Single, Loop };
 
     struct Settings {
-        Settings() : is_static(false), global_gravity_modifier(1), emitter_mass(0), particles_gravity(false), fade_over_time(true), gravity(sf::Vector2f(0, 0)), render_type(RenderType::Pixel) {}
+        Settings() :
+        particle_lifetime(sf::Vector2f(2, 5)),
+        particle_mass(sf::Vector2f(2, 5)),
+        sprite_size(sf::Vector2f(30, 50)),
+        emission_radius(0),
+        gravity(sf::Vector2f(0, 0)),
+        fade_over_time(true)
+        {}
 
-        bool is_static;
-        float global_gravity_modifier;
-        float emitter_mass;
-        bool particles_gravity;
-        bool fade_over_time;
+        sf::Vector2f particle_lifetime;
+        sf::Vector2f particle_mass;
+        sf::Vector2f sprite_size;
+        float emission_radius;
+
+        sf::Vector2f position;
         sf::Vector2f gravity;
-
-        RenderType render_type;
+        bool fade_over_time;
     };
 
-    explicit ParticleSystem(sf::Vector2f = sf::Vector2f(0, 0));
-    ~ParticleSystem();
+    explicit ParticleSystem(RenderType, EmissionType, int, float);
 
     struct Particle {
-        Particle() : lifetime(0), init_lifetime(0), velocity(sf::Vector2f(0, 0)), mass(1) {}
-        ~Particle() = default;
+        explicit Particle(float t, sf::Vector2f v = sf::Vector2f(0, 0), float m = 1) : velocity(v), mass(m), init_lifetime(t) {}
 
         float lifetime;
         float init_lifetime;
@@ -44,21 +45,27 @@ public:
 
     void Draw(sf::RenderWindow&);
     void Update();
-    void Emit(int);
-    int Count();
+
+    void PushTexture(sf::Texture*);
+    void PushTextureRect(sf::FloatRect);
+
     void SetPosition(sf::Vector2f);
     void Move(sf::Vector2f);
-    void PushTexture(sf::Texture*, sf::FloatRect);
-    void PopTexture();
 
     Settings settings;
 
 private:
-    void EmitPixels(int);
-    void EmitSprites(int);
+    void Revive(int);
+    void Emit();
 
-    sf::Clock time_elapsed;
+    int left_to_emit;
+    float emission_delay;
+    float emission_current_delay;
+
     sf::Vector2f position;
+
+    RenderType render_type;
+    EmissionType emission_type;
 
     std::vector <Particle> particles;
     std::vector <sf::Vertex> vertices;
