@@ -14,10 +14,10 @@
  * # N/A or already defined
  *          Point    Line     Ray    Circle    Rect
  * Point     -/-     -/-      -/-     +/-      +/-
- * Line       #      -/-      -/-     -/-      +/-
+ * Line       #      +/-      -/-     -/-      +/-
  * Ray        #       #       -/-     -/-      +/-
  * Circle     #       #        #      +/-      -/-
- * Rect       #       #        #       #       +/^
+ * Rect       #       #        #       #       +/+
  */
 
 class Collider {
@@ -77,6 +77,7 @@ public:
     static bool CircleVsCircle(const Circle&, const Circle&);
     static bool PointVsRect(const sf::Vector2f&, const Rect&);
     static bool RectVsRect(const Rect&, const Rect&);
+    static Collision LineVsLine(const Line&, const Line&);
     static Collision LineVsRect(const Line&, const Rect&);
     static Collision RayVsRect(const Ray&, const Rect&);
 

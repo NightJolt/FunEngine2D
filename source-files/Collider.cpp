@@ -81,3 +81,25 @@ Collider::Collision Collider::DynamicRectVsRect(const Collider::Rect& r1, const 
 
     return dynamic_collision;
 }
+
+Collider::Collision Collider::LineVsLine(const Collider::Line& a, const Collider::Line& b) {
+    Collision collision;
+
+    float x1_x3 = a.start.x - b.start.x;
+    float y3_y4 = b.start.y - b.end.y;
+    float y1_y3 = a.start.y - b.start.y;
+    float x3_x4 = b.start.x - b.end.x;
+    float x1_x2 = a.start.x - a.end.x;
+    float y1_y2 = a.start.y - a.end.y;
+
+    float denominator = x1_x2 * y3_y4 - y1_y2 * x3_x4;
+
+    if (denominator == 0) return collision;
+
+    collision.near_t = (x1_x3 * y3_y4 - y1_y3 * x3_x4) / denominator;
+    collision.far_t = -(x1_x2 * y1_y3 - y1_y2 * x1_x3) / denominator;
+
+    collision.result = 0 <= collision.near_t && collision.near_t <= 1 && 0 <= collision.far_t && collision.far_t <= 1;
+
+    return collision;
+}
