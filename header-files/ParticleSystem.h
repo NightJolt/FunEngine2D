@@ -14,6 +14,7 @@ public:
 
     struct Settings {
         Settings() :
+        particle_velocity(sf::Vector2f(50, 100)),
         particle_lifetime(sf::Vector2f(2, 5)),
         particle_mass(sf::Vector2f(2, 5)),
         sprite_size(sf::Vector2f(30, 50)),
@@ -22,6 +23,7 @@ public:
         fade_over_time(true)
         {}
 
+        sf::Vector2f particle_velocity;
         sf::Vector2f particle_lifetime;
         sf::Vector2f particle_mass;
         sf::Vector2f sprite_size;

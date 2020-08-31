@@ -9,13 +9,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
 include_directories(header-files)
 include_directories(source-files)
-include_directories(imgui)
+#include_directories(imgui)
 
-file (GLOB SOURCE_FILES #_RECURSE
-    header-files/*.h
-    source-files/*.cpp
-    imgui/*.h
-    imgui/*.cpp
+file (GLOB_RECURSE SOURCE_FILES
+        header-files/*.h
+        source-files/*.cpp
+        #imgui/*.h
+        #imgui/*.cpp
 )
 
 add_executable(FunEngine2D ${SOURCE_FILES})

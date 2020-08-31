@@ -2,7 +2,7 @@
 
 
 
-#define INIT_SCREEN_SIZE sf::VideoMode(1920, 1440)
+#define INIT_SCREEN_SIZE sf::Vector2i(1920, 1440)
 #define INIT_VIEW_SIZE sf::Vector2f(1920, 1440)
 #define INIT_VIEW_ORIGIN Vector2f(0, 0)
 

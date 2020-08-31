@@ -59,7 +59,7 @@ void ParticleSystem::Update() {
 }
 
 void ParticleSystem::Revive(int i) {
-    sf::Vector2f rand_velocity = Math::Normalize(sf::Vector2f((float)Math::Random(-100, 100), (float)Math::Random(-100, -50))) * (float)Math::Random(50, 100);
+    sf::Vector2f rand_velocity = Math::Normalize(sf::Vector2f((float)Math::Random(-100, 100), (float)Math::Random(-100, 100))) * (float)Math::Random(settings.particle_velocity.x, settings.particle_velocity.y);
     float rand_mass = Math::Random(settings.particle_mass.x, settings.particle_mass.y);
 
     sf::Vector2f n_position;

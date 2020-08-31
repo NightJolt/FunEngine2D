@@ -15,7 +15,7 @@ public:
     static float MapValue(const float&, const float&, const float&, const float&, const float&);
     static sf::Vector2f Normalize(const sf::Vector2f&);
 
-    static sf::Vector2f ScaleViewWithWindow(); // needs buffer
+    //static sf::Vector2f ScaleViewWithWindow(); // needs buffer
     static sf::Vector2f ScreenToWorld(sf::Vector2i, const sf::RenderWindow&);
     static sf::Vector2i WorldToScreen(const sf::Vector2f&, const sf::RenderWindow&);
     static sf::Vector2i WorldToGrid(const sf::Vector2f&);
@@ -64,6 +64,11 @@ public:
     template <class T>
     static sf::Vector2<T> Lerp(const sf::Vector2<T>& a, const sf::Vector2<T>& b, const float& v) {
         return sf::Vector2<T>(Lerp(a.x, b.x, v), Lerp(a.y, b.y, v));
+    }
+
+    template <class T>
+    static sf::Vector2<T> Swap(const sf::Vector2<T>& a) {
+        return sf::Vector2<T>(a.y, a.x);
     }
 
     template <class T>
