@@ -9,8 +9,9 @@
 #define CHUNK_SIZE 16
 
 #define TILE_SIZE 8.f
-
-
+#define TILE_TEXTURE_SIZE 8
+#define TILE_ATLAS_SIZE 256
+#define RAND_TEXTURE_COUNT 2
 
 
 struct UniqueKey {
