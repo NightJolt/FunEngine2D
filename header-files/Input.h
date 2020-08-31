@@ -25,6 +25,7 @@ public:
             sf::Keyboard::Key = sf::Keyboard::Key::S,
             sf::Keyboard::Key = sf::Keyboard::Key::W
     );
+    static int LastKeyboardPressed();
 
     static bool Pressed(sf::Mouse::Button);
     static bool Released(sf::Mouse::Button);
@@ -71,6 +72,7 @@ private:
     static bool keyboard_key_pressed[KEYBOARD_KEY_COUNT];
     static bool keyboard_key_released[KEYBOARD_KEY_COUNT];
     static bool keyboard_key_hold[KEYBOARD_KEY_COUNT];
+    static int last_keyboard_key_pressed;
 
     static bool mouse_button_pressed[MOUSE_BUTTON_COUNT];
     static bool mouse_button_released[MOUSE_BUTTON_COUNT];

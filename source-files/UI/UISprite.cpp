@@ -21,6 +21,8 @@ void UISprite::SetSpriteRect(sf::FloatRect& r) {
 void UISprite::SetTexure(sf::Texture* t) {
     texture = t;
 
+    if (!texture) return;
+
     sf::Vector2u s = t->getSize();
 
     vertex_arr[0].texCoords = sf::Vector2f(0, 0);
@@ -36,6 +38,8 @@ void UISprite::SetColor(sf::Color c) {
 }
 
 void UISprite::draw(sf::RenderTarget& t, sf::RenderStates s) const {
+    if (!texture) return;
+
     s.texture = texture;
 
     t.draw(vertex_arr, s);
@@ -46,7 +50,7 @@ void UISprite::Rescale(sf::Vector2f s) {
 
     switch(settings.stick_to_point) {
         case UI::StickPoint::CENTER:
-            pivot = vertex_arr[0].position + (vertex_arr[2].position - vertex_arr[0].position) * .5f;
+            pivot = (vertex_arr[0].position + vertex_arr[2].position) * .5f;
 
             break;
         default:

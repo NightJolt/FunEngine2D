@@ -5,6 +5,7 @@
 bool Input::keyboard_key_pressed[KEYBOARD_KEY_COUNT];
 bool Input::keyboard_key_released[KEYBOARD_KEY_COUNT];
 bool Input::keyboard_key_hold[KEYBOARD_KEY_COUNT];
+int Input::last_keyboard_key_pressed = 0;
 
 bool Input::mouse_button_pressed[MOUSE_BUTTON_COUNT];
 bool Input::mouse_button_released[MOUSE_BUTTON_COUNT];
@@ -24,6 +25,8 @@ void Input::Listen() {
             } else {
                 keyboard_key_pressed[key] = true;
                 keyboard_key_hold[key] = true;
+
+                last_keyboard_key_pressed = key;
             }
         } else {
             if (keyboard_key_hold[key]) {
@@ -107,6 +110,10 @@ int Input::Vertical(sf::Keyboard::Key a, sf::Keyboard::Key b) {
 
 sf::Vector2f Input::K2D(sf::Keyboard::Key a, sf::Keyboard::Key b, sf::Keyboard::Key c, sf::Keyboard::Key d) {
     return Math::Normalize(sf::Vector2f(Horizontal(a, b), Vertical(c, d)));
+}
+
+int Input::LastKeyboardPressed() {
+    return last_keyboard_key_pressed;
 }
 
 

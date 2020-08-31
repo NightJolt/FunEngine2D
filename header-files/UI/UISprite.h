@@ -2,7 +2,7 @@
 
 #include "UI.h"
 
-class UISprite : public UI {
+class UISprite : public virtual UI {
 public:
     explicit UISprite(sf::FloatRect, sf::Texture*);
     ~UISprite() override;

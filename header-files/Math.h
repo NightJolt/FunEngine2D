@@ -67,6 +67,11 @@ public:
     }
 
     template <class T>
+    static sf::Vector2<T> Sqrt(const sf::Vector2<T>& a) {
+        return sf::Vector2<T>(sqrt(a.x), sqrt(a.y));
+    }
+
+    template <class T>
     static sf::Vector2<T> Swap(const sf::Vector2<T>& a) {
         return sf::Vector2<T>(a.y, a.x);
     }
