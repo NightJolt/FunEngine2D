@@ -38,16 +38,18 @@ void ParticleSystem::Update() {
                     vertices[i].color = sf::Color::Transparent;
                 } else {
                     Revive(i);
+
+                    i += 3;
                 }
 
-                if (render_type == RenderType::Sprite) i += 3;
+                continue;
             }
-        }
-    }
 
-    for (int i = 0; i < particles.size(); i++) {
-        if (particles[i].lifetime > 0 && settings.fade_over_time) {
-            vertices[i].color.a = Math::MapValue(particles[i].lifetime, 0, particles[i].init_lifetime, 0, 255);
+            if (settings.fade_over_time) {
+                vertices[i].color.a = Math::MapValue(particles[i].lifetime, 0, particles[i].init_lifetime, 0, 255);
+            }
+
+            particles[i].velocity += settings.gravity * FTime::DeltaTime();
         }
     }
 

@@ -38,13 +38,14 @@ int main() {
     fps_display.setCharacterSize(24);
     fps_display.setPosition(-700, -600);
 
-    ParticleSystem particle_system(ParticleSystem::Sprite, ParticleSystem::Loop, 100, 0.1f);
+    ParticleSystem particle_system(ParticleSystem::Sprite, ParticleSystem::Loop, 10, 0.1f);
     particle_system.PushTexture(&R::textures[0]);
     for (int j = 0; j < 13; j++) {
         for (int i = 0; i < 13; i++) {
             particle_system.PushTextureRect(FloatRect(sf::Vector2f(72 * j, 72 * i), sf::Vector2f(72, 72)));
         }
     }
+    particle_system.settings.gravity = Vector2f(0, 40);
 
     UIButton uis(FloatRect(10, 10, 100, 100));
     uis.SetCallback([](){
