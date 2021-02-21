@@ -1,20 +1,18 @@
 #include "Math.h"
 
-#include <cmath>
-
 int Math::Random(int a, int b) {
     return rand() % (b - a) + a;
 }
 
 float Math::Random(float a, float b) {
-    return Random((int)a, (int)b); // temp;
+    return Random((int)a, (int)b); // todo move to c++11 rand;
 }
 
 bool Math::RandPerc(const int& chance) {
     return Random(1, 100) <= chance;
 }
 
-int Math::Mod(const int& a, const unsigned int& m) {
+int Math::Mod(const int& a, const int& m) {
     const int r = a % m;
 
     return r >= 0 ? r : m - r;
@@ -28,6 +26,15 @@ sf::Vector2f Math::Normalize(const sf::Vector2f& v) {
     const float l = Magnitude(v);
 
     return l ? v / l : v;
+}
+
+float Math::Q_rsqrt(float v) {
+    float y = v;
+    long i = 0x5f3759df - ((*(long*)&y) >> 1);
+
+    y = *(float*)&i;
+
+    return y * (1.5f - (y * y * v * .5f));
 }
 
 sf::Vector2f Math::ScreenToWorld(sf::Vector2i p, const sf::RenderWindow& window) {
@@ -57,6 +64,7 @@ sf::Vector2i Math::WorldToScreen(const sf::Vector2f& p, const sf::RenderWindow& 
     return window.mapCoordsToPixel(p/* * sf::Vector2f(1, -1)*/);
 }
 
+// todo make grid contants local
 sf::Vector2i Math::WorldToGrid(const sf::Vector2f& p) {
     return sf::Vector2i(std::floor(p.x / TILE_SIZE), std::floor(p.y / TILE_SIZE));
 }
@@ -77,8 +85,6 @@ sf::Vector2i Math::GridToChunk(const sf::Vector2i& p) {
 sf::Vector2i Math::GridToTile(const sf::Vector2i& p) {
     return sf::Vector2i(Math::Mod(p.x, CHUNK_SIZE), Math::Mod(p.y, CHUNK_SIZE));
 }
-
-
 
 sf::Vector2f Math::GravitationalAcceleration(sf::Vector2f p1, sf::Vector2f p2, float m2) {
     sf::Vector2f segment = p2 - p1;

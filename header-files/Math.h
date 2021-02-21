@@ -1,19 +1,16 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-
 #include "globals.h"
-
-#include <cmath>
 
 class Math {
 public:
     static int Random(int, int); // TODO change to C++11 random
     static float Random(float, float);
     static bool RandPerc(const int&);
-    static int Mod(const int&, const unsigned int&);
+    static int Mod(const int&, const int&);
     static float MapValue(const float&, const float&, const float&, const float&, const float&);
     static sf::Vector2f Normalize(const sf::Vector2f&);
+    static float Q_rsqrt(float);
 
     //static sf::Vector2f ScaleViewWithWindow(); // needs buffer
     static sf::Vector2f ScreenToWorld(sf::Vector2i, const sf::RenderWindow&);

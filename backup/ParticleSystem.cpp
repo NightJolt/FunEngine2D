@@ -18,15 +18,22 @@ void ParticleSystem::Draw(sf::RenderWindow& window) {
 }
 
 void ParticleSystem::Update() {
-    if (left_to_emit > 0) {
-        if (emission_current_delay <= 0) {
-            Emit();
+//    if (left_to_emit > 0) {
+//        if (emission_current_delay <= 0) {
+//            Emit();
+//
+//            left_to_emit--;
+//            emission_current_delay = emission_delay;
+//        } else {
+//            emission_current_delay -= FTime::DeltaTime();
+//        }
+//    }
 
-            left_to_emit--;
-            emission_current_delay = emission_delay;
-        } else {
-            emission_current_delay -= FTime::DeltaTime();
-        }
+
+    while (emission_current_delay <= 0 && left_to_emit > 0) {
+        Emit();
+
+        left_to_emit--;
     }
 
     for (int i = 0; i < particles.size(); i++) {

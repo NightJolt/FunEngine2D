@@ -1,7 +1,5 @@
 #include "Input.h"
 
-
-
 bool Input::keyboard_key_pressed[KEYBOARD_KEY_COUNT];
 bool Input::keyboard_key_released[KEYBOARD_KEY_COUNT];
 bool Input::keyboard_key_hold[KEYBOARD_KEY_COUNT];
@@ -14,8 +12,6 @@ bool Input::mouse_button_hold[MOUSE_BUTTON_COUNT];
 bool Input::joystick_button_pressed[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
 bool Input::joystick_button_released[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
 bool Input::joystick_button_hold[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-
-
 
 void Input::Listen() {
     for (int key = 0; key < KEYBOARD_KEY_COUNT; key++) {

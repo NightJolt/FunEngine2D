@@ -15,7 +15,7 @@ public:
     struct Settings {
         Settings() :
         particle_velocity(sf::Vector2f(50, 100)),
-        particle_lifetime(sf::Vector2f(2, 5)),
+        particle_lifetime(sf::Vector2f(20, 50)),
         particle_mass(sf::Vector2f(2, 5)),
         sprite_size(sf::Vector2f(30, 50)),
         emission_radius(0),

@@ -7,7 +7,6 @@
 class R {
 public:
     static void LoadResources();
-    //static void LoadResource();
 
     static std::vector <sf::Texture> textures;
     static std::vector <sf::Font> fonts;

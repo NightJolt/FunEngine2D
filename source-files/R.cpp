@@ -18,7 +18,7 @@ const std::string R::fonts_to_load[] = {
 
 std::vector <sf::Shader*> R::shaders = std::vector <sf::Shader*> ();
 const std::string R::shaders_to_load[] = {
-        "test"
+        //"test"
 };
 
 void R::LoadResources() {
