@@ -44,7 +44,7 @@
 
 #pragma endregion
 
-#pragma region tilemap
+/*#pragma region tilemap
 
 #define CHUNK_SIZE 16
 #define TILE_SIZE 8.f
@@ -52,7 +52,7 @@
 #define TILE_ATLAS_SIZE 256
 #define RAND_TEXTURE_COUNT 2
 
-#pragma endregion
+#pragma endregion*/
 
 extern sf::RenderWindow* glob_window; // todo: Move to window manager
 

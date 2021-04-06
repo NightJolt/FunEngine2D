@@ -38,7 +38,8 @@ float fun::Math::Q_rsqrt(float v) {
 }
 
 sf::Vector2f fun::Math::ScreenToWorld(sf::Vector2i p, const sf::RenderWindow& window) {
-    return window.mapPixelToCoords(p);// * sf::Vector2f(1, -1);
+    return window.mapPixelToCoords(p);
+
     /*sf::View view = window.getView();
 
     // set origin to bottom left
@@ -58,13 +59,11 @@ sf::Vector2f fun::Math::ScreenToWorld(sf::Vector2i p, const sf::RenderWindow& wi
     return world_point;*/
 }
 
-// Todo not tested yet
-
 sf::Vector2i fun::Math::WorldToScreen(const sf::Vector2f& p, const sf::RenderWindow& window) {
-    return window.mapCoordsToPixel(p/* * sf::Vector2f(1, -1)*/);
+    return window.mapCoordsToPixel(p);
 }
 
-// todo make grid contants local
+/*// todo make grid constants local
 sf::Vector2i fun::Math::WorldToGrid(const sf::Vector2f& p) {
     return sf::Vector2i(std::floor(p.x / TILE_SIZE), std::floor(p.y / TILE_SIZE));
 }
@@ -84,7 +83,7 @@ sf::Vector2i fun::Math::GridToChunk(const sf::Vector2i& p) {
 
 sf::Vector2i fun::Math::GridToTile(const sf::Vector2i& p) {
     return sf::Vector2i(Math::Mod(p.x, CHUNK_SIZE), Math::Mod(p.y, CHUNK_SIZE));
-}
+}*/
 
 sf::Vector2f fun::Math::GravitationalAcceleration(sf::Vector2f p1, sf::Vector2f p2, float m2) {
     sf::Vector2f segment = p2 - p1;

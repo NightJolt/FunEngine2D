@@ -16,11 +16,12 @@ namespace fun {
         //static sf::Vector2f ScaleViewWithWindow(); // needs buffer
         static sf::Vector2f ScreenToWorld(sf::Vector2i, const sf::RenderWindow&);
         static sf::Vector2i WorldToScreen(const sf::Vector2f&, const sf::RenderWindow&);
-        static sf::Vector2i WorldToGrid(const sf::Vector2f&);
+        /*static sf::Vector2i WorldToGrid(const sf::Vector2f&);
         static sf::Vector2f GridToWorld(const sf::Vector2i&);
         static sf::Vector2i GridToChunk(const sf::Vector2i&);
-        static sf::Vector2i GridToTile(const sf::Vector2i&);
+        static sf::Vector2i GridToTile(const sf::Vector2i&);*/
 
+        // todo: move to physics
         static sf::Vector2f GravitationalAcceleration(sf::Vector2f, sf::Vector2f, float);
         static sf::Vector2f GravitationalPull(sf::Vector2f, float, sf::Vector2f, float);
 
