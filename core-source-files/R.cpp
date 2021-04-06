@@ -1,27 +1,23 @@
 #include "R.h"
 
-const std::string R::resources_directory = "../R/";
-const std::string R::textures_directory = R::resources_directory + "textures/";
-const std::string R::fonts_directory = R::resources_directory + "fonts/";
-const std::string R::shaders_directory = R::resources_directory + "shaders/";
+const std::string fun::R::resources_directory = "../R/";
+const std::string fun::R::textures_directory = R::resources_directory + "textures/";
+const std::string fun::R::fonts_directory = R::resources_directory + "fonts/";
+const std::string fun::R::shaders_directory = R::resources_directory + "shaders/";
 
-std::vector <sf::Texture> R::textures = std::vector <sf::Texture> ();
-const std::string R::textures_to_load[] = {
-        "test.png",
-        "pixel_galaxy.png"
+std::vector <sf::Texture> fun::R::textures = std::vector <sf::Texture> ();
+const std::string fun::R::textures_to_load[] = {
 };
 
-std::vector <sf::Font> R::fonts = std::vector <sf::Font> ();
-const std::string R::fonts_to_load[] = {
-        "andy_bold.ttf"
+std::vector <sf::Font> fun::R::fonts = std::vector <sf::Font> ();
+const std::string fun::R::fonts_to_load[] = {
 };
 
-std::vector <sf::Shader*> R::shaders = std::vector <sf::Shader*> ();
-const std::string R::shaders_to_load[] = {
-        //"test"
+std::vector <sf::Shader*> fun::R::shaders = std::vector <sf::Shader*> ();
+const std::string fun::R::shaders_to_load[] = {
 };
 
-void R::LoadResources() {
+void fun::R::LoadResources() {
     for (const auto& texture_path : textures_to_load) {
         sf::Texture* texture = &textures.emplace_back(sf::Texture());
 

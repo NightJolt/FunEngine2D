@@ -3,7 +3,7 @@
 #include "SFML/Graphics.hpp"
 
 #include "Math.h"
-#include "FTime.h"
+#include "Time.h"
 
 #include <iostream>
 

@@ -146,7 +146,7 @@ static float grad(int32_t hash, float x, float y, float z) {
  *
  * @return Noise value in the range[-1; 1], value of 0 on all integer coordinates.
  */
-float Noise::noise(float x) {
+float fun::Noise::noise(float x) {
     float n0, n1;   // Noise contributions from the two "corners"
 
     // No need to skew the input space in 1D
@@ -185,7 +185,7 @@ float Noise::noise(float x) {
  *
  * @return Noise value in the range[-1; 1], value of 0 on all integer coordinates.
  */
-float Noise::noise(float x, float y) {
+float fun::Noise::noise(float x, float y) {
     float n0, n1, n2;   // Noise contributions from the three corners
 
     // Skewing/Unskewing factors for 2D
@@ -273,7 +273,7 @@ float Noise::noise(float x, float y) {
  *
  * @return Noise value in the range[-1; 1], value of 0 on all integer coordinates.
  */
-float Noise::noise(float x, float y, float z) {
+float fun::Noise::noise(float x, float y, float z) {
     float n0, n1, n2, n3; // Noise contributions from the four corners
 
     // Skewing/Unskewing factors for 3D
@@ -378,7 +378,7 @@ float Noise::noise(float x, float y, float z) {
  *
  * @return Noise value in the range[-1; 1], value of 0 on all integer coordinates.
  */
-float Noise::fractal(size_t octaves, float x) const {
+float fun::Noise::fractal(size_t octaves, float x) const {
     float output    = 0.f;
     float denom     = 0.f;
     float frequency = mFrequency;
@@ -404,7 +404,7 @@ float Noise::fractal(size_t octaves, float x) const {
  *
  * @return Noise value in the range[-1; 1], value of 0 on all integer coordinates.
  */
-float Noise::fractal(size_t octaves, float x, float y) const {
+float fun::Noise::fractal(size_t octaves, float x, float y) const {
     float output = 0.f;
     float denom  = 0.f;
     float frequency = mFrequency;
@@ -431,7 +431,7 @@ float Noise::fractal(size_t octaves, float x, float y) const {
  *
  * @return Noise value in the range[-1; 1], value of 0 on all integer coordinates.
  */
-float Noise::fractal(size_t octaves, float x, float y, float z) const {
+float fun::Noise::fractal(size_t octaves, float x, float y, float z) const {
     float output = 0.f;
     float denom  = 0.f;
     float frequency = mFrequency;
