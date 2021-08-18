@@ -16,6 +16,10 @@ bool fun::Client::Connect(const std::string& ip, unsigned short port) {
     return false;
 }
 
+void fun::Client::Disconnect() {
+    tcp_socket.disconnect();
+}
+
 void fun::Client::Update() {
     sf::Packet incoming_packet;
 

@@ -9,6 +9,7 @@ namespace fun {
         ~Client();
 
         bool Connect(const std::string&, unsigned short);
+        void Disconnect();
 
         void Update();
 

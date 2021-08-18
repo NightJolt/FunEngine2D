@@ -9,6 +9,8 @@ namespace fun {
         Server();
         ~Server();
 
+        void Close();
+
         void Listen();
 
         bool SetPort(unsigned short);

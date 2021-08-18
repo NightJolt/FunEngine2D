@@ -5,6 +5,10 @@ fun::Server::Server() {
 }
 
 fun::Server::~Server() {
+    Close();
+}
+
+void fun::Server::Close() {
     for (auto client : clients) delete client;
 
     listener.close();
@@ -22,7 +26,11 @@ void fun::Server::Listen() {
 
 void fun::Server::CollectGarbage() {
     for (int i = (int)clients.size() - 1; i >= 0; i--) {
+        std::cout << "Connection status for " << i << " : " << clients[i]->getRemoteAddress() << ", " << clients[i]->getRemotePort() << std::endl;
+
         if (!IsConnected(clients[i])) {
+            std::cout << "Disconnected " << i << std::endl;
+
             clients.erase(clients.begin() + i);
         }
     }
