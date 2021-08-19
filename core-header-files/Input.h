@@ -13,6 +13,7 @@
 namespace fun {
     class Input {
     public:
+
         static void Listen();
 
         static bool Pressed(sf::Keyboard::Key);

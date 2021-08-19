@@ -37,6 +37,14 @@ float fun::Math::Q_rsqrt(float v) {
     return y * (1.5f - (y * y * v * .5f));
 }
 
+float fun::Math::Radians(float degrees) {
+    return degrees * 0.017435f;
+}
+
+float fun::Math::Degrees(float radians) {
+    return radians * 57.295779f;
+}
+
 sf::Vector2f fun::Math::ScreenToWorld(sf::Vector2i p, const sf::RenderWindow& window) {
     return window.mapPixelToCoords(p);
 

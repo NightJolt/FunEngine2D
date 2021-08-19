@@ -20,6 +20,8 @@ fun::Command::Command(const std::string& cmd) {
     for (int i = 0; i <= cmd.size(); i++) {
         char c = i == cmd.size() ? ' ' : cmd[i];
 
+        if (i == 0 && c == '/') continue;
+
         if ((c == '[' || c == ']') && !ignore_brackets) {
             ignore_special_keys = c == '[';
 

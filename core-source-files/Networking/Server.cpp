@@ -26,10 +26,10 @@ void fun::Server::Listen() {
 
 void fun::Server::CollectGarbage() {
     for (int i = (int)clients.size() - 1; i >= 0; i--) {
-        std::cout << "Connection status for " << i << " : " << clients[i]->getRemoteAddress() << ", " << clients[i]->getRemotePort() << std::endl;
+        //std::cout << "Connection status for " << i << " : " << clients[i]->getRemoteAddress() << ", " << clients[i]->getRemotePort() << std::endl;
 
         if (!IsConnected(clients[i])) {
-            std::cout << "Disconnected " << i << std::endl;
+            //std::cout << "Disconnected " << i << std::endl;
 
             clients.erase(clients.begin() + i);
         }
@@ -55,7 +55,7 @@ void fun::Server::ListenData() {
             for (int j = 0; j < clients.size(); j++) {
                 if (i == j) continue;
 
-                while (clients[j]->send(packet) == sf::Socket::Partial) {}
+                while (clients[j]->send(packet) == sf::Socket::Partial) {} // Busy waiting
             }
         }
     }

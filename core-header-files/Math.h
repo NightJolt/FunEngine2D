@@ -5,6 +5,7 @@
 namespace fun {
     class Math {
     public:
+
         static int Random(int, int); // TODO change to C++11 random
         static float Random(float, float);
         static bool RandPerc(const int&);
@@ -12,6 +13,8 @@ namespace fun {
         static float MapValue(const float&, const float&, const float&, const float&, const float&);
         static sf::Vector2f Normalize(const sf::Vector2f&);
         static float Q_rsqrt(float);
+        static float Radians(float);
+        static float Degrees(float);
 
         //static sf::Vector2f ScaleViewWithWindow(); // needs buffer
         static sf::Vector2f ScreenToWorld(sf::Vector2i, const sf::RenderWindow&);

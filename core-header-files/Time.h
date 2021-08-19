@@ -5,6 +5,7 @@
 namespace fun {
     class Time {
     public:
+
         static void Recalculate();
         static float UnscaledDeltaTime();
         static float DeltaTime();
@@ -19,6 +20,7 @@ namespace fun {
         static void RemoveClock(void*, const std::string&);
 
     private:
+
         static sf::Clock delta_clock;
 
         static float time_elapsed;

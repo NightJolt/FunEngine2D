@@ -5,6 +5,7 @@
 namespace fun {
     class R {
     public:
+
         static void LoadResources();
 
         static std::vector <sf::Texture> textures;
@@ -15,6 +16,7 @@ namespace fun {
         // todo: lua scripts
 
     private:
+
         static const std::string textures_to_load[];
         static const std::string fonts_to_load[];
         static const std::string shaders_to_load[];
