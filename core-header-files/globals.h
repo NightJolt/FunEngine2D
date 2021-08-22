@@ -2,7 +2,7 @@
 
 #pragma region flags
 
-#define ENABLE_PRINTING
+//#define ENABLE_DEBUGGING
 
 #define USES_SFML
 //#define USES_IMGUI
@@ -32,7 +32,7 @@
 
 #pragma region stdlibs
 
-#if defined(ENABLE_PRINTING)
+#if defined(ENABLE_DEBUGGING)
 #include <iostream>
 #endif
 
@@ -59,9 +59,18 @@
 
 #pragma endregion*/
 
-extern sf::RenderWindow* glob_window; // todo: Move to window manager
+typedef char int8;                     //                       -127 to 127
+typedef short int16;                   //                    -32,768 to 32,767
+typedef int int32;                     //             -2,147,483,648 to 2,147,483,647
+typedef long long int64;               // -9,223,372,036,854,775,807 to 9,223,372,036,854,775,807
+typedef unsigned char uint8;           //                          0 to 255
+typedef unsigned short uint16;         //                          0 to 65,535
+typedef unsigned int uint32;           //                          0 to 4,294,967,295
+typedef unsigned long long uint64;     //                          0 to 18,446,744,073,709,551,615
 
 #define LOCALIZE(type, body) [this]() -> type body
+
+void glob_init();
 
 struct UniqueKey {
     UniqueKey(void* p, const char* k) : ptr(p), key(strdup(k)) {}
@@ -182,12 +191,12 @@ inline bool operator >=(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
 #if defined(SFML_VEC3_OVERLOADS)
 
 template <typename T>
-inline std::string to_string_key(const sf::Vector3<T>& a) {
+std::string to_string_key(const sf::Vector3<T>& a) {
     return std::to_string(a.x) + ' ' + std::to_string(a.y) + ' ' + std::to_string(a.z);
 }
 
 template <typename T>
-inline std::string to_string(const sf::Vector3<T>& a) {
+std::string to_string(const sf::Vector3<T>& a) {
     return "Vector3(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ", " + std::to_string(a.z) + ")";
 }
 
