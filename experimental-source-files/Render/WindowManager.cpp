@@ -28,8 +28,6 @@ void fun::WindowManager::WindowData::AddUI(const sf::Drawable& drawable, int ord
     ui_queue.Add(drawable, order);
 }
 
-void fun::WindowManager::WindowData::OnResized() {}
-
 void fun::WindowManager::WindowData::Clear(const sf::Color& color) {
     window.clear(color);
 }
@@ -44,4 +42,38 @@ void fun::WindowManager::WindowData::Draw() {
 
 void fun::WindowManager::WindowData::Display() {
     window.display();
+}
+
+void fun::WindowManager::WindowData::PollEvents() {
+    sf::Event event;
+
+    while (window.pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::Closed:
+                window.close();
+
+                break;
+            case sf::Event::GainedFocus:
+                is_focused = true;
+
+                break;
+            case sf::Event::LostFocus:
+                is_focused = false;
+
+                break;
+            case sf::Event::MouseWheelMoved:
+                world_view.zoom(event.mouseWheel.delta > 0 ? 0.9f : 1.1f);
+
+                break;
+            case sf::Event::Resized:
+                sf::Vector2f ratio = (sf::Vector2f)window.getSize() / (sf::Vector2f)resolution;
+                resolution = window.getSize();
+                world_view.setSize(world_view.getSize() * ratio);
+
+                //sf::Vector2f scale_val = Math::Sqrt(ratio * Math::Swap(ratio));
+                //fps.Rescale(scale_val);
+
+                break;
+        }
+    }
 }

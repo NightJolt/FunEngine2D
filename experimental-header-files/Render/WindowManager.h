@@ -3,6 +3,7 @@
 #include "globals.h"
 
 #include "Render/RenderQueue.h"
+#include "Math.h"
 
 namespace fun {
     class WindowManager {
@@ -29,7 +30,7 @@ namespace fun {
             void AddWorld(const sf::Drawable&, int);
             void AddUI(const sf::Drawable&, int);
 
-            void OnResized();
+            void PollEvents();
             void Clear(const sf::Color&);
             void Draw();
             void Display();
