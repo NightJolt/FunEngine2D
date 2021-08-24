@@ -31,9 +31,7 @@ namespace fun {
             void AddUI(const sf::Drawable&, int);
 
             void PollEvents();
-            void Clear(const sf::Color&);
-            void Draw();
-            void Display();
+            void Display(const sf::Color&);
         };
 
         static WindowData* main_window;

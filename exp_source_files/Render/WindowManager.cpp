@@ -28,19 +28,15 @@ void fun::WindowManager::WindowData::AddUI(const sf::Drawable& drawable, int ord
     ui_queue.Add(drawable, order);
 }
 
-void fun::WindowManager::WindowData::Clear(const sf::Color& color) {
-    window.clear(color);
-}
+void fun::WindowManager::WindowData::Display(const sf::Color& bg_color) {
+    window.clear(bg_color);
 
-void fun::WindowManager::WindowData::Draw() {
     window.setView(world_view);
     window.draw(world_queue);
 
     window.setView(ui_view);
     window.draw(ui_queue);
-}
 
-void fun::WindowManager::WindowData::Display() {
     window.display();
 }
 

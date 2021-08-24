@@ -9,14 +9,10 @@
 
 #include "../kernel/header_files/cudatest.cuh"
 
-using namespace std;
-using namespace sf;
-using namespace fun;
-
 // USED FOR TESTING
 int main () {
 
-    cout << CudaTesting::AddTwoNumbers(420, 69) << endl;
+    std::cout << fun::CudaTesting::AddTwoNumbers(420, 69) << std::endl;
 
     sf::CircleShape a(100, 30);
     sf::CircleShape b(100, 30);
@@ -28,22 +24,20 @@ int main () {
 
     glob_init();
 
-    WindowManager::Init("FunEngine2D");
+    fun::WindowManager::Init("FunEngine2D");
 
-    R::LoadResources();
+    fun::WindowManager::WindowData* window_data = fun::WindowManager::main_window;
 
-    while (WindowManager::main_window->window.isOpen()) {
-        Input::Listen();
+    while (window_data->window.isOpen()) {
+        fun::Input::Listen();
         fun::Time::Recalculate();
 
-        WindowManager::main_window->PollEvents();
+        window_data->PollEvents();
 
-        WindowManager::main_window->AddWorld(a, 2);
-        WindowManager::main_window->AddWorld(b, 2);
+        window_data->AddWorld(a, 420);
+        window_data->AddWorld(b, 69);
 
-        WindowManager::main_window->Clear(sf::Color::Black);
-        WindowManager::main_window->Draw();
-        WindowManager::main_window->Display();
+        window_data->Display(sf::Color::Black);
     }
 
     return 0;
