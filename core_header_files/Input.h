@@ -1,8 +1,11 @@
 #pragma once
 
 #include "globals.h"
-
 #include "Math.h"
+
+#define ENABLE_MOUSE
+#define ENABLE_KEYBOARD
+//#define ENABLE_JOYSTICKS
 
 #define KEYBOARD_KEY_COUNT sf::Keyboard::Key::KeyCount
 #define MOUSE_BUTTON_COUNT sf::Mouse::Button::ButtonCount
@@ -15,6 +18,27 @@ namespace fun {
     public:
 
         static void Listen();
+
+#if defined(ENABLE_MOUSE)
+    public:
+
+        static bool Pressed(sf::Mouse::Button);
+        static bool Released(sf::Mouse::Button);
+        static bool Hold(sf::Mouse::Button);
+        static sf::Vector2f M2D();
+
+    private:
+
+        static bool mouse_button_pressed[MOUSE_BUTTON_COUNT];
+        static bool mouse_button_released[MOUSE_BUTTON_COUNT];
+        static bool mouse_button_hold[MOUSE_BUTTON_COUNT];
+
+        static sf::Vector2f mouse_position;
+        static sf::Vector2f mouse_delta;
+#endif
+
+#if defined(ENABLE_KEYBOARD)
+    public:
 
         static bool Pressed(sf::Keyboard::Key);
         static bool Released(sf::Keyboard::Key);
@@ -29,10 +53,16 @@ namespace fun {
         );
         static int LastKeyboardPressed();
 
-        static bool Pressed(sf::Mouse::Button);
-        static bool Released(sf::Mouse::Button);
-        static bool Hold(sf::Mouse::Button);
-        static sf::Vector2f M2D();
+    private:
+
+        static bool keyboard_key_pressed[KEYBOARD_KEY_COUNT];
+        static bool keyboard_key_released[KEYBOARD_KEY_COUNT];
+        static bool keyboard_key_hold[KEYBOARD_KEY_COUNT];
+        static int last_keyboard_key_pressed;
+#endif
+
+#if defined(ENABLE_JOYSTICKS)
+        public:
 
         enum JoystickButton {
             X,
@@ -72,20 +102,9 @@ namespace fun {
 
     private:
 
-        static bool keyboard_key_pressed[KEYBOARD_KEY_COUNT];
-        static bool keyboard_key_released[KEYBOARD_KEY_COUNT];
-        static bool keyboard_key_hold[KEYBOARD_KEY_COUNT];
-        static int last_keyboard_key_pressed;
-
-        static bool mouse_button_pressed[MOUSE_BUTTON_COUNT];
-        static bool mouse_button_released[MOUSE_BUTTON_COUNT];
-        static bool mouse_button_hold[MOUSE_BUTTON_COUNT];
-
-        static sf::Vector2f mouse_position;
-        static sf::Vector2f mouse_delta;
-
         static bool joystick_button_pressed[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
         static bool joystick_button_released[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
         static bool joystick_button_hold[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+#endif
     };
 }

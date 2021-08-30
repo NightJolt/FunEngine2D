@@ -7,6 +7,7 @@ namespace fun {
     public:
 
         void Add(const sf::Drawable&, int);
+        void Clear();
 
     private:
 

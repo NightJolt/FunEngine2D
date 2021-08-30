@@ -38,6 +38,9 @@ void fun::WindowManager::WindowData::Display(const sf::Color& bg_color) {
     window.draw(ui_queue);
 
     window.display();
+
+    world_queue.Clear();
+    ui_queue.Clear();
 }
 
 void fun::WindowManager::WindowData::PollEvents() {

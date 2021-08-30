@@ -1,6 +1,11 @@
 #include "R.h"
 
+#if defined(RELEASE_BUILD)
+const std::string fun::R::resources_directory = "/R/";
+#else
 const std::string fun::R::resources_directory = "../R/";
+#endif
+
 const std::string fun::R::textures_directory = R::resources_directory + "textures/";
 const std::string fun::R::fonts_directory = R::resources_directory + "fonts/";
 const std::string fun::R::shaders_directory = R::resources_directory + "shaders/";
@@ -9,8 +14,13 @@ std::vector <sf::Texture> fun::R::textures = std::vector <sf::Texture> ();
 const std::string fun::R::textures_to_load[] = {
 };
 
+std::vector <sf::Image> fun::R::images = std::vector <sf::Image> ();
+const std::string fun::R::images_to_load[] = {
+};
+
 std::vector <sf::Font> fun::R::fonts = std::vector <sf::Font> ();
 const std::string fun::R::fonts_to_load[] = {
+        //"andy_bold.ttf"
 };
 
 std::vector <sf::Shader*> fun::R::shaders = std::vector <sf::Shader*> ();
@@ -23,6 +33,14 @@ void fun::R::LoadResources() {
 
         if (!texture->loadFromFile(textures_directory + texture_path)) {
             textures.pop_back();
+        }
+    }
+
+    for (const auto& image_path : images_to_load) {
+        sf::Image* image = &images.emplace_back(sf::Image());
+
+        if (!image->loadFromFile(images_directory + image_path)) {
+            images.pop_back();
         }
     }
 

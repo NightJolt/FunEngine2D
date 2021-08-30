@@ -3,6 +3,7 @@
 #pragma region flags
 
 #define ENABLE_DEBUGGING
+//define RELEASE_BUILD
 
 #define USES_SFML
 //#define USES_IMGUI
