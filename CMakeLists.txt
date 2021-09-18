@@ -10,28 +10,19 @@ set(GCC_COVERAGE_COMPILE_FLAGS "-lsfml-graphics -lsfml-window -lsfml-system -lsf
 # -Ofast -pthread -lm -lGL -L/usr/X11R6/lib -lGLU -lGLEW -lXi -lXmu
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
-include_directories(proj_header_files)
-include_directories(proj_source_files)
-include_directories(core_header_files)
-include_directories(core_source_files)
-include_directories(exp_header_files)
-include_directories(exp_source_files)
+include_directories(source)
 
 file (
         GLOB_RECURSE SOURCE_FILES
 
-        proj_header_files/*.h
-        proj_source_files/*.cpp
-        core_header_files/*.h
-        core_source_files/*.cpp
-        exp_header_files/*.h
-        exp_source_files/*.cpp
+        source/*.cpp
 )
 
 add_executable(FunEngine2D ${SOURCE_FILES})
 
-add_subdirectory(kernel)
+add_subdirectory(fun_engine_2d)
 
-target_link_libraries(FunEngine2D kernel_lib)
+target_link_libraries(FunEngine2D fe2d_source)
+target_link_libraries(FunEngine2D fe2d_kernel)
 #target_link_libraries(FunEngine2D ${LUA_LIBRARIES})
 #target_link_libraries(FunEngine2D PRIVATE ImGui-SFML::ImGui-SFML)

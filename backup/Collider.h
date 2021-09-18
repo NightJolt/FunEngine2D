@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Math.h"
+#include "../Core/Math.h"
 
 /*
  * S - Static collision

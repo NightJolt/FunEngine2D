@@ -4,7 +4,7 @@
 #include "UIText.h"
 
 #include "Collider.h"
-#include "Input.h"
+#include "../../Core/Input.h"
 
 class UIButton : public UISprite, public UIText {
 public:

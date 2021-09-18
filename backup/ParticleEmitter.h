@@ -1,7 +1,7 @@
-#include "globals.h"
+#include "../Core/globals.h"
 
-#include "Math.h"
-#include "Time.h"
+#include "../Core/Math.h"
+#include "../Core/Time.h"
 
 class ParticleEmitter {
 public:

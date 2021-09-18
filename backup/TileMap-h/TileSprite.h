@@ -2,9 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Math.h"
+#include "../../Core/Math.h"
 
-#include "globals.h"
+#include "../../Core/globals.h"
 
 #define TILE_TOP_MASK 1
 #define TILE_RIGHT_MASK 2

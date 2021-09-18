@@ -2,8 +2,8 @@
 
 #include "SFML/Graphics.hpp"
 
-#include "Math.h"
-#include "Time.h"
+#include "../Core/Math.h"
+#include "../Core/Time.h"
 
 #include <iostream>
 
