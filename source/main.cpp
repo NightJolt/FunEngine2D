@@ -11,7 +11,6 @@
 
 // USED FOR TESTING
 int main () {
-
     std::cout << fun::CudaTesting::AddTwoNumbers(420, 69) << std::endl;
 
     sf::CircleShape a(100, 30);
