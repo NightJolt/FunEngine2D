@@ -45,32 +45,6 @@ float fun::Math::Degrees(float radians) {
     return radians * 57.295779f;
 }
 
-sf::Vector2f fun::Math::ScreenToWorld(sf::Vector2i p, const sf::RenderWindow& window) {
-    return window.mapPixelToCoords(p);
-
-    /*sf::View view = window.getView();
-
-    // set origin to bottom left
-    p.y = window.getSize().y - p.y;
-
-    // map from screen to view
-    float x = MapValue(p.x, 0, window.getSize().x, 0, view.getSize().x);
-    float y = MapValue(p.y, 0, window.getSize().y, 0, view.getSize().y);
-
-    // center coordinates
-    sf::Vector2f world_point = sf::Vector2f(x, y) - view.getSize() * .5f;
-
-    // apply camera position
-    world_point.x += view.getCenter().x;
-    world_point.y -= view.getCenter().y;
-
-    return world_point;*/
-}
-
-sf::Vector2i fun::Math::WorldToScreen(const sf::Vector2f& p, const sf::RenderWindow& window) {
-    return window.mapCoordsToPixel(p);
-}
-
 /*// todo make grid constants local
 sf::Vector2i fun::Math::WorldToGrid(const sf::Vector2f& p) {
     return sf::Vector2i(std::floor(p.x / TILE_SIZE), std::floor(p.y / TILE_SIZE));

@@ -1,10 +1,12 @@
 #include "../../include/core/R.h"
 
+const std::string fun::R::resources_directory =
 #if defined(RELEASE_BUILD)
-const std::string fun::R::resources_directory = "/R/";
+"/R/"
 #else
-const std::string fun::R::resources_directory = "../R/";
+"../R/"
 #endif
+;
 
 const std::string fun::R::textures_directory = R::resources_directory + "textures/";
 const std::string fun::R::images_directory = R::resources_directory + "images/";

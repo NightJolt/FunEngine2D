@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.19.2)
-project(FunEngine2D LANGUAGES CXX CUDA)
+
+set(PROJECT_NAME FunEngine2D)
+
+project(${PROJECT_NAME} LANGUAGES CXX CUDA)
 
 #find_package(Lua REQUIRED)
 #find_package(ImGui-SFML REQUIRED)
@@ -18,11 +21,11 @@ file (
         source/*.cpp
 )
 
-add_executable(FunEngine2D ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 add_subdirectory(fun_engine_2d)
 
-target_link_libraries(FunEngine2D fe2d_source)
-target_link_libraries(FunEngine2D fe2d_kernel)
-#target_link_libraries(FunEngine2D ${LUA_LIBRARIES})
-#target_link_libraries(FunEngine2D PRIVATE ImGui-SFML::ImGui-SFML)
+target_link_libraries(${PROJECT_NAME} fe2d_source)
+target_link_libraries(${PROJECT_NAME} fe2d_kernel)
+#target_link_libraries(${PROJECT_NAME} ${LUA_LIBRARIES})
+#target_link_libraries(${PROJECT_NAME} PRIVATE ImGui-SFML::ImGui-SFML)

@@ -33,6 +33,8 @@ int main () {
 
         window_data->PollEvents();
 
+        a.setPosition(window_data->ScreenToWorld(sf::Mouse::getPosition(window_data->window)));
+
         window_data->AddWorld(a, 420);
         window_data->AddWorld(b, 69);
 

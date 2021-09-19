@@ -1,9 +1,6 @@
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CUDA_STANDARD 20)
 
-#find_package(Lua REQUIRED)
-#find_package(ImGui-SFML REQUIRED)
-
 include_directories(include)
 include_directories(source)
 
