@@ -1,13 +1,13 @@
-#include "../fun_engine_2d/include/core/globals.h"
+#include "../fun_engine_2d/core/include/globals.h"
 
-#include "../fun_engine_2d/include/core/tools/Command.h"
-#include "../fun_engine_2d/include/core/render/RenderQueue.h"
-#include "../fun_engine_2d/include/core/render/WindowManager.h"
-#include "../fun_engine_2d/include/core/R.h"
-#include "../fun_engine_2d/include/core/Input.h"
-#include "../fun_engine_2d/include/core/Time.h"
+#include "../fun_engine_2d/core/include/tools/Command.h"
+#include "../fun_engine_2d/core/include/render/RenderQueue.h"
+#include "../fun_engine_2d/core/include/render/WindowManager.h"
+#include "../fun_engine_2d/core/include/R.h"
+#include "../fun_engine_2d/core/include/Input.h"
+#include "../fun_engine_2d/core/include/Time.h"
 
-#include "../fun_engine_2d/include/experimental//kernel/cudatest.cuh"
+#include "../fun_engine_2d/kernel/include/cudatest.cuh"
 
 // USED FOR TESTING
 int main () {
@@ -33,7 +33,7 @@ int main () {
 
         window_data->PollEvents();
 
-        a.setPosition(window_data->ScreenToWorld(sf::Mouse::getPosition(window_data->window)));
+        a.setPosition(window_data->ScreenToWorld(sf::Mouse::getPosition(window_data->window)) - a.getRadius());
 
         window_data->AddWorld(a, 420);
         window_data->AddWorld(b, 69);

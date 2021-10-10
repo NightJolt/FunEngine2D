@@ -25,7 +25,7 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 add_subdirectory(fun_engine_2d)
 
-target_link_libraries(${PROJECT_NAME} fe2d_source)
-target_link_libraries(${PROJECT_NAME} fe2d_kernel)
+#target_link_libraries(${PROJECT_NAME} fe2d_source)
+#target_link_libraries(${PROJECT_NAME} fe2d_kernel)
 #target_link_libraries(${PROJECT_NAME} ${LUA_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} PRIVATE ImGui-SFML::ImGui-SFML)
