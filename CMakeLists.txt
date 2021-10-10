@@ -13,7 +13,8 @@ set(GCC_COVERAGE_COMPILE_FLAGS "-lsfml-graphics -lsfml-window -lsfml-system -lsf
 # -Ofast -pthread -lm -lGL -L/usr/X11R6/lib -lGLU -lGLEW -lXi -lXmu
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 
-include_directories(source)
+#include_directories(header)
+#include_directories(source)
 
 file (
         GLOB_RECURSE SOURCE_FILES
