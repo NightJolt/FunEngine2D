@@ -70,7 +70,7 @@ typedef unsigned short uint16;         //                          0 to 65,535
 typedef unsigned int uint32;           //                          0 to 4,294,967,295
 typedef unsigned long long uint64;     //                          0 to 18,446,744,073,709,551,615
 
-#define LOCALIZE(type, body) [this]() -> type body
+#define TO_LAMBDA(type, body) [this]() -> type body
 
 void glob_init();
 
