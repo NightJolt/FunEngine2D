@@ -1,13 +1,13 @@
-#include "../fun_engine_2d/core/include/globals.h"
+#include "fun_engine_2d/core/include/globals.h"
 
-#include "../fun_engine_2d/core/include/tools/Command.h"
-#include "../fun_engine_2d/core/include/render/RenderQueue.h"
-#include "../fun_engine_2d/core/include/render/WindowManager.h"
-#include "../fun_engine_2d/core/include/R.h"
-#include "../fun_engine_2d/core/include/Input.h"
-#include "../fun_engine_2d/core/include/Time.h"
+#include "fun_engine_2d/core/include/tools/Command.h"
+#include "fun_engine_2d/core/include/render/RenderQueue.h"
+#include "fun_engine_2d/core/include/render/WindowManager.h"
+#include "fun_engine_2d/core/include/R.h"
+#include "fun_engine_2d/core/include/Input.h"
+#include "fun_engine_2d/core/include/Time.h"
 
-#include "../fun_engine_2d/kernel/include/cudatest.cuh"
+#include "fun_engine_2d/kernel/include/cudatest.cuh"
 
 // USED FOR TESTING
 int main () {
