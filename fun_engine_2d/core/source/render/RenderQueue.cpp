@@ -11,7 +11,7 @@ void fun::RenderQueue::Clear() {
 }
 
 void fun::RenderQueue::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    std::stable_sort(queue.begin(), queue.end(), [](const RenderItem& a, const RenderItem& b) -> bool { return a.order > b.order; });
+    std::stable_sort(queue.begin(), queue.end(), [](const RenderItem& a, const RenderItem& b) -> bool { return a.order < b.order; });
 
     for (auto& item : queue) {
         target.draw(*item.drawable, states);
