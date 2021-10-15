@@ -47,8 +47,11 @@ namespace fun {
             void PollEvents();
             void Display(const sf::Color&);
 
-            sf::Vector2f ScreenToWorld(const sf::Vector2i&);
-            sf::Vector2i WorldToScreen(const sf::Vector2f&);
+            sf::Vector2i GetMouseScreenPosition() const;
+            sf::Vector2f GetMouseWorldPosition() const;
+
+            sf::Vector2f ScreenToWorld(const sf::Vector2i&) const;
+            sf::Vector2i WorldToScreen(const sf::Vector2f&) const;
         };
 
         static WindowData* main_window;

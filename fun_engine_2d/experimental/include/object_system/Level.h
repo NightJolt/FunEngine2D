@@ -22,6 +22,25 @@ namespace fun {
         void Update();
         void Dispose();
 
+        template <class T>
+        std::vector <T*> GetObjectsOfType() {
+            std::vector <Object*> objects;
+
+            for (auto object : static_objects) {
+                if (dynamic_cast <T*> (object)) {
+                    objects.template emplace_back(object);
+                }
+            }
+
+            for (auto object : live_objects) {
+                if (dynamic_cast <T*> (object)) {
+                    objects.template emplace_back(object);
+                }
+            }
+
+            return objects;
+        }
+
     private:
 
         std::vector <StaticObject*> static_objects;

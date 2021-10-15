@@ -129,10 +129,18 @@ void fun::WindowManager::WindowData::PollEvents() {
     }
 }
 
-sf::Vector2f fun::WindowManager::WindowData::ScreenToWorld(const sf::Vector2i& p) {
+sf::Vector2i fun::WindowManager::WindowData::GetMouseScreenPosition() const {
+    return sf::Mouse::getPosition(window);
+}
+
+sf::Vector2f fun::WindowManager::WindowData::GetMouseWorldPosition() const {
+    return ScreenToWorld(GetMouseScreenPosition());
+}
+
+sf::Vector2f fun::WindowManager::WindowData::ScreenToWorld(const sf::Vector2i& p) const {
     return world_buffer.mapPixelToCoords(p);
 }
 
-sf::Vector2i fun::WindowManager::WindowData::WorldToScreen(const sf::Vector2f& p) {
+sf::Vector2i fun::WindowManager::WindowData::WorldToScreen(const sf::Vector2f& p) const {
     return world_buffer.mapCoordsToPixel(p);
 }

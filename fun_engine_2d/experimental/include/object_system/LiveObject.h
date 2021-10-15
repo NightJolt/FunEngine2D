@@ -1,15 +1,15 @@
 #pragma once
 
-#include "StaticObject.h"
+#include "Object.h"
 
 namespace fun {
-    class LiveObject : public StaticObject {
+    class LiveObject : public Object {
     public:
 
         LiveObject() = default;
-        virtual ~LiveObject() = default;
+        ~LiveObject() noexcept override = 0;
 
-        virtual void Update() = 0;
+        virtual void Update();
 
     private:
     };

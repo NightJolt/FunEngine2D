@@ -1,14 +1,13 @@
 #pragma once
 
+#include "Object.h"
+
 namespace fun {
-    class StaticObject {
+    class StaticObject : public Object {
     public:
 
         StaticObject() = default;
-        virtual ~StaticObject() = default;
-
-        virtual void Init() = 0;
-        virtual void Dispose() = 0;
+        ~StaticObject() noexcept override = 0;
 
     private:
     };

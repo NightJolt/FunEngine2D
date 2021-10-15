@@ -33,6 +33,8 @@ int main () {
 
         window_data->PollEvents();
 
+        window_data->world_view.move(fun::Input::K2D() * sf::Vector2f(1, -1) * 30.f);
+
         a.setPosition(window_data->ScreenToWorld(sf::Mouse::getPosition(window_data->window)) - a.getRadius());
 
         window_data->AddWorld(a, 420);

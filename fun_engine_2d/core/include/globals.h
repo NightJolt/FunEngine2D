@@ -61,16 +61,20 @@
 
 #pragma endregion*/
 
-typedef char int8;                     //                       -127 to 127
-typedef short int16;                   //                    -32,768 to 32,767
-typedef int int32;                     //             -2,147,483,648 to 2,147,483,647
-typedef long long int64;               // -9,223,372,036,854,775,807 to 9,223,372,036,854,775,807
-typedef unsigned char uint8;           //                          0 to 255
-typedef unsigned short uint16;         //                          0 to 65,535
-typedef unsigned int uint32;           //                          0 to 4,294,967,295
-typedef unsigned long long uint64;     //                          0 to 18,446,744,073,709,551,615
+typedef char i8;                     //                       -127 to 127
+typedef short i16;                   //                    -32,768 to 32,767
+typedef int i32;                     //             -2,147,483,648 to 2,147,483,647
+typedef long long i64;               // -9,223,372,036,854,775,807 to 9,223,372,036,854,775,807
+typedef long i32_64;
+typedef unsigned char u8;           //                          0 to 255
+typedef unsigned short u16;         //                          0 to 65,535
+typedef unsigned int u32;           //                          0 to 4,294,967,295
+typedef unsigned long long u64;     //                          0 to 18,446,744,073,709,551,615
+typedef unsigned long u32_64;
 
-#define TO_LAMBDA(type, body) [this]() -> type body
+#define TO_LAMBDA(type, args, body) [this] args -> type body
+#define print(body) std::cout << body;
+#define println(body) std::cout << body << std::endl;
 
 void glob_init();
 
