@@ -22,7 +22,7 @@ void fun::Interaction::Update() {
 
     if (obj_active) {
         bool interaction = obj_active->Interactable_Interaction(mouse_pos);
-        bool is_interacted = interaction || obj_active->l_hold || obj_active->r_pressed || obj_active->r_hold;
+        bool is_interacted = interaction || obj_active->l_pressed || obj_active->l_hold || obj_active->l_released || obj_active->r_pressed || obj_active->r_hold || obj_active->r_released;
 
         if (is_interacted) {
             obj_active->l_pressed = false;
@@ -34,11 +34,13 @@ void fun::Interaction::Update() {
                         obj_active->l_pressed = true;
                         obj_active->l_hold = true;
                     }
-                } else if (Input::Released(sf::Mouse::Left)) {
-                    if (obj_active->l_hold) {
-                        obj_active->l_hold = false;
-                        obj_active->l_released = true;
-                    }
+                }
+            }
+
+            if (Input::Released(sf::Mouse::Left)) {
+                if (obj_active->l_hold) {
+                    obj_active->l_hold = false;
+                    obj_active->l_released = true;
                 }
             }
 
@@ -51,11 +53,13 @@ void fun::Interaction::Update() {
                         obj_active->r_pressed = true;
                         obj_active->r_hold = true;
                     }
-                } else if (Input::Released(sf::Mouse::Right)) {
-                    if (obj_active->r_hold) {
-                        obj_active->r_hold = false;
-                        obj_active->r_released = true;
-                    }
+                }
+            }
+
+            if (Input::Released(sf::Mouse::Right)) {
+                if (obj_active->r_hold) {
+                    obj_active->r_hold = false;
+                    obj_active->r_released = true;
                 }
             }
 
@@ -85,14 +89,22 @@ void fun::Interaction::Update() {
         }
     }
 
-    if (!obj_active) {
-        for (auto object : interactables) {
-            if (object->Interactable_Interaction(mouse_pos)) {
-                if (!obj_active || obj_active->layer < object->layer) {
-                    obj_active = object;
-                }
+    if (obj_active) {
+        if (!(obj_active->l_hold || obj_active->r_hold)) {
+            typeof(obj_active) new_target = ObjectAtPos(mouse_pos);
+
+            if (!new_target) new_target = obj_active;
+
+            if (new_target != obj_active) {
+                obj_active->hover_exit = true;
+                new_target->hover_enter = true;
+
+                obj_last = obj_active;
+                obj_active = new_target;
             }
         }
+    } else {
+        obj_active = ObjectAtPos(mouse_pos);
 
         if (!obj_active) return;
 
@@ -100,6 +112,22 @@ void fun::Interaction::Update() {
     }
 }
 
-void fun::Interaction::Dispose(fun::Interactable *) {
-    // todo: implement
+void fun::Interaction::Dispose(Interactable* interactable) {
+    for (auto it = interactables.rbegin(); it != interactables.rend(); it++) {
+        if (*it == interactable) interactables.erase((it + 1).base());
+    }
+}
+
+fun::Interactable* fun::Interaction::ObjectAtPos(const sf::Vector2f& pos) {
+    Interactable* target = nullptr;
+
+    for (auto object : interactables) {
+        if (object->Interactable_Interaction(pos)) {
+            if (!target || target->layer < object->layer) {
+                target = object;
+            }
+        }
+    }
+
+    return target;
 }

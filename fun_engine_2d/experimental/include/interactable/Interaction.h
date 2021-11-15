@@ -13,12 +13,12 @@ namespace fun {
     public:
 
         static void Add(Interactable*);
-
         static void Update();
+        static void Dispose(Interactable*);
+
+        static Interactable* ObjectAtPos(const sf::Vector2f&);
 
     private:
-
-        static void Dispose(Interactable*);
 
         static Interactable* obj_active;
         static Interactable* obj_last;

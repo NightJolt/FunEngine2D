@@ -1,6 +1,6 @@
 #include "interactable/Interactable.h"
 
-fun::Interactable::Interactable(i32 layer) : layer(layer) {
+fun::Interactable::Interactable() : layer(0) {
     Interaction::Add(this);
 
     r_pressed = false;
@@ -16,7 +16,9 @@ fun::Interactable::Interactable(i32 layer) : layer(layer) {
     hover_exit = false;
 }
 
-fun::Interactable::~Interactable() noexcept = default;
+fun::Interactable::~Interactable() noexcept {
+    fun::Interaction::Dispose(this);
+}
 
 bool fun::Interactable::Interactable_RightPressed() const {
     return r_pressed;

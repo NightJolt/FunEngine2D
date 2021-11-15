@@ -1,6 +1,7 @@
 #include "Time.h"
 
 sf::Clock fun::Time::delta_clock = sf::Clock();
+sf::Time fun::Time::delta_time = sf::Time();
 
 float fun::Time::time_elapsed = 0;
 float fun::Time::unscaled_delta_time = 0;
@@ -11,7 +12,8 @@ float fun::Time::fps = 0;
 std::map <UniqueKey, float> fun::Time::clocks = std::map <UniqueKey, float> ();
 
 void fun::Time::Recalculate() {
-    unscaled_delta_time = delta_clock.restart().asSeconds();
+    delta_time = delta_clock.restart();
+    unscaled_delta_time = delta_time.asSeconds();
     scaled_delta_time = unscaled_delta_time * time_scale;
     time_elapsed += unscaled_delta_time;
 
@@ -28,6 +30,10 @@ float fun::Time::UnscaledDeltaTime() {
 
 float fun::Time::DeltaTime() {
     return scaled_delta_time;
+}
+
+sf::Time fun::Time::DeltaTimeObject() {
+    return delta_time;
 }
 
 float fun::Time::TimeElapsed() {

@@ -9,6 +9,7 @@ namespace fun {
         static void Recalculate();
         static float UnscaledDeltaTime();
         static float DeltaTime();
+        static sf::Time DeltaTimeObject();
         static float TimeElapsed();
         static float FPS();
 
@@ -22,6 +23,7 @@ namespace fun {
     private:
 
         static sf::Clock delta_clock;
+        static sf::Time delta_time;
 
         static float time_elapsed;
         static float unscaled_delta_time;

@@ -6,7 +6,7 @@
 //define RELEASE_BUILD
 
 #define USES_SFML
-//#define USES_IMGUI
+#define USES_IMGUI
 //#define USES_LUA
 //#define USING_BOX2D
 
@@ -40,6 +40,7 @@
 
 #include <memory>
 #include <cstring>
+#include <sstream>
 #include <map>
 #include <unordered_map>
 #include <set>
@@ -73,8 +74,11 @@ typedef unsigned long long u64;     //                          0 to 18,446,744,
 typedef unsigned long u32_64;
 
 #define TO_LAMBDA(type, args, body) [this] args -> type body
-#define print(body) std::cout << body;
-#define println(body) std::cout << body << std::endl;
+
+#define print(body) std::cout << body
+#define println(body) std::cout << body << std::endl
+
+#define is_type_of(type, obj) (dynamic_cast <type*> (obj) != nullptr)
 
 void glob_init();
 

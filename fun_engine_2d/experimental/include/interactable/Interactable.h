@@ -5,6 +5,7 @@
 #include "../../../core/include/Math.h"
 #include "../../../core/include/Input.h"
 
+#include "../object_system/LiveObject.h"
 #include "Interaction.h"
 
 namespace fun {
@@ -15,7 +16,7 @@ namespace fun {
 
     public:
 
-        Interactable(i32 = 0);
+        Interactable();
         virtual ~Interactable() noexcept = 0;
 
         void Interactable_SetInteractionLayer(i32);

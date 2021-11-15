@@ -5,18 +5,23 @@
 #include "../../../core/include/Math.h"
 
 namespace fun {
-    class CurvedLine : public sf::Drawable {
+    class CurvedLine final : public sf::Drawable {
     public:
 
         CurvedLine();
+        ~CurvedLine() noexcept final = default;
 
-        void SetPoints(sf::Vector2f, sf::Vector2f, bool = true);
-        void SetRadius(float, bool = true);
-        void SetSmoothness(int, bool = true);
-        void CurveAt(float, bool = true);
-        void SetColor(sf::Color, bool = true);
+        void SetPoints(sf::Vector2f, sf::Vector2f);
+        void SetRadius(float);
+        void SetSmoothness(int);
+        void CurveAt(float);
+        void SetColor(const sf::Color&);
 
     private:
+
+        void Build() const;
+
+        void draw(sf::RenderTarget&, sf::RenderStates) const final;
 
         sf::Vector2f from;
         sf::Vector2f to;
@@ -24,13 +29,9 @@ namespace fun {
         float radius = 40;
         int smoothness = 5;
         float curving_point = .5f;
+        sf::Color color = { 0, 0, 0 };
 
-        sf::Color color;
-
-        std::vector<sf::Vertex> points;
-
-        void Build();
-
-        void draw(sf::RenderTarget &, sf::RenderStates) const override;
+        mutable bool should_update = false;
+        mutable std::vector <sf::Vertex> points;
     };
 }

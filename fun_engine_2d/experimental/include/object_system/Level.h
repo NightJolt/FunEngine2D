@@ -6,21 +6,36 @@
 #include "LiveObject.h"
 
 namespace fun {
-    class Level {
+    class Level final {
     public:
 
         Level();
         ~Level() = default;
 
         template <class T>
-        T& CreateStaticObject() { return static_objects.emplace_back(new T); }
+        T* CreateStaticObject() {
+            T* object = new T;
+
+            live_objects.emplace_back(dynamic_cast <StaticObject*> (object))->Init();
+
+            return object;
+        }
 
         template <class T>
-        T& CreateLiveObject() { return live_objects.emplace_back(new T); }
+        T* CreateLiveObject() {
+            T* object = new T;
+
+            live_objects.emplace_back(dynamic_cast <LiveObject*> (object))->Init();
+
+            return object;
+        }
 
         void Init();
         void Update();
         void Dispose();
+        void Unload();
+
+        void ShowHierarchy();
 
         template <class T>
         std::vector <T*> GetObjectsOfType() {

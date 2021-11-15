@@ -1,7 +1,7 @@
 #include "render/WindowManager.h"
 
-const sf::Vector2u fun::WindowManager::INIT_SCREEN_SIZE = sf::Vector2u(856, 482);
-const sf::Vector2f fun::WindowManager::INIT_VIEW_SIZE = sf::Vector2f(856, 482);
+const sf::Vector2u fun::WindowManager::INIT_SCREEN_SIZE = sf::Vector2u(856, 482) * (unsigned)2;
+const sf::Vector2f fun::WindowManager::INIT_VIEW_SIZE = sf::Vector2f(856, 482) * 2.f;
 const sf::Vector2f fun::WindowManager::INIT_VIEW_ORIGIN = sf::Vector2f(0, 0);
 
 fun::WindowManager::WindowData* fun::WindowManager::main_window = nullptr;
@@ -66,6 +66,11 @@ void fun::WindowManager::WindowData::Display(const sf::Color& bg_color) {
 
     window.setView(final_view);
     window.draw(world_render/*, fun::R::shaders[0]*/);
+
+#if defined(USES_IMGUI)
+    ImGui::SFML::Render(window);
+#endif
+
     window.display();
 
     world_queue.Clear();
@@ -86,6 +91,9 @@ void fun::WindowManager::WindowData::PollEvents() {
     float curr_zoom_value;
 
     while (window.pollEvent(event)) {
+#if defined(USES_IMGUI)
+        ImGui::SFML::ProcessEvent(event);
+#endif
         switch (event.type) {
             case sf::Event::Closed:
                 window.close();

@@ -19,11 +19,75 @@ void fun::Level::Update() {
 }
 
 void fun::Level::Dispose() {
+    for (auto rit = static_objects.rbegin(); rit != static_objects.rend(); rit++) {
+        if ((*rit)->should_be_disposed) {
+            auto it = (rit + 1).base();
+
+            delete *it;
+
+            static_objects.erase(it);
+        }
+    }
+
+    for (auto rit = live_objects.rbegin(); rit != live_objects.rend(); rit++) {
+        if ((*rit)->should_be_disposed) {
+            auto it = (rit + 1).base();
+
+            delete *it;
+
+            live_objects.erase(it);
+        }
+    }
+}
+
+void fun::Level::Unload() {
     for (auto obj : static_objects) {
-        obj->Dispose();
+        delete obj;
     }
 
     for (auto obj : live_objects) {
-        obj->Dispose();
+        delete obj;
     }
+}
+
+void fun::Level::ShowHierarchy() {
+    std::ostringstream mem_addr;
+
+    mem_addr << this;
+
+    ImGui::Begin(("Level " + mem_addr.str()).c_str());
+
+        if (ImGui::TreeNode("Live Objects")) {
+            for (auto& object : live_objects) {
+                mem_addr.str("");
+                mem_addr.clear();
+                mem_addr << object;
+
+                ImGui::TableNextColumn();
+
+                if (ImGui::Button(mem_addr.str().c_str(), ImVec2(-FLT_MIN, 0.0f))) {
+                    object->should_be_disposed = true;
+                }
+            }
+
+            ImGui::TreePop();
+        }
+
+        if (ImGui::TreeNode("Static Objects")) {
+            for (auto& object : static_objects) {
+                mem_addr.str("");
+                mem_addr.clear();
+                mem_addr << object;
+
+                ImGui::TableNextColumn();
+
+                if (ImGui::Button(mem_addr.str().c_str(), ImVec2(-FLT_MIN, 0.0f))) {
+                    object->should_be_disposed = true;
+                }
+            }
+
+            ImGui::TreePop();
+        }
+
+    ImGui::End();
 }
