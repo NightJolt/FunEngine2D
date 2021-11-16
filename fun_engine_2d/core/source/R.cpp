@@ -23,7 +23,6 @@ const std::string fun::R::images_to_load[] = {
 
 std::vector <sf::Font> fun::R::fonts = std::vector <sf::Font> ();
 const std::string fun::R::fonts_to_load[] = {
-        "lato_light.ttf"
 };
 
 std::vector <sf::Shader*> fun::R::shaders = std::vector <sf::Shader*> ();

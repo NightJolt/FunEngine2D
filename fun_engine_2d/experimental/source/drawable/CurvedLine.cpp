@@ -1,47 +1,53 @@
 #include "drawable/CurvedLine.h"
 
 fun::CurvedLine::CurvedLine() {
-    SetColor(sf::Color(150, 150, 150));
-
     Build();
 }
 
-void fun::CurvedLine::SetPoints(sf::Vector2f f, sf::Vector2f t, bool should_update) {
+void fun::CurvedLine::SetPoints(sf::Vector2f f, sf::Vector2f t) {
+    if (from == f && to == t) return;
+
     from = f;
     to = t;
 
-    if (should_update) Build();
+    should_update = true;
 }
 
-void fun::CurvedLine::SetRadius(float r, bool should_update) {
+void fun::CurvedLine::SetRadius(float r) {
+    if (radius != r) return;
+
     radius = r;
 
-    if (should_update) Build();
+    should_update = true;
 }
 
-void fun::CurvedLine::SetSmoothness(int s, bool should_update) {
+void fun::CurvedLine::SetSmoothness(int s) {
+    if (smoothness != s) return;
+
     smoothness = s;
 
-    if (should_update) Build();
+    should_update = true;
 }
 
-void fun::CurvedLine::CurveAt(float c, bool should_update) {
+void fun::CurvedLine::CurveAt(float c) {
+    if (curving_point != c) return;
+
     curving_point = c;
 
-    if (should_update) Build();
+    should_update = true;
 }
 
-void fun::CurvedLine::SetColor(sf::Color c, bool should_update) {
+void fun::CurvedLine::SetColor(const sf::Color& c) {
+    if (color == c) return;
+
     color = c;
 
-    if (should_update) {
-        for (auto& point : points) {
-            point.color = color;
-        }
+    for (auto& point : points) {
+        point.color = color;
     }
 }
 
-void fun::CurvedLine::Build() {
+void fun::CurvedLine::Build() const {
     if (std::abs(to.x - from.x) < 2 * radius || std::abs(to.y - from.y) < 2 * radius) {
         points.resize(2);
 
@@ -93,6 +99,12 @@ void fun::CurvedLine::Build() {
     }
 }
 
-void fun::CurvedLine::draw(sf::RenderTarget& rt, sf::RenderStates rs) const {
-    rt.draw(&points[0], points.size(), sf::LineStrip);
+void fun::CurvedLine::draw(sf::RenderTarget& render_target, sf::RenderStates rs) const {
+    if (should_update) {
+        Build();
+
+        should_update = false;
+    }
+
+    render_target.draw(&points[0], points.size(), sf::LineStrip);
 }
