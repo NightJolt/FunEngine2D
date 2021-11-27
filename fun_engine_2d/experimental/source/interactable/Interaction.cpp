@@ -91,7 +91,7 @@ void fun::Interaction::Update() {
 
     if (obj_active) {
         if (!(obj_active->l_hold || obj_active->r_hold)) {
-            typeof(obj_active) new_target = ObjectAtPos(mouse_pos);
+            Interactable* new_target = ObjectAtPos(mouse_pos);
 
             if (!new_target) new_target = obj_active;
 

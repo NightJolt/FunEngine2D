@@ -2,13 +2,18 @@
 
 #pragma region flags
 
+#define WIN
+// #define UNIX
+// #define OSX
+
 #define ENABLE_DEBUGGING
-//define RELEASE_BUILD
+// define RELEASE_BUILD
 
 #define USES_SFML
 #define USES_IMGUI
-//#define USES_LUA
-//#define USING_BOX2D
+// #define USES_CUDA
+// #define USES_LUA
+// #define USING_BOX2D
 
 #if defined(USES_SFML)
 #define SFML_VEC2_OVERLOADS
@@ -17,7 +22,7 @@
 
 #pragma endregion
 
-#pragma region libs
+#pragma region libsWW
 
 #if defined(USES_SFML)
 #include <SFML/Graphics.hpp>
@@ -73,11 +78,12 @@ typedef unsigned int u32;           //                          0 to 4,294,967,2
 typedef unsigned long long u64;     //                          0 to 18,446,744,073,709,551,615
 typedef unsigned long u32_64;
 
-#define TO_LAMBDA(type, args, body) [this] args -> type body
-
 #define print(body) std::cout << body
-#define println(body) std::cout << body << std::endl
+#define printsp(body) print(body) << " "
+#define println(body) print(body) << std::endl
+#define nextln() std::cout << std::endl
 
+#define to_lambda(type, args, body) [this] args -> type body
 #define is_type_of(type, obj) (dynamic_cast <type*> (obj) != nullptr)
 
 void glob_init();

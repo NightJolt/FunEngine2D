@@ -3,7 +3,7 @@
 #include "../globals.h"
 
 #include "RenderQueue.h"
-#include "../Math.h"
+#include "../_Math.h"
 
 namespace fun {
     class WindowManager {

@@ -2,7 +2,7 @@
 
 #include "globals.h"
 
-#include "Math.h"
+#include "_Math.h"
 
 #define ENABLE_MOUSE
 #define ENABLE_KEYBOARD

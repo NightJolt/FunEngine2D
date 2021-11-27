@@ -1,4 +1,4 @@
-#include "Math.h"
+#include "_Math.h"
 
 int fun::Math::Random(int a, int b) {
     return rand() % (b - a) + a;

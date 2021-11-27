@@ -1,4 +1,4 @@
-#include "Time.h"
+#include "_Time.h"
 
 sf::Clock fun::Time::delta_clock = sf::Clock();
 sf::Time fun::Time::delta_time = sf::Time();

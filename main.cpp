@@ -5,12 +5,14 @@
 #include "fun_engine_2d/core/include/render/WindowManager.h"
 #include "fun_engine_2d/core/include/R.h"
 #include "fun_engine_2d/core/include/Input.h"
-#include "fun_engine_2d/core/include/Time.h"
+#include "fun_engine_2d/core/include/_Time.h"
 #include "fun_engine_2d/experimental/include/interactable/Interaction.h"
 #include "fun_engine_2d/experimental/include/object_system/Level.h"
 #include "fun_engine_2d/experimental/include/drawable/RoundedRect.h"
 
+#if defined(UNIX)
 #include "fun_engine_2d/kernel/include/cudatest.cuh"
+#endif
 
 // USED FOR TESTING
 int main () {
@@ -27,7 +29,9 @@ int main () {
 
     ImGui::SFML::Init(window_data->window);
 
+#if defined(UNIX)
     std::cout << fun::CudaTesting::AddTwoNumbers(420, 69) << std::endl;
+#endif
 
     sf::CircleShape a(100, 30);
     sf::CircleShape b(100, 30);
