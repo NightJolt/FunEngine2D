@@ -42,6 +42,13 @@ namespace fun {
         }
 
         template <class T>
+        static float Manhattan(const sf::Vector2<T>& v) {
+            const auto abs_v = Math::Abs(v);
+
+            return abs_v.x + abs_v.y;
+        }
+
+        template <class T>
         static float Magnitude(const sf::Vector2<T>& v) {
             return sqrt(Scalar(v, v));
         }

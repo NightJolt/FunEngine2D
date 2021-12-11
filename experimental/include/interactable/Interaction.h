@@ -17,6 +17,7 @@ namespace fun {
         static void Dispose(Interactable*);
 
         static Interactable* ObjectAtPos(const sf::Vector2f&);
+        static bool IsAnythingInteracted();
 
     private:
 

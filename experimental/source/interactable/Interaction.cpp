@@ -131,3 +131,7 @@ fun::Interactable* fun::Interaction::ObjectAtPos(const sf::Vector2f& pos) {
 
     return target;
 }
+
+bool fun::Interaction::IsAnythingInteracted() {
+    return obj_active;
+}

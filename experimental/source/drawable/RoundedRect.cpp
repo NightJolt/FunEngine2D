@@ -24,7 +24,7 @@ void fun::RoundedRect::SetPosition(const sf::Vector2f& p) {
     position = p;
 }
 
-const sf::Vector2f& fun::RoundedRect::GetPosition() {
+const sf::Vector2f& fun::RoundedRect::GetPosition() const {
     return position;
 }
 
@@ -36,7 +36,7 @@ void fun::RoundedRect::SetSize(const sf::Vector2f& s) {
     should_update = true;
 }
 
-const sf::Vector2f& fun::RoundedRect::GetSize() {
+const sf::Vector2f& fun::RoundedRect::GetSize() const {
     return size;
 }
 

@@ -5,8 +5,8 @@ find_package(SFML COMPONENTS system window graphics network audio REQUIRED)
 set(SFML_LIBS sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
 
 set (ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/lib/cmake/ImGui-SFML")
-set(IMGUI_SFML_LIBS ImGui-SFML::ImGui-SFML)
 find_package(ImGui-SFML REQUIRED)
+set(IMGUI_SFML_LIBS ImGui-SFML::ImGui-SFML)
 
 add_subdirectory(core)
 add_subdirectory(experimental)

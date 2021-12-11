@@ -13,9 +13,9 @@ namespace fun {
 
         void SetRadius(float);
         void SetPosition(const sf::Vector2f&);
-        const sf::Vector2f& GetPosition();
+        const sf::Vector2f& GetPosition() const;
         void SetSize(const sf::Vector2f&);
-        const sf::Vector2f& GetSize();
+        const sf::Vector2f& GetSize() const;
         void SetSmoothness(int);
         void SetFillColor(const sf::Color&);
 
