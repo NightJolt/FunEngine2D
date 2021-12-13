@@ -13,7 +13,7 @@
 #define USES_IMGUI
 // #define USES_CUDA
 // #define USES_LUA
-// #define USING_BOX2D
+// #define USES_BOX2D
 
 #if defined(USES_SFML)
 #define SFML_VEC2_OVERLOADS
@@ -86,41 +86,25 @@ typedef unsigned long u32_64;
 #define to_lambda(type, args, body) [this] args -> type body
 #define is_type_of(type, obj) (dynamic_cast <type*> (obj) != nullptr)
 
-void glob_init();
+namespace fun {
+    void glob_init();
 
-struct UniqueKey {
-    UniqueKey(void* p, const char* k) : ptr(p), key(strdup(k)) {}
-    ~UniqueKey() { free(key); }
+    struct UniqueKey {
+        UniqueKey(void*, const char*);
+        ~UniqueKey();
 
-    bool operator <(const UniqueKey& other) const {
-        return strcmp(key, other.key) < 0;
-    }
+        bool operator <(const UniqueKey&) const;
 
-    UniqueKey(const UniqueKey& other) {
-        ptr = other.ptr;
-        key = strdup(other.key);
-    }
+        UniqueKey(const UniqueKey&);
 
-    UniqueKey& operator =(const UniqueKey& other) {
-        if (&other == this) return *this;
+        UniqueKey& operator =(const UniqueKey&);
 
-        ptr = other.ptr;
-        key = strdup(other.key);
+        UniqueKey(UniqueKey&&) noexcept;
 
-        return *this;
-    }
-
-    UniqueKey(UniqueKey&& other) noexcept {
-        ptr = other.ptr;
-        key = other.key;
-
-        other.ptr = nullptr;
-        other.key = nullptr;
-    }
-
-    void* ptr;
-    char* key;
-};
+        void* ptr;
+        char* key;
+    };
+}
 
 #pragma region sfml_vec2
 #if defined(SFML_VEC2_OVERLOADS)

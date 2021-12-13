@@ -9,7 +9,7 @@ float _scaled_delta_time_ = 0;
 float _time_scale_ = 1;
 float _fps_ = 0;
 
-std::map <UniqueKey, float> _clocks_;
+std::map <fun::UniqueKey, float> _clocks_;
 
 void fun::time::recalculate() {
     _delta_time_ = _delta_clock_.restart();
