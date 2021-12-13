@@ -1,66 +1,63 @@
 #include "Input.h"
 
 #if defined(ENABLE_MOUSE)
-bool fun::Input::mouse_button_pressed[MOUSE_BUTTON_COUNT];
-bool fun::Input::mouse_button_released[MOUSE_BUTTON_COUNT];
-bool fun::Input::mouse_button_hold[MOUSE_BUTTON_COUNT];
+bool _mouse_button_pressed_[MOUSE_BUTTON_COUNT];
+bool _mouse_button_released_[MOUSE_BUTTON_COUNT];
+bool _mouse_button_hold_[MOUSE_BUTTON_COUNT];
 
-sf::Vector2f fun::Input::mouse_position = sf::Vector2f(0, 0);
-sf::Vector2f fun::Input::mouse_delta = sf::Vector2f(0, 0);
+sf::Vector2f _mouse_position_ = sf::Vector2f(0, 0);
+sf::Vector2f _mouse_delta_ = sf::Vector2f(0, 0);
 #endif
 
 #if defined(ENABLE_KEYBOARD)
-bool fun::Input::keyboard_key_pressed[KEYBOARD_KEY_COUNT];
-bool fun::Input::keyboard_key_released[KEYBOARD_KEY_COUNT];
-bool fun::Input::keyboard_key_hold[KEYBOARD_KEY_COUNT];
-int fun::Input::last_keyboard_key_pressed = 0;
+bool _keyboard_key_pressed_[KEYBOARD_KEY_COUNT];
+bool _keyboard_key_released_[KEYBOARD_KEY_COUNT];
+bool _keyboard_key_hold_[KEYBOARD_KEY_COUNT];
 #endif
 
 #if defined(ENABLE_JOYSTICKS)
-bool fun::Input::joystick_button_pressed[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-bool fun::Input::joystick_button_released[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-bool fun::Input::joystick_button_hold[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+bool _joystick_button_pressed_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+bool _joystick_button_released_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+bool _joystick_button_hold_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
 #endif
 
-void fun::Input::Listen() {
+void fun::input::listen() {
 #if defined(ENABLE_MOUSE)
     for (int button = 0; button < MOUSE_BUTTON_COUNT; button++) {
-        mouse_button_pressed[button] = false;
-        mouse_button_released[button] = false;
+        _mouse_button_pressed_[button] = false;
+        _mouse_button_released_[button] = false;
 
         if (sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button))) {
-            if (!mouse_button_hold[button]) {
-                mouse_button_pressed[button] = true;
-                mouse_button_hold[button] = true;
+            if (!_mouse_button_hold_[button]) {
+                _mouse_button_pressed_[button] = true;
+                _mouse_button_hold_[button] = true;
             }
         } else {
-            if (mouse_button_hold[button]) {
-                mouse_button_hold[button] = false;
-                mouse_button_released[button] = true;
+            if (_mouse_button_hold_[button]) {
+                _mouse_button_hold_[button] = false;
+                _mouse_button_released_[button] = true;
             }
         }
     }
 
-    mouse_delta = (sf::Vector2f)sf::Mouse::getPosition() - mouse_position;
-    mouse_position += mouse_delta;
+    _mouse_delta_ = (sf::Vector2f)sf::Mouse::getPosition() - _mouse_position_;
+    _mouse_position_ += _mouse_delta_;
 #endif
 
 #if defined(ENABLE_KEYBOARD)
     for (int key = 0; key < KEYBOARD_KEY_COUNT; key++) {
-        keyboard_key_pressed[key] = false;
-        keyboard_key_released[key] = false;
+        _keyboard_key_pressed_[key] = false;
+        _keyboard_key_released_[key] = false;
 
         if (sf::Keyboard::isKeyPressed(static_cast <sf::Keyboard::Key> (key))) {
-            if (!keyboard_key_hold[key]) {
-                keyboard_key_pressed[key] = true;
-                keyboard_key_hold[key] = true;
-
-                last_keyboard_key_pressed = key;
+            if (!_keyboard_key_hold_[key]) {
+                _keyboard_key_pressed_[key] = true;
+                _keyboard_key_hold_[key] = true;
             }
         } else {
-            if (keyboard_key_hold[key]) {
-                keyboard_key_hold[key] = false;
-                keyboard_key_released[key] = true;
+            if (_keyboard_key_hold_[key]) {
+                _keyboard_key_hold_[key] = false;
+                _keyboard_key_released_[key] = true;
             }
         }
     }
@@ -69,19 +66,19 @@ void fun::Input::Listen() {
 #if defined(ENABLE_JOYSTICKS)
     for (int button = 0; button < JOYSTICK_BUTTON_COUNT; button++) {
         for (int index = 0; index < MAX_JOYSTICK_COUNT; index++) {
-            joystick_button_pressed[button][index] = false;
-            joystick_button_released[button][index] = false;
+            _joystick_button_pressed_[button][index] = false;
+            _joystick_button_released_[button][index] = false;
 
-            if (IsJoystickConnected(index)) {
+            if (is_joystick_connected(index)) {
                 if (sf::Joystick::isButtonPressed(index, button)) {
-                    if (joystick_button_hold[button][index]) {
-                        joystick_button_pressed[button][index] = true;
-                        joystick_button_hold[button][index] = true;
+                    if (_joystick_button_hold_[button][index]) {
+                        _joystick_button_pressed_[button][index] = true;
+                        _joystick_button_hold_[button][index] = true;
                     }
                 } else {
-                    if (joystick_button_hold[button][index]) {
-                        joystick_button_hold[button][index] = false;
-                        joystick_button_released[button][index] = true;
+                    if (_joystick_button_hold_[button][index]) {
+                        _joystick_button_hold_[button][index] = false;
+                        _joystick_button_released_[button][index] = true;
                     }
                 }
             }
@@ -93,78 +90,74 @@ void fun::Input::Listen() {
 
 
 #if defined(ENABLE_MOUSE)
-bool fun::Input::Pressed(sf::Mouse::Button button) {
-    return mouse_button_pressed[button];
+bool fun::input::pressed(sf::Mouse::Button button) {
+    return _mouse_button_pressed_[button];
 }
 
-bool fun::Input::Released(sf::Mouse::Button button) {
-    return mouse_button_released[button];
+bool fun::input::released(sf::Mouse::Button button) {
+    return _mouse_button_released_[button];
 }
 
-bool fun::Input::Hold(sf::Mouse::Button button) {
-    return mouse_button_hold[button];
+bool fun::input::hold(sf::Mouse::Button button) {
+    return _mouse_button_hold_[button];
 }
 
-sf::Vector2f fun::Input::M2D() {
-    return mouse_delta;
+sf::Vector2f fun::input::mouse_2d() {
+    return _mouse_delta_;
 }
 #endif
 
 
 
 #if defined(ENABLE_KEYBOARD)
-bool fun::Input::Pressed(sf::Keyboard::Key key) {
-    return keyboard_key_pressed[key];
+bool fun::input::pressed(sf::Keyboard::Key key) {
+    return _keyboard_key_pressed_[key];
 }
 
-bool fun::Input::Released(sf::Keyboard::Key key) {
-    return keyboard_key_released[key];
+bool fun::input::released(sf::Keyboard::Key key) {
+    return _keyboard_key_released_[key];
 }
 
-bool fun::Input::Hold(sf::Keyboard::Key key) {
-    return keyboard_key_hold[key];
+bool fun::input::hold(sf::Keyboard::Key key) {
+    return _keyboard_key_hold_[key];
 }
 
-int fun::Input::Horizontal(sf::Keyboard::Key a, sf::Keyboard::Key b) {
-    return keyboard_key_hold[b] - keyboard_key_hold[a];
+int fun::input::horizontal(sf::Keyboard::Key a, sf::Keyboard::Key b) {
+    return _keyboard_key_hold_[b] - _keyboard_key_hold_[a];
 }
 
-int fun::Input::Vertical(sf::Keyboard::Key a, sf::Keyboard::Key b) {
-    return keyboard_key_hold[b] - keyboard_key_hold[a];
+int fun::input::vertical(sf::Keyboard::Key a, sf::Keyboard::Key b) {
+    return _keyboard_key_hold_[b] - _keyboard_key_hold_[a];
 }
 
-sf::Vector2f fun::Input::K2D(sf::Keyboard::Key a, sf::Keyboard::Key b, sf::Keyboard::Key c, sf::Keyboard::Key d) {
-    return Math::Normalize(sf::Vector2f(Horizontal(a, b), Vertical(c, d)));
-}
-
-int fun::Input::LastKeyboardPressed() {
-    return last_keyboard_key_pressed;
+sf::Vector2f fun::input::keyboard_2d(sf::Keyboard::Key a, sf::Keyboard::Key b, sf::Keyboard::Key c, sf::Keyboard::Key d) {
+    return math::normalize(sf::Vector2f(horizontal(a, b), vertical(c, d)));
 }
 #endif
 
 
 
 #if defined(ENABLE_JOYSTICKS)
-bool fun::Input::IsJoystickConnected(int index) {
+bool fun::input::is_joystick_connected(int index) {
     return sf::Joystick::isConnected(index);
 }
 
-bool fun::Input::Pressed(JoystickButton button, int index) {
-    return joystick_button_pressed[button][index];
+bool fun::input::pressed(JoystickButton button, int index) {
+    return _joystick_button_pressed_[button][index];
 }
 
-bool fun::Input::Released(JoystickButton button, int index) {
-    return joystick_button_released[button][index];
+bool fun::input::released(JoystickButton button, int index) {
+    return _joystick_button_released_[button][index];
 }
 
-bool fun::Input::Hold(JoystickButton button, int index) {
-    return joystick_button_hold[button][index];
+bool fun::input::hold(JoystickButton button, int index) {
+    return _joystick_button_hold_[button][index];
 }
 
-float fun::Input::Value(JoystickAxis axis, int index) {
+float fun::input::value(JoystickAxis axis, int index) {
     auto jaxis = static_cast <sf::Joystick::Axis> (axis);
 
-    if (IsJoystickConnected(index) && sf::Joystick::hasAxis(index, jaxis)) {
+    if (is_joystick_connected(index) && sf::Joystick::hasAxis(index, jaxis)) {
         float value = sf::Joystick::getAxisPosition(index, jaxis);
 
         if (axis == L2 || axis == R2) value = (value + 100) / 2;
@@ -176,7 +169,7 @@ float fun::Input::Value(JoystickAxis axis, int index) {
     }
 }
 
-sf::Vector2f fun::Input::J2D(Input::JoystickAxis a, Input::JoystickAxis b) {
-    return Math::Normalize(sf::Vector2f(Value(a), Value(b)));
+sf::Vector2f fun::input::joystick_2d(JoystickAxis a, JoystickAxis b) {
+    return math::normalize(sf::Vector2f(value(a), value(b)));
 }
 #endif

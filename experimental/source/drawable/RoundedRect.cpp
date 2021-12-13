@@ -63,7 +63,7 @@ void fun::RoundedRect::Build() const {
 
     int ind = 0;
     const sf::Vector2f half_size = size * .5f;
-    float angle_step = fun::Math::Radians(90) / (smoothness + 1);
+    float angle_step = math::radians(90) / (smoothness + 1);
     float angle;
     sf::Vector2f pos;
 

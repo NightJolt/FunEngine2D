@@ -1,69 +1,69 @@
 #include "_Time.h"
 
-sf::Clock fun::Time::delta_clock = sf::Clock();
-sf::Time fun::Time::delta_time = sf::Time();
+sf::Clock _delta_clock_;
+sf::Time _delta_time_;
 
-float fun::Time::time_elapsed = 0;
-float fun::Time::unscaled_delta_time = 0;
-float fun::Time::scaled_delta_time = 0;
-float fun::Time::time_scale = 1;
-float fun::Time::fps = 0;
+float _time_elapsed_ = 0;
+float _unscaled_delta_time_ = 0;
+float _scaled_delta_time_ = 0;
+float _time_scale_ = 1;
+float _fps_ = 0;
 
-std::map <UniqueKey, float> fun::Time::clocks = std::map <UniqueKey, float> ();
+std::map <UniqueKey, float> _clocks_;
 
-void fun::Time::Recalculate() {
-    delta_time = delta_clock.restart();
-    unscaled_delta_time = delta_time.asSeconds();
-    scaled_delta_time = unscaled_delta_time * time_scale;
-    time_elapsed += unscaled_delta_time;
+void fun::time::recalculate() {
+    _delta_time_ = _delta_clock_.restart();
+    _unscaled_delta_time_ = _delta_time_.asSeconds();
+    _scaled_delta_time_ = _unscaled_delta_time_ * _time_scale_;
+    _time_elapsed_ += _unscaled_delta_time_;
 
-    fps = 1.f / unscaled_delta_time;
+    _fps_ = 1.f / _unscaled_delta_time_;
 
-    for (auto& clock : clocks) {
-        if (clock.second > 0) clock.second -= DeltaTime();
+    for (auto& clock : _clocks_) {
+        if (clock.second > 0) clock.second -= _scaled_delta_time_;
     }
 }
 
-float fun::Time::UnscaledDeltaTime() {
-    return unscaled_delta_time;
+float fun::time::unscaled_delta_time() {
+    return _unscaled_delta_time_;
 }
 
-float fun::Time::DeltaTime() {
-    return scaled_delta_time;
+float fun::time::delta_time() {
+    return _scaled_delta_time_;
 }
 
-sf::Time fun::Time::DeltaTimeObject() {
-    return delta_time;
+sf::Time fun::time::delta_time_object() {
+    return _delta_time_;
 }
 
-float fun::Time::TimeElapsed() {
-    return time_elapsed;
+float fun::time::time_elapsed() {
+    return _time_elapsed_;
 }
 
-float fun::Time::FPS() {
-    return fps;
+float fun::time::fps() {
+    return _fps_;
 }
 
-void fun::Time::SetTimeScale(float val) {
-    time_scale = val;
+void fun::time::set_time_scale(float val) {
+    _time_scale_ = val;
 }
 
-void fun::Time::GetTimeScale(float val) {
-    time_scale *= val;
+void fun::time::get_time_scale(float val) {
+    _time_scale_ *= val;
 }
 
-void fun::Time::RegisterClock(void* ptr, const std::string& str, float val) {
-    clocks[UniqueKey(ptr, str.c_str())] = val;
+void fun::time::register_clock(void* ptr, const std::string& str, float val) {
+    _clocks_[UniqueKey(ptr, str.c_str())] = val;
 }
 
-float fun::Time::RetrieveClock(void* ptr, const std::string& str) {
+float fun::time::get_clock(void* ptr, const std::string& str) {
     UniqueKey key = UniqueKey(ptr, str.c_str());
 
-    return clocks[key];
+    return _clocks_[key];
 }
 
-void fun::Time::RemoveClock(void* p, const std::string& k) {
+void fun::time::remove_clock(void* p, const std::string& k) {
     UniqueKey key = UniqueKey(p, k.c_str());
 
-    clocks.erase(key);
+    _clocks_.erase(key);
 }

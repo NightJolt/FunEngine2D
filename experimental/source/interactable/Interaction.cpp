@@ -29,7 +29,7 @@ void fun::Interaction::Update() {
             obj_active->l_released = false;
 
             if (interaction) {
-                if (Input::Pressed(sf::Mouse::Left)) {
+                if (input::pressed(sf::Mouse::Left)) {
                     if (!obj_active->l_hold) {
                         obj_active->l_pressed = true;
                         obj_active->l_hold = true;
@@ -37,7 +37,7 @@ void fun::Interaction::Update() {
                 }
             }
 
-            if (Input::Released(sf::Mouse::Left)) {
+            if (input::released(sf::Mouse::Left)) {
                 if (obj_active->l_hold) {
                     obj_active->l_hold = false;
                     obj_active->l_released = true;
@@ -48,7 +48,7 @@ void fun::Interaction::Update() {
             obj_active->r_released = false;
 
             if (interaction) {
-                if (Input::Pressed(sf::Mouse::Right)) {
+                if (input::pressed(sf::Mouse::Right)) {
                     if (!obj_active->r_hold) {
                         obj_active->r_pressed = true;
                         obj_active->r_hold = true;
@@ -56,7 +56,7 @@ void fun::Interaction::Update() {
                 }
             }
 
-            if (Input::Released(sf::Mouse::Right)) {
+            if (input::released(sf::Mouse::Right)) {
                 if (obj_active->r_hold) {
                     obj_active->r_hold = false;
                     obj_active->r_released = true;

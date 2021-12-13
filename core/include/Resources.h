@@ -2,7 +2,7 @@
 
 #include "globals.h"
 
-namespace fun {
+namespace fun::resources {
     void load_texture(const std::string&, const std::string&);
     const sf::Texture& get_texture(const std::string&);
 

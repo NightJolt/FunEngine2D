@@ -14,98 +14,65 @@
 #define JOYSTICK_AXIS_COUNT fun::Input::JoystickAxisCount
 #define MAX_JOYSTICK_COUNT 8
 
-namespace fun {
-    class Input {
-    public:
-
-        static void Listen();
+namespace fun::input {
+    void listen();
 
 #if defined(ENABLE_MOUSE)
-    public:
-
-        static bool Pressed(sf::Mouse::Button);
-        static bool Released(sf::Mouse::Button);
-        static bool Hold(sf::Mouse::Button);
-        static sf::Vector2f M2D();
-
-    private:
-
-        static bool mouse_button_pressed[MOUSE_BUTTON_COUNT];
-        static bool mouse_button_released[MOUSE_BUTTON_COUNT];
-        static bool mouse_button_hold[MOUSE_BUTTON_COUNT];
-
-        static sf::Vector2f mouse_position;
-        static sf::Vector2f mouse_delta;
+    bool pressed(sf::Mouse::Button);
+    bool released(sf::Mouse::Button);
+    bool hold(sf::Mouse::Button);
+    sf::Vector2f mouse_2d();
 #endif
 
 #if defined(ENABLE_KEYBOARD)
-    public:
-
-        static bool Pressed(sf::Keyboard::Key);
-        static bool Released(sf::Keyboard::Key);
-        static bool Hold(sf::Keyboard::Key);
-        static int Horizontal(sf::Keyboard::Key = sf::Keyboard::Key::A, sf::Keyboard::Key = sf::Keyboard::Key::D);
-        static int Vertical(sf::Keyboard::Key = sf::Keyboard::Key::S, sf::Keyboard::Key = sf::Keyboard::Key::W);
-        static sf::Vector2f K2D(
-                sf::Keyboard::Key = sf::Keyboard::Key::A,
-                sf::Keyboard::Key = sf::Keyboard::Key::D,
-                sf::Keyboard::Key = sf::Keyboard::Key::S,
-                sf::Keyboard::Key = sf::Keyboard::Key::W
-        );
-        static int LastKeyboardPressed();
-
-    private:
-
-        static bool keyboard_key_pressed[KEYBOARD_KEY_COUNT];
-        static bool keyboard_key_released[KEYBOARD_KEY_COUNT];
-        static bool keyboard_key_hold[KEYBOARD_KEY_COUNT];
-        static int last_keyboard_key_pressed;
+    bool pressed(sf::Keyboard::Key);
+    bool released(sf::Keyboard::Key);
+    bool hold(sf::Keyboard::Key);
+    int horizontal(sf::Keyboard::Key = sf::Keyboard::Key::A, sf::Keyboard::Key = sf::Keyboard::Key::D);
+    int vertical(sf::Keyboard::Key = sf::Keyboard::Key::S, sf::Keyboard::Key = sf::Keyboard::Key::W);
+    sf::Vector2f keyboard_2d(
+            sf::Keyboard::Key = sf::Keyboard::Key::A,
+            sf::Keyboard::Key = sf::Keyboard::Key::D,
+            sf::Keyboard::Key = sf::Keyboard::Key::S,
+            sf::Keyboard::Key = sf::Keyboard::Key::W
+    );
 #endif
 
 #if defined(ENABLE_JOYSTICKS)
-        public:
+    enum JoystickButton {
+        X,
+        O,
+        T,
+        R,
+        L1,
+        R1,
+        L2I,
+        R2I,
 
-        enum JoystickButton {
-            X,
-            O,
-            T,
-            R,
-            L1,
-            R1,
-            L2I,
-            R2I,
-
-            JoystickButtonCount
-        };
-
-        enum JoystickAxis {
-            L3X,
-            L3Y,
-            L2,
-            R2,
-            R3X,
-            R3Y,
-            DX,
-            DY,
-
-            JoystickAxisCount
-        };
-
-        static bool IsJoystickConnected(int = 0);
-        static bool Pressed(JoystickButton, int = 0);
-        static bool Released(JoystickButton, int = 0);
-        static bool Hold(JoystickButton, int = 0);
-        static float Value(JoystickAxis, int = 0);
-        static sf::Vector2f J2D(
-                JoystickAxis = JoystickAxis::L3X,
-                JoystickAxis = JoystickAxis::L3Y
-        );
-
-    private:
-
-        static bool joystick_button_pressed[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-        static bool joystick_button_released[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-        static bool joystick_button_hold[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-#endif
+        JoystickButtonCount
     };
+
+    enum JoystickAxis {
+        L3X,
+        L3Y,
+        L2,
+        R2,
+        R3X,
+        R3Y,
+        DX,
+        DY,
+
+        JoystickAxisCount
+    };
+
+    bool is_joystick_connected(int = 0);
+    bool pressed(JoystickButton, int = 0);
+    bool released(JoystickButton, int = 0);
+    bool hold(JoystickButton, int = 0);
+    float value(JoystickAxis, int = 0);
+    sf::Vector2f joystick_2d(
+            JoystickAxis = JoystickAxis::L3X,
+            JoystickAxis = JoystickAxis::L3Y
+    );
+#endif
 }

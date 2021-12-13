@@ -2,35 +2,18 @@
 
 #include "globals.h"
 
-namespace fun {
-    class Time {
-    public:
+namespace fun::time {
+    void recalculate();
+    float unscaled_delta_time();
+    float delta_time();
+    sf::Time delta_time_object();
+    float time_elapsed();
+    float fps();
 
-        static void Recalculate();
-        static float UnscaledDeltaTime();
-        static float DeltaTime();
-        static sf::Time DeltaTimeObject();
-        static float TimeElapsed();
-        static float FPS();
+    void set_time_scale(float);
+    void get_time_scale(float);
 
-        static void SetTimeScale(float);
-        static void GetTimeScale(float);
-
-        static void RegisterClock(void*, const std::string&, float);
-        static float RetrieveClock(void*, const std::string&);
-        static void RemoveClock(void*, const std::string&);
-
-    private:
-
-        static sf::Clock delta_clock;
-        static sf::Time delta_time;
-
-        static float time_elapsed;
-        static float unscaled_delta_time;
-        static float scaled_delta_time;
-        static float time_scale;
-        static float fps;
-
-        static std::map <UniqueKey, float> clocks;
-    };
+    void register_clock(void*, const std::string&, float);
+    float get_clock(void*, const std::string&);
+    void remove_clock(void*, const std::string&);
 }

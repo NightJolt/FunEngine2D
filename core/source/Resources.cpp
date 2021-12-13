@@ -1,6 +1,6 @@
 #include "Resources.h"
 
-void fun::load_texture(const std::string& key, const std::string& file) {
+void fun::resources::load_texture(const std::string& key, const std::string& file) {
     textures.insert_or_assign(key, sf::Texture());
 
     auto it = textures.find(key);
@@ -10,11 +10,11 @@ void fun::load_texture(const std::string& key, const std::string& file) {
     }
 }
 
-const sf::Texture& fun::get_texture(const std::string& key) {
+const sf::Texture& fun::resources::get_texture(const std::string& key) {
     return textures.at(key);
 }
 
-void fun::load_font(const std::string& key, const std::string& file) {
+void fun::resources::load_font(const std::string& key, const std::string& file) {
     fonts.insert_or_assign(key, sf::Font());
 
     auto it = fonts.find(key);
@@ -24,7 +24,7 @@ void fun::load_font(const std::string& key, const std::string& file) {
     }
 }
 
-const sf::Font& fun::get_font(const std::string& key) {
+const sf::Font& fun::resources::get_font(const std::string& key) {
     return fonts.at(key);
 }
 
