@@ -10,7 +10,7 @@ void fun::Interaction::Add(fun::Interactable* interactable) {
 }
 
 void fun::Interaction::Update() {
-    sf::Vector2 mouse_pos = WindowManager::main_window->GetMouseWorldPosition();
+    sf::Vector2 mouse_pos = wndmgr::main_window->GetMouseWorldPosition();
 
     if (obj_last) {
         obj_last->r_released = false;

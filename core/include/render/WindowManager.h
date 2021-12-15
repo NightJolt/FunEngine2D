@@ -5,16 +5,13 @@
 #include "RenderQueue.h"
 #include "../_Math.h"
 
-namespace fun {
-    class WindowManager {
-    public:
-
-        static const sf::Vector2u INIT_SCREEN_SIZE;
-        static const sf::Vector2f INIT_VIEW_SIZE;
-        static const sf::Vector2f INIT_VIEW_ORIGIN;
+namespace fun::wndmgr {
+        extern const sf::Vector2u INIT_SCREEN_SIZE;
+        extern const sf::Vector2f INIT_VIEW_SIZE;
+        extern const sf::Vector2f INIT_VIEW_ORIGIN;
 
         struct WindowData {
-            explicit WindowData(const std::string&);
+            explicit WindowData(const std::string&, i32, const sf::ContextSettings&);
 
             sf::RenderWindow window;
 
@@ -54,10 +51,7 @@ namespace fun {
             sf::Vector2i WorldToScreen(const sf::Vector2f&);
         };
 
-        static WindowData* main_window;
+        extern WindowData* main_window;
 
-        static void Init(const std::string&);
-
-    private:
-    };
+        void init(const std::string&, i32 = sf::Style::Default, const sf::ContextSettings& = sf::ContextSettings());
 }

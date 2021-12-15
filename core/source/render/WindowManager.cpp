@@ -1,17 +1,17 @@
 #include "render/WindowManager.h"
 
-const sf::Vector2u fun::WindowManager::INIT_SCREEN_SIZE = sf::Vector2u(856, 482) * (unsigned)2;
-const sf::Vector2f fun::WindowManager::INIT_VIEW_SIZE = sf::Vector2f(856, 482) * 2.f;
-const sf::Vector2f fun::WindowManager::INIT_VIEW_ORIGIN = sf::Vector2f(0, 0);
+const sf::Vector2u fun::wndmgr::INIT_SCREEN_SIZE = sf::Vector2u(856, 482) * (unsigned)2;
+const sf::Vector2f fun::wndmgr::INIT_VIEW_SIZE = sf::Vector2f(856, 482) * 2.f;
+const sf::Vector2f fun::wndmgr::INIT_VIEW_ORIGIN = sf::Vector2f(0, 0);
 
-fun::WindowManager::WindowData* fun::WindowManager::main_window = nullptr;
+fun::wndmgr::WindowData* fun::wndmgr::main_window = nullptr;
 
-void fun::WindowManager::Init(const std::string& window_name) {
-    main_window = new WindowData(window_name);
+void fun::wndmgr::init(const std::string& window_name, i32 style, const sf::ContextSettings& settings) {
+    main_window = new WindowData(window_name, style, settings);
 }
 
-fun::WindowManager::WindowData::WindowData(const std::string& window_name) :
-        window(sf::VideoMode(INIT_SCREEN_SIZE.x, INIT_SCREEN_SIZE.y), window_name),
+fun::wndmgr::WindowData::WindowData(const std::string& window_name, i32 style, const sf::ContextSettings& settings) :
+        window(sf::VideoMode(INIT_SCREEN_SIZE.x, INIT_SCREEN_SIZE.y), window_name, style, settings),
         world_view(INIT_VIEW_ORIGIN, INIT_VIEW_SIZE),
         ui_view(INIT_VIEW_ORIGIN, INIT_VIEW_SIZE),
         is_focused(false),
@@ -19,15 +19,15 @@ fun::WindowManager::WindowData::WindowData(const std::string& window_name) :
         resolution(INIT_SCREEN_SIZE)
 {}
 
-void fun::WindowManager::WindowData::AddWorld(const sf::Drawable& drawable, int order) {
+void fun::wndmgr::WindowData::AddWorld(const sf::Drawable& drawable, int order) {
     world_queue.Add(drawable, order);
 }
 
-void fun::WindowManager::WindowData::AddUI(const sf::Drawable& drawable, int order) {
+void fun::wndmgr::WindowData::AddUI(const sf::Drawable& drawable, int order) {
     ui_queue.Add(drawable, order);
 }
 
-void fun::WindowManager::WindowData::Display(const sf::Color& bg_color) {
+void fun::wndmgr::WindowData::Display(const sf::Color& bg_color) {
 //    world_buffer.clear(bg_color);
     //ui_buffer.clear(sf::Color::Transparent);
 
@@ -85,7 +85,7 @@ void fun::WindowManager::WindowData::Display(const sf::Color& bg_color) {
 //    world_queue.Clear();
 }
 
-void fun::WindowManager::WindowData::PollEvents() {
+void fun::wndmgr::WindowData::PollEvents() {
     sf::Event event;
 
     float curr_zoom_value;
@@ -137,21 +137,21 @@ void fun::WindowManager::WindowData::PollEvents() {
     }
 }
 
-sf::Vector2i fun::WindowManager::WindowData::GetMouseScreenPosition() {
+sf::Vector2i fun::wndmgr::WindowData::GetMouseScreenPosition() {
     return sf::Mouse::getPosition(window);
 }
 
-sf::Vector2f fun::WindowManager::WindowData::GetMouseWorldPosition() {
+sf::Vector2f fun::wndmgr::WindowData::GetMouseWorldPosition() {
     return ScreenToWorld(GetMouseScreenPosition());
 }
 
-sf::Vector2f fun::WindowManager::WindowData::ScreenToWorld(const sf::Vector2i& p) {
+sf::Vector2f fun::wndmgr::WindowData::ScreenToWorld(const sf::Vector2i& p) {
     world_buffer.setView(world_view);
 
     return world_buffer.mapPixelToCoords(p);
 }
 
-sf::Vector2i fun::WindowManager::WindowData::WorldToScreen(const sf::Vector2f& p) {
+sf::Vector2i fun::wndmgr::WindowData::WorldToScreen(const sf::Vector2f& p) {
     world_buffer.setView(world_view);
 
     return world_buffer.mapCoordsToPixel(p);
