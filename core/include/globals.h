@@ -109,14 +109,16 @@ namespace fun {
 #pragma region sfml_vec2
 #if defined(SFML_VEC2_OVERLOADS)
 
-template <typename T>
-inline std::string to_string_key(const sf::Vector2<T>& a) {
-    return std::to_string(a.x) + ' ' + std::to_string(a.y);
-}
+namespace fun {
+    template <typename T>
+    inline std::string to_string_key(const sf::Vector2<T>& a) {
+        return std::to_string(a.x) + ' ' + std::to_string(a.y);
+    }
 
-template <typename T>
-inline std::string to_string(const sf::Vector2<T>& a) {
-    return "Vector2(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ")";
+    template <typename T>
+    inline std::string to_string(const sf::Vector2<T>& a) {
+        return "Vector2(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ")";
+    }
 }
 
 template <typename T>
@@ -190,14 +192,16 @@ inline bool operator >=(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
 #pragma region sfml_vec3
 #if defined(SFML_VEC3_OVERLOADS)
 
-template <typename T>
-std::string to_string_key(const sf::Vector3<T>& a) {
-    return std::to_string(a.x) + ' ' + std::to_string(a.y) + ' ' + std::to_string(a.z);
-}
+namespace fun {
+    template <typename T>
+    std::string to_string_key(const sf::Vector3<T>& a) {
+        return std::to_string(a.x) + ' ' + std::to_string(a.y) + ' ' + std::to_string(a.z);
+    }
 
-template <typename T>
-std::string to_string(const sf::Vector3<T>& a) {
-    return "Vector3(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ", " + std::to_string(a.z) + ")";
+    template <typename T>
+    std::string to_string(const sf::Vector3<T>& a) {
+        return "Vector3(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ", " + std::to_string(a.z) + ")";
+    }
 }
 
 template <typename T>

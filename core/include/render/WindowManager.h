@@ -4,6 +4,7 @@
 
 #include "RenderQueue.h"
 #include "../_Math.h"
+#include "../tools/Debugger.h"
 
 namespace fun::wndmgr {
         extern const sf::Vector2u INIT_SCREEN_SIZE;
