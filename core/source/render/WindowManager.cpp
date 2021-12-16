@@ -54,8 +54,6 @@ void fun::wndmgr::WindowData::Display(const sf::Color& bg_color) {
 //    world_queue.Clear();
 //    ui_queue.Clear();
 
-
-
     world_buffer.clear(bg_color);
 
     world_buffer.setView(world_view);
@@ -116,6 +114,7 @@ void fun::wndmgr::WindowData::PollEvents() {
 
                 break;
             case sf::Event::Resized:
+
                 const sf::Vector2u& new_resolution = window.getSize();
                 const sf::Vector2f ratio = (sf::Vector2f)new_resolution / (sf::Vector2f)resolution;
 

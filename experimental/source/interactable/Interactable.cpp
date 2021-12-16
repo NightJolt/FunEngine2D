@@ -17,7 +17,7 @@ fun::Interactable::Interactable() : layer(0) {
 }
 
 fun::Interactable::~Interactable() noexcept {
-    fun::Interaction::Dispose(this);
+    Interaction::Dispose(this);
 }
 
 bool fun::Interactable::Interactable_RightPressed() const {
