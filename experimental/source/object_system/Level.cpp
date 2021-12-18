@@ -1,6 +1,6 @@
 #include "object_system/Level.h"
 
-fun::Level::Level() : static_objects(std::vector <StaticObject*> ()), live_objects(std::vector <LiveObject*> ())  {}
+fun::Level::Level(const std::string& name) : name(name), static_objects(std::vector <StaticObject*> ()), live_objects(std::vector <LiveObject*> ())  {}
 
 void fun::Level::Init() {
     for (auto obj : static_objects) {
@@ -53,9 +53,9 @@ void fun::Level::Unload() {
 void fun::Level::ShowHierarchy() {
     std::ostringstream mem_addr;
 
-    mem_addr << this;
+    // mem_addr << this;
 
-    ImGui::Begin(("Level " + mem_addr.str()).c_str());
+    ImGui::Begin(("Level " + name/*mem_addr.str()*/).c_str());
 
         if (ImGui::TreeNode("Live Objects")) {
             for (auto& object : live_objects) {
@@ -90,4 +90,12 @@ void fun::Level::ShowHierarchy() {
         }
 
     ImGui::End();
+}
+
+void fun::Level::SetName(const std::string& str) {
+    name = str;
+}
+
+const std::string& fun::Level::GetName() {
+    return name;
 }

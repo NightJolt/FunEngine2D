@@ -9,7 +9,7 @@ namespace fun {
     class Level final {
     public:
 
-        Level();
+        explicit Level(const std::string& = "unnamed");
         ~Level() = default;
 
         template <class T>
@@ -56,7 +56,12 @@ namespace fun {
             return objects;
         }
 
+        void SetName(const std::string&);
+        const std::string& GetName();
+
     private:
+
+        std::string name;
 
         std::vector <StaticObject*> static_objects;
         std::vector <LiveObject*> live_objects;
