@@ -1,7 +1,7 @@
 #include "render/WindowManager.h"
 
-const sf::Vector2u fun::wndmgr::INIT_SCREEN_SIZE = sf::Vector2u(856, 482) * (unsigned)2;
-const sf::Vector2f fun::wndmgr::INIT_VIEW_SIZE = sf::Vector2f(856, 482) * 2.f;
+const sf::Vector2u fun::wndmgr::INIT_SCREEN_SIZE = sf::Vector2u(856, 482);
+const sf::Vector2f fun::wndmgr::INIT_VIEW_SIZE = sf::Vector2f(856, 482);
 const sf::Vector2f fun::wndmgr::INIT_VIEW_ORIGIN = sf::Vector2f(0, 0);
 
 fun::wndmgr::WindowData* fun::wndmgr::main_window = nullptr;
@@ -17,7 +17,13 @@ fun::wndmgr::WindowData::WindowData(const std::string& window_name, i32 style, c
         is_focused(false),
         zoom(1),
         resolution(INIT_SCREEN_SIZE)
-{}
+{
+        world_buffer.create(INIT_SCREEN_SIZE.x, INIT_SCREEN_SIZE.y, window.getSettings());
+        world_render.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(world_buffer.getTexture().getSize())));
+
+        final_view.setSize((sf::Vector2f)INIT_SCREEN_SIZE);
+        final_view.setCenter((sf::Vector2f)INIT_SCREEN_SIZE * .5f);
+}
 
 void fun::wndmgr::WindowData::AddWorld(const sf::Drawable& drawable, int order) {
     world_queue.Add(drawable, order);
@@ -28,31 +34,31 @@ void fun::wndmgr::WindowData::AddUI(const sf::Drawable& drawable, int order) {
 }
 
 void fun::wndmgr::WindowData::Display(const sf::Color& bg_color) {
-//    world_buffer.clear(bg_color);
-    //ui_buffer.clear(sf::Color::Transparent);
+    // world_buffer.clear(bg_color);
+    // ui_buffer.clear(sf::Color::Transparent);
 
-    /*world_buffer.setView(world_view);
-    window.setView(world_view);*/
-//    world_buffer.draw(world_queue);
-//    world_render.setTexture(world_buffer.getTexture());
-//    window.draw(world_render);
+    // world_buffer.setView(world_view);
+    // window.setView(world_view);
+    // world_buffer.draw(world_queue);
+    // world_render.setTexture(world_buffer.getTexture());
+    // window.draw(world_render);
 
-    /*world_buffer.setView(world_view);
-    world_buffer.draw(world_queue);
-    world_render.setTexture(world_buffer.getTexture());
+    // world_buffer.setView(world_view);
+    // world_buffer.draw(world_queue);
+    // world_render.setTexture(world_buffer.getTexture());
 
-    ui_buffer.setView(ui_view);
-    ui_buffer.draw(ui_queue);
-    ui_render.setTexture(ui_buffer.getTexture());
+    // ui_buffer.setView(ui_view);
+    // ui_buffer.draw(ui_queue);
+    // ui_render.setTexture(ui_buffer.getTexture());
 
-    final_buffer.draw(world_render); // Apply World Shader
-    final_buffer.draw(ui_render); // Apply UI Shader
+    // final_buffer.draw(world_render); // Apply World Shader
+    // final_buffer.draw(ui_render); // Apply UI Shader
 
-    final_render.setTexture(final_buffer.getTexture());
-    window.draw(final_render); // Apply Final Shader*/
+    // final_render.setTexture(final_buffer.getTexture());
+    // window.draw(final_render); // Apply Final Shader
 
-//    world_queue.Clear();
-//    ui_queue.Clear();
+    // world_queue.Clear();
+    // ui_queue.Clear();
 
     world_buffer.clear(bg_color);
 
@@ -114,7 +120,6 @@ void fun::wndmgr::WindowData::PollEvents() {
 
                 break;
             case sf::Event::Resized:
-
                 const sf::Vector2u& new_resolution = window.getSize();
                 const sf::Vector2f ratio = (sf::Vector2f)new_resolution / (sf::Vector2f)resolution;
 
