@@ -7,52 +7,59 @@
 #include "../tools/Debugger.h"
 
 namespace fun::wndmgr {
-        extern const sf::Vector2u INIT_SCREEN_SIZE;
-        extern const sf::Vector2f INIT_VIEW_SIZE;
-        extern const sf::Vector2f INIT_VIEW_ORIGIN;
+    struct WindowData {
+        explicit WindowData(const std::string& = "unnamed", const sf::Vector2u& = { 856, 482 }, u32 = sf::Style::Default, const sf::ContextSettings& = sf::ContextSettings());
 
-        struct WindowData {
-            explicit WindowData(const std::string&, i32, const sf::ContextSettings&);
+        std::string name;
+        sf::Vector2u size;
+        u32 style;
+        sf::ContextSettings settings;
+    };
 
-            sf::RenderWindow window;
+    struct Window {
+        sf::RenderWindow render_window;
 
-            // render queues
-            RenderQueue world_queue;
-            RenderQueue ui_queue;
+        // render queues
+        RenderQueue world_queue;
+        RenderQueue ui_queue;
 
-            // render views
-            sf::View world_view;
-            sf::View ui_view;
-            sf::View final_view;
+        // render views
+        sf::View world_view;
+        sf::View ui_view;
+        sf::View final_view;
 
-            // render textures
-            sf::RenderTexture world_buffer;
-            sf::RenderTexture ui_buffer;
-            sf::RenderTexture final_buffer;
+        // render textures
+        sf::RenderTexture world_buffer;
+        sf::RenderTexture ui_buffer;
+        sf::RenderTexture final_buffer;
 
-            // render sprites
-            sf::Sprite world_render;
-            sf::Sprite ui_render;
-            sf::Sprite final_render;
+        // render sprites
+        sf::Sprite world_render;
+        sf::Sprite ui_render;
+        sf::Sprite final_render;
 
-            bool is_focused;
-            float zoom;
-            sf::Vector2u resolution;
+        bool is_focused;
+        float zoom;
+        // sf::Vector2u resolution;
 
-            void AddWorld(const sf::Drawable&, int);
-            void AddUI(const sf::Drawable&, int);
+        explicit Window(const WindowData&);
 
-            void PollEvents();
-            void Display(const sf::Color&);
+        void RefreshWindow();
 
-            sf::Vector2i GetMouseScreenPosition();
-            sf::Vector2f GetMouseWorldPosition();
+        void AddWorld(const sf::Drawable&, int);
+        void AddUI(const sf::Drawable&, int);
 
-            sf::Vector2f ScreenToWorld(const sf::Vector2i&);
-            sf::Vector2i WorldToScreen(const sf::Vector2f&);
-        };
+        void PollEvents();
+        void Display(const sf::Color&);
 
-        extern WindowData* main_window;
+        sf::Vector2i GetMouseScreenPosition();
+        sf::Vector2f GetMouseWorldPosition();
 
-        void init(const std::string&, i32 = sf::Style::Default, const sf::ContextSettings& = sf::ContextSettings());
+        sf::Vector2f ScreenToWorld(const sf::Vector2i&);
+        sf::Vector2i WorldToScreen(const sf::Vector2f&);
+    };
+
+    extern Window* main_window;
+
+    void init(const WindowData&);
 }

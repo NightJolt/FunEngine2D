@@ -13,19 +13,23 @@ namespace fun {
         ~Level() = default;
 
         template <class T>
-        T* CreateStaticObject() {
+        T* CreateStaticObject(const std::string name = "unnamed") {
             T* object = new T;
 
             live_objects.emplace_back(dynamic_cast <StaticObject*> (object))->Init();
+            
+            object->name = name;
 
             return object;
         }
 
         template <class T>
-        T* CreateLiveObject() {
+        T* CreateLiveObject(const std::string name = "unnamed") {
             T* object = new T;
 
             live_objects.emplace_back(dynamic_cast <LiveObject*> (object))->Init();
+
+            object->name = name;
 
             return object;
         }
@@ -56,12 +60,9 @@ namespace fun {
             return objects;
         }
 
-        void SetName(const std::string&);
-        const std::string& GetName();
+        std::string name;
 
     private:
-
-        std::string name;
 
         std::vector <StaticObject*> static_objects;
         std::vector <LiveObject*> live_objects;

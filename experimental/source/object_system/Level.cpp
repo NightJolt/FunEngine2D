@@ -51,21 +51,14 @@ void fun::Level::Unload() {
 }
 
 void fun::Level::ShowHierarchy() {
-    std::ostringstream mem_addr;
 
-    // mem_addr << this;
-
-    ImGui::Begin(("Level " + name/*mem_addr.str()*/).c_str());
+    ImGui::Begin(("Level " + name).c_str());
 
         if (ImGui::TreeNode("Live Objects")) {
-            for (auto& object : live_objects) {
-                mem_addr.str("");
-                mem_addr.clear();
-                mem_addr << object;
-
+            for (auto object : live_objects) {
                 ImGui::TableNextColumn();
 
-                if (ImGui::Button(mem_addr.str().c_str(), ImVec2(-FLT_MIN, 0.0f))) {
+                if (ImGui::Button(object->name.c_str(), ImVec2(-FLT_MIN, 0.0f))) {
                     object->should_be_disposed = true;
                 }
             }
@@ -74,14 +67,10 @@ void fun::Level::ShowHierarchy() {
         }
 
         if (ImGui::TreeNode("Static Objects")) {
-            for (auto& object : static_objects) {
-                mem_addr.str("");
-                mem_addr.clear();
-                mem_addr << object;
-
+            for (auto object : static_objects) {
                 ImGui::TableNextColumn();
 
-                if (ImGui::Button(mem_addr.str().c_str(), ImVec2(-FLT_MIN, 0.0f))) {
+                if (ImGui::Button(object->name.c_str(), ImVec2(-FLT_MIN, 0.0f))) {
                     object->should_be_disposed = true;
                 }
             }
@@ -90,12 +79,4 @@ void fun::Level::ShowHierarchy() {
         }
 
     ImGui::End();
-}
-
-void fun::Level::SetName(const std::string& str) {
-    name = str;
-}
-
-const std::string& fun::Level::GetName() {
-    return name;
 }

@@ -13,6 +13,7 @@ namespace fun {
         virtual void Dispose();
 
         bool should_be_disposed = false;
+        std::string name = "";
 
     private:
     };
