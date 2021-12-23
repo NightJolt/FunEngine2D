@@ -46,8 +46,8 @@ namespace fun::wndmgr {
 
         void RefreshWindow();
 
-        void AddWorld(const sf::Drawable&, int);
-        void AddUI(const sf::Drawable&, int);
+        void DrawWorld(const sf::Drawable&, int);
+        void DrawUI(const sf::Drawable&, int);
 
         void PollEvents();
         void Display(const sf::Color&);

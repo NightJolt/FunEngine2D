@@ -36,11 +36,11 @@ void fun::wndmgr::Window::RefreshWindow() {
     final_view.setCenter((sf::Vector2f)new_resolution * .5f);
 }
 
-void fun::wndmgr::Window::AddWorld(const sf::Drawable& drawable, int order) {
+void fun::wndmgr::Window::DrawWorld(const sf::Drawable& drawable, int order) {
     world_queue.Add(drawable, order);
 }
 
-void fun::wndmgr::Window::AddUI(const sf::Drawable& drawable, int order) {
+void fun::wndmgr::Window::DrawUI(const sf::Drawable& drawable, int order) {
     ui_queue.Add(drawable, order);
 }
 
