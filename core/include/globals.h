@@ -13,7 +13,7 @@
 #define USES_IMGUI
 // #define USES_CUDA
 // #define USES_LUA
-// #define USES_BOX2D
+#define USES_BOX2D
 
 #if defined(USES_SFML)
 #define SFML_VEC2_OVERLOADS
@@ -25,14 +25,24 @@
 #pragma region libsWW
 
 #if defined(USES_SFML)
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
+
 #endif
 
 #if defined(USES_IMGUI)
+
 #include <imgui.h>
 #include <imgui-SFML.h>
+
+#endif
+
+#if defined(USES_BOX2D)
+
+#include <box2d/box2d.h>
+
 #endif
 
 #pragma endregion
