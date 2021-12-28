@@ -5,7 +5,7 @@
 #include "../../../core/include/_Math.h"
 #include "../../../core/include/Input.h"
 
-#include "../object_system/LiveObject.h"
+#include "../ecs/Entity.h"
 #include "Interaction.h"
 
 namespace fun {
@@ -19,8 +19,8 @@ namespace fun {
         Interactable();
         virtual ~Interactable() noexcept = 0;
 
-        void Interactable_SetInteractionLayer(i32);
-        i32 Interactable_GetInteractionLayer() const;
+        void Interactable_SetInteractionLayer(uint32_t);
+        uint32_t Interactable_GetInteractionLayer() const;
 
         [[nodiscard]] bool Interactable_RightPressed() const;
         [[nodiscard]] bool Interactable_RightHold() const;
@@ -50,6 +50,6 @@ namespace fun {
         bool hovered;
         bool hover_exit;
 
-        i32 layer;
+        uint32_t layer;
     };
 }

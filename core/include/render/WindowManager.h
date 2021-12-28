@@ -8,11 +8,11 @@
 
 namespace fun::wndmgr {
     struct WindowData {
-        explicit WindowData(const std::string& = "unnamed", const sf::Vector2u& = { 856, 482 }, u32 = sf::Style::Default, const sf::ContextSettings& = sf::ContextSettings());
+        explicit WindowData(const std::string& = "unnamed", const sf::Vector2u& = { 856, 482 }, uint32_t = sf::Style::Default, const sf::ContextSettings& = sf::ContextSettings());
 
         std::string name;
         sf::Vector2u size;
-        u32 style;
+        uint32_t style;
         sf::ContextSettings settings;
     };
 

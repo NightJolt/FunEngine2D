@@ -2,7 +2,7 @@
 
 fun::wndmgr::Window* fun::wndmgr::main_window = nullptr;
 
-fun::wndmgr::WindowData::WindowData(const std::string& name, const sf::Vector2u& size, u32 style, const sf::ContextSettings& settings) :
+fun::wndmgr::WindowData::WindowData(const std::string& name, const sf::Vector2u& size, uint32_t style, const sf::ContextSettings& settings) :
     name(name),
     size(size),
     style(style),

@@ -13,11 +13,11 @@ namespace fun {
 
         virtual void Draw(wndmgr::Window*) const = 0;
 
-        void Drawable_SetDrawingLayer(i32);
-        i32 Drawable_GetDrawingLayer() const;
+        void Drawable_SetDrawingLayer(uint32_t);
+        uint32_t Drawable_GetDrawingLayer() const;
 
     private:
 
-        i32 layer = 0;
+        uint32_t layer = 0;
     };
 }

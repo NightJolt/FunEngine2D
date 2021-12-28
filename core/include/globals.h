@@ -56,6 +56,7 @@
 #include <memory>
 #include <cstring>
 #include <sstream>
+#include <string_view>
 #include <map>
 #include <unordered_map>
 #include <set>
@@ -64,6 +65,8 @@
 #include <vector>
 #include <array>
 #include <queue>
+#include <random>
+#include <xhash>
 
 #pragma endregion
 
@@ -77,16 +80,16 @@
 
 #pragma endregion*/
 
-typedef char i8;                     //                       -127 to 127
-typedef short i16;                   //                    -32,768 to 32,767
-typedef int i32;                     //             -2,147,483,648 to 2,147,483,647
-typedef long long i64;               // -9,223,372,036,854,775,807 to 9,223,372,036,854,775,807
-typedef long i32_64;
-typedef unsigned char u8;           //                          0 to 255
-typedef unsigned short u16;         //                          0 to 65,535
-typedef unsigned int u32;           //                          0 to 4,294,967,295
-typedef unsigned long long u64;     //                          0 to 18,446,744,073,709,551,615
-typedef unsigned long u32_64;
+// typedef char i8;                     //                       -127 to 127
+// typedef short i16;                   //                    -32,768 to 32,767
+// typedef int i32;                     //             -2,147,483,648 to 2,147,483,647
+// typedef long long i64;               // -9,223,372,036,854,775,807 to 9,223,372,036,854,775,807
+// typedef long i32_64;
+// typedef unsigned char u8;           //                          0 to 255
+// typedef unsigned short u16;         //                          0 to 65,535
+// typedef unsigned int u32;           //                          0 to 4,294,967,295
+// typedef unsigned long long u64;     //                          0 to 18,446,744,073,709,551,615
+// typedef unsigned long u32_64;
 
 #define print(body) std::cout << body
 #define printsp(body) print(body) << " "
@@ -99,20 +102,39 @@ typedef unsigned long u32_64;
 namespace fun {
     void glob_init();
 
-    struct UniqueKey {
-        UniqueKey(void*, const char*);
-        ~UniqueKey();
+    namespace uuid {
+        uint64_t generate();
+    }
 
-        bool operator <(const UniqueKey&) const;
+    struct UniqueKey {
+        UniqueKey();
+        UniqueKey(uint64_t, const char*);
+        // ~UniqueKey();
 
         UniqueKey(const UniqueKey&);
-
         UniqueKey& operator =(const UniqueKey&);
-
         UniqueKey(UniqueKey&&) noexcept;
 
-        void* ptr;
-        char* key;
+		operator uint64_t() const;
+
+        uint64_t uuid;
+        char key[16];
+    };
+}
+
+namespace std {
+    template <>
+    struct hash <fun::UniqueKey> {
+        std::size_t operator()(const fun::UniqueKey& ukey) const {
+            size_t h = 5381;
+            int c;
+            const char* s = ukey.key;
+
+			while ((c = *s++))
+				h = ((h << 5) + h) + c;
+
+            return hash <uint64_t> ()(ukey) + h;
+        }
     };
 }
 

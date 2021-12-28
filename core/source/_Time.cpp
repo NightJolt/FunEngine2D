@@ -1,15 +1,15 @@
 #include "_Time.h"
 
-sf::Clock _delta_clock_;
-sf::Time _delta_time_;
+static sf::Clock _delta_clock_;
+static sf::Time _delta_time_;
 
-float _time_elapsed_ = 0;
-float _unscaled_delta_time_ = 0;
-float _scaled_delta_time_ = 0;
-float _time_scale_ = 1;
-float _fps_ = 0;
+static float _time_elapsed_ = 0;
+static float _unscaled_delta_time_ = 0;
+static float _scaled_delta_time_ = 0;
+static float _time_scale_ = 1;
+static float _fps_ = 0;
 
-std::map <fun::UniqueKey, float> _clocks_;
+static std::unordered_map <fun::UniqueKey, float> _clocks_;
 
 void fun::time::recalculate() {
     _delta_time_ = _delta_clock_.restart();
@@ -52,18 +52,14 @@ void fun::time::get_time_scale(float val) {
     _time_scale_ *= val;
 }
 
-void fun::time::register_clock(void* ptr, const std::string& str, float val) {
-    _clocks_[UniqueKey(ptr, str.c_str())] = val;
+void fun::time::register_clock(const UniqueKey& ukey, float val) {
+    _clocks_[ukey] = val;
 }
 
-float fun::time::get_clock(void* ptr, const std::string& str) {
-    UniqueKey key = UniqueKey(ptr, str.c_str());
-
-    return _clocks_[key];
+float fun::time::get_clock(const UniqueKey& ukey) {
+    return _clocks_[ukey];
 }
 
-void fun::time::remove_clock(void* p, const std::string& k) {
-    UniqueKey key = UniqueKey(p, k.c_str());
-
-    _clocks_.erase(key);
+void fun::time::remove_clock(const UniqueKey& ukey) {
+    _clocks_.erase(ukey);
 }

@@ -56,10 +56,10 @@ bool fun::Interactable::Interactable_HoverExit() const {
     return hover_exit;
 }
 
-void fun::Interactable::Interactable_SetInteractionLayer(i32 new_layer) {
+void fun::Interactable::Interactable_SetInteractionLayer(uint32_t new_layer) {
     layer = new_layer;
 }
 
-i32 fun::Interactable::Interactable_GetInteractionLayer() const {
+uint32_t fun::Interactable::Interactable_GetInteractionLayer() const {
     return layer;
 }

@@ -1,24 +1,24 @@
 #include "Input.h"
 
 #if defined(ENABLE_MOUSE)
-bool _mouse_button_pressed_[MOUSE_BUTTON_COUNT];
-bool _mouse_button_released_[MOUSE_BUTTON_COUNT];
-bool _mouse_button_hold_[MOUSE_BUTTON_COUNT];
+static bool _mouse_button_pressed_[MOUSE_BUTTON_COUNT];
+static bool _mouse_button_released_[MOUSE_BUTTON_COUNT];
+static bool _mouse_button_hold_[MOUSE_BUTTON_COUNT];
 
-sf::Vector2f _mouse_position_ = sf::Vector2f(0, 0);
-sf::Vector2f _mouse_delta_ = sf::Vector2f(0, 0);
+static sf::Vector2f _mouse_position_ = sf::Vector2f(0, 0);
+static sf::Vector2f _mouse_delta_ = sf::Vector2f(0, 0);
 #endif
 
 #if defined(ENABLE_KEYBOARD)
-bool _keyboard_key_pressed_[KEYBOARD_KEY_COUNT];
-bool _keyboard_key_released_[KEYBOARD_KEY_COUNT];
-bool _keyboard_key_hold_[KEYBOARD_KEY_COUNT];
+static bool _keyboard_key_pressed_[KEYBOARD_KEY_COUNT];
+static bool _keyboard_key_released_[KEYBOARD_KEY_COUNT];
+static bool _keyboard_key_hold_[KEYBOARD_KEY_COUNT];
 #endif
 
 #if defined(ENABLE_JOYSTICKS)
-bool _joystick_button_pressed_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-bool _joystick_button_released_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-bool _joystick_button_hold_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+static bool _joystick_button_pressed_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+static bool _joystick_button_released_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+static bool _joystick_button_hold_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
 #endif
 
 void fun::input::listen() {
