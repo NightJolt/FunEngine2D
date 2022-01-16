@@ -51,6 +51,11 @@
 
 #if defined(ENABLE_DEBUGGING)
 #include <iostream>
+
+#define print(body) std::cout << body
+#define printsp(body) print(body) << " "
+#define println(body) print(body) << std::endl
+#define nextln() std::cout << std::endl
 #endif
 
 #include <memory>
@@ -67,6 +72,7 @@
 #include <queue>
 #include <random>
 #include <xhash>
+#include <utility>
 
 #pragma endregion
 
@@ -91,24 +97,28 @@
 // typedef unsigned long long u64;     //                          0 to 18,446,744,073,709,551,615
 // typedef unsigned long u32_64;
 
-#define print(body) std::cout << body
-#define printsp(body) print(body) << " "
-#define println(body) print(body) << std::endl
-#define nextln() std::cout << std::endl
+typedef uint64_t mask64_t;
+typedef uint32_t mask32_t;
+typedef uint16_t mask16_t;
+typedef uint8_t mask8_t;
+
+typedef uint64_t uuid_t;
 
 #define to_lambda(type, args, body) [this] args -> type body
 #define is_type_of(type, obj) (dynamic_cast <type*> (obj) != nullptr)
+
+#define bits(expr) (sizeof(expr) << 3)
 
 namespace fun {
     void glob_init();
 
     namespace uuid {
-        uint64_t generate();
+        uuid_t generate();
     }
 
     struct UniqueKey {
         UniqueKey();
-        UniqueKey(uint64_t, const char*);
+        UniqueKey(uuid_t, const char*);
         // ~UniqueKey();
 
         UniqueKey(const UniqueKey&);
@@ -117,7 +127,7 @@ namespace fun {
 
 		operator uint64_t() const;
 
-        uint64_t uuid;
+        uuid_t uuid;
         char key[16];
     };
 }

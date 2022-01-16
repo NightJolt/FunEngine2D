@@ -11,15 +11,19 @@ namespace fun {
         explicit Level(const std::string& = "unnamed");
         ~Level() = default;
 
-        template <class T>
-        T* CreateEntity(const std::string name = "unnamed") {
-            T* object = new T;
+        // template <class T>
+        // T* CreateEntity(const std::string name = "unnamed") {
+        //     T* object = new T;
 
-            entities.emplace_back(dynamic_cast <Entity*> (object))->Init();
+        //     entities.emplace_back(dynamic_cast <Entity*> (object))->Init();
             
-            object->name = name;
+        //     object->name = name;
 
-            return object;
+        //     return object;
+        // }
+
+        uuid_t CreateEntity() {
+            return uuid::generate();
         }
 
         void Init();

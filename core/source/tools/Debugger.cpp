@@ -33,6 +33,9 @@ void fun::debugger::display() {
                     for (auto& msg : msgs) {
                         ImGui::Text(msg.c_str());
                     }
+                    
+                    if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+                        ImGui::SetScrollHereY(1.0f);
 
                     ImGui::EndChild();
                 ImGui::EndTabItem();

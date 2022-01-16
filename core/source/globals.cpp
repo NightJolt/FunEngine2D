@@ -13,7 +13,7 @@ void fun::glob_init() {
 
 fun::UniqueKey::UniqueKey() : uuid(0), key("") {}
 
-fun::UniqueKey::UniqueKey(uint64_t uuid, const char* _key) : uuid(uuid) {
+fun::UniqueKey::UniqueKey(uuid_t uuid, const char* _key) : uuid(uuid) {
     strncat(key, _key, sizeof key);
 }
 

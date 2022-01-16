@@ -40,7 +40,6 @@ namespace fun::wndmgr {
 
         bool is_focused;
         float zoom;
-        // sf::Vector2u resolution;
 
         explicit Window(const WindowData&);
 
