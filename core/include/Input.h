@@ -6,12 +6,12 @@
 
 #define ENABLE_MOUSE
 #define ENABLE_KEYBOARD
-//#define ENABLE_JOYSTICKS
+#define ENABLE_JOYSTICKS
 
 #define KEYBOARD_KEY_COUNT sf::Keyboard::Key::KeyCount
 #define MOUSE_BUTTON_COUNT sf::Mouse::Button::ButtonCount
-#define JOYSTICK_BUTTON_COUNT fun::Input::JoystickButtonCount
-#define JOYSTICK_AXIS_COUNT fun::Input::JoystickAxisCount
+#define JOYSTICK_BUTTON_COUNT fun::input::JoystickButtonCount
+#define JOYSTICK_AXIS_COUNT fun::input::JoystickAxisCount
 #define MAX_JOYSTICK_COUNT 8
 
 namespace fun::input {

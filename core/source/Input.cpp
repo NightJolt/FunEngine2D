@@ -160,7 +160,7 @@ float fun::input::value(JoystickAxis axis, int index) {
     if (is_joystick_connected(index) && sf::Joystick::hasAxis(index, jaxis)) {
         float value = sf::Joystick::getAxisPosition(index, jaxis);
 
-        if (axis == L2 || axis == R2) value = (value + 100) / 2;
+        // if (axis == L2 || axis == R2) value = (value + 100) / 2;
 
         return value / 100;
 

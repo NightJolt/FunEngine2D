@@ -5,6 +5,11 @@ static std::vector <fun::ecs::Entity> entities;
 static fun::ecs::EntityID available;
 static fun::ecs::Entity next = -1;
 
+static std::vector <std::vector <fun::ecs::EntityV>> denses = std::vector <std::vector <fun::ecs::EntityV>> ();
+static std::vector <std::vector <fun::ecs::EntityID>> sparses = std::vector <std::vector <fun::ecs::EntityID>> ();
+static std::vector <std::vector <uint8_t>> components = std::vector <std::vector <uint8_t>> ();
+static std::vector <uint32_t> sizes = std::vector <uint32_t> ();
+
 
 
 auto fun::ecs::get_entity_id(Entity entity) -> EntityID {
