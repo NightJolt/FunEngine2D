@@ -3,12 +3,18 @@
 static std::vector <fun::ecs::Entity> entities;
 
 static fun::ecs::EntityID available;
-static fun::ecs::Entity next = -1;
+static fun::ecs::Entity next = NULLENTITY;
 
-static std::vector <std::vector <fun::ecs::EntityV>> denses = std::vector <std::vector <fun::ecs::EntityV>> ();
-static std::vector <std::vector <fun::ecs::EntityID>> sparses = std::vector <std::vector <fun::ecs::EntityID>> ();
-static std::vector <std::vector <uint8_t>> components = std::vector <std::vector <uint8_t>> ();
-static std::vector <uint32_t> sizes = std::vector <uint32_t> ();
+typedef std::vector <fun::ecs::EntityV> dense_t;
+typedef std::vector <fun::ecs::EntityID> sparse_t;
+typedef std::vector <uint8_t> components_t;
+
+static std::vector <dense_t> denses;
+static std::vector <sparse_t> sparses;
+static std::vector <components_t> components;
+static std::vector <uint32_t> sizes;
+
+static fun::ecs::Entity entity_selected = NULLENTITY;
 
 
 
@@ -43,6 +49,8 @@ auto fun::ecs::recycle_entity() -> Entity {
 auto fun::ecs::destroy_entity(Entity entity) -> void {
     if (!is_entity_alive(entity)) return;
 
+    if (entity_selected == entity) entity_selected = NULLENTITY;
+
     EntityID id = get_entity_id(entity);
 
     entity++;
@@ -63,11 +71,11 @@ auto fun::ecs::is_entity_recyclable(Entity entity) -> bool {
 
 
 auto fun::ecs::is_entity_alive(Entity entity) -> bool {
-    return entities[get_entity_id(entity)] == entity;
+    return get_entity_id(entity) < entities.size() && entities[get_entity_id(entity)] == entity;
 }
 
 auto fun::ecs::is_id_alive(EntityID id) -> bool {
-    return get_entity_id(entities[id]) == id;
+    return id < entities.size() && get_entity_id(entities[id]) == id;
 }
 
 auto fun::ecs::new_entity() -> Entity {
@@ -81,13 +89,105 @@ auto fun::ecs::new_entity() -> Entity {
 
 auto fun::ecs::show_hierarchy() -> void {
     ImGui::Begin("Entities");
-
-    EntityID id = -1;
     
     for (Entity entity : entities) {
-        if (!is_id_alive(++id)) continue;
+        if (!is_entity_alive(entity)) continue;
 
-        if (ImGui::Button(("ID: " + std::to_string(get_entity_id(entity)) + " | Ver: " + std::to_string(get_entity_version(entity))).c_str(), ImVec2(-FLT_MIN, 0.0f))) {}
+        if (ImGui::Button(("ID: " + std::to_string(get_entity_id(entity)) + " | Ver: " + std::to_string(get_entity_version(entity))).c_str(), ImVec2(-FLT_MIN, 0.0f))) {
+            entity_selected = entity;
+        }
+    }
+
+    ImGui::End();
+}
+
+
+
+bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)> create_component) {
+    if (!is_entity_alive(entity) || has_component(entity, component_id)) return false;
+
+    if (sizes.size() == component_id) {
+        denses.emplace_back(dense_t());
+        sparses.emplace_back(sparse_t());
+        components.emplace_back(components_t());
+        sizes.emplace_back(0);
+    }
+
+    EntityID entity_id = get_entity_id(entity);
+    EntityID entity_v = get_entity_version(entity);
+
+    auto* dense = &denses[component_id];
+    auto* sparse = &sparses[component_id];
+    auto* t_componets = &components[component_id];
+    auto* size_p = &sizes[component_id];
+    auto size = *size_p;
+    
+    {
+        if (dense->size() == size) {
+            dense->emplace_back(entity_v);
+        } else {
+            (*dense)[size] = entity_v;
+        }
+
+        *size_p++;
+    }
+
+    {
+        if (sparse->size() <= entity_id) {
+            sparse->resize(entity_id + 1);
+        }
+
+        (*sparse)[entity_id] = size;
+    }
+
+    {
+        uint64_t length = static_cast <uint64_t> (size) * component_size;
+        uint64_t arr_length = t_componets->size();
+
+        if (arr_length <= length) {
+            t_componets->resize(arr_length + component_size);
+        }
+
+        create_component(&(*t_componets)[length]);
+    }
+
+    return true;
+}
+
+bool fun::ecs::has_component(Entity entity, ComponentID component_id) {
+    if (sizes.size() == component_id) return false;
+
+    EntityID entity_id = get_entity_id(entity);
+    EntityV entity_v = get_entity_version(entity);
+
+    auto* dense = &denses[component_id];
+    auto* sparse = &sparses[component_id];
+
+    auto dense_index = (*sparse)[entity_id];
+    
+    if (sparse->size() <= entity_id) return false;
+    if (sizes[component_id] <= dense_index) return false;
+
+    return (*dense)[dense_index] == entity_v;
+}
+
+bool fun::ecs::remove_component(Entity entity, ComponentID component_id, size_t component_size) {
+    return false;
+}
+
+void fun::ecs::show_components() {
+    ImGui::Begin("Components");
+
+    if (entity_selected == NULLENTITY) {
+        ImGui::End();
+
+        return;
+    }
+    
+    for (int i = 0; i < components.size(); i++) {
+        if (!has_component(entity_selected, i)) continue;
+
+        if (ImGui::Button(("ID: " + std::to_string(i)).c_str(), ImVec2(-FLT_MIN, 0.0f))) {}
     }
 
     ImGui::End();

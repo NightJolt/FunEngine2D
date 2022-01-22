@@ -73,6 +73,7 @@
 #include <random>
 #include <xhash>
 #include <utility>
+#include <functional>
 
 #pragma endregion
 

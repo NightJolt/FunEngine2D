@@ -1,11 +1,14 @@
 #pragma once
 
 #include "../../../core/include/globals.h"
+#include "../../../core/include/tools/Debugger.h"
 
 namespace fun::ecs {
     typedef uint64_t Entity;
     typedef uint32_t EntityID;
     typedef uint32_t EntityV;
+
+    #define NULLENTITY -1
 
     EntityID get_entity_id(Entity);
     EntityV get_entity_version(Entity);
@@ -22,8 +25,8 @@ namespace fun::ecs {
 
     void show_hierarchy();
 
-    void allocate(int);
-    void reserve(int);
+    // void allocate(int);
+    // void reserve(int);
 
     typedef uint8_t ComponentID;
 
@@ -31,69 +34,27 @@ namespace fun::ecs {
     bool get_component_id() {
         static ComponentID id = 0;
 
-        return ++id;
+        return id++;
     }
 
-    extern std::vector <std::vector <EntityV>> denses;
-    extern std::vector <std::vector <EntityID>> sparses;
-    extern std::vector <std::vector <uint8_t>> components;
-    extern std::vector <uint32_t> sizes;
+    bool add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)>);
+    bool has_component(Entity entity, ComponentID component_id);
+    bool remove_component(Entity entity, ComponentID component_id, size_t component_size);
 
     template <class T>
-    void add_component(Entity entity) {
-        if (!is_entity_alive(entity) || has_component <T> (entity)) return;
-
-        ComponentID component_id = get_component_id <T> ();
-        EntityID entity_id = get_entity_id(entity);
-        EntityID entity_v = get_entity_version(entity);
-
-        auto* dense = &denses[component_id];
-        auto* sparse = &sparses[component_id];
-        auto* t_componets = &components[component_id];
-        auto* size_p = &sizes[component_id];
-        auto size = *size_p;
-
-        {
-            if (dense->size() > size) {
-                dense->emplace_back(entity_v);
-            } else {
-                (*dense)[size] = entity_v;
-            }
-
-            *size_p++;
-        }
-
-        {
-            if (sparse->size() <= entity_id) {
-                sparse->resize(entity_id + 1);
-            }
-
-            (*sparse)[entity_id] = size;
-        }
-
-        {
-            uint64_t length = (static_cast <uint64_t> (size) + 1) * sizeof(T);
-            uint64_t arr_length = t_componets->size();
-
-            if (arr_length <= length) {
-                t_componets->resize(arr_length + sizeof(T));
-            }
-
-            *reinterpret_cast <T*> (t_componets + length - 1) = T();
-        }
+    bool add_component(Entity entity) {
+        return add_component(entity, get_component_id <T> (), sizeof(T), [](uint8_t* ptr) -> void { *reinterpret_cast <T*> (ptr) = T(); });
     }
 
     template <class T>
     bool has_component(Entity entity) {
-        return false;
+        return has_component(entity, get_component_id <T> ());
     }
 
     template <class T>
-    bool remove_component(Entity entity) {} 
+    bool remove_component(Entity entity) {
+        return remove_component(entity, get_component_id <T> (), sizeof(T));
+    }
 
-    class Component {
-    public:
-
-        virtual void Update() = 0;
-    };
+    void show_components();
 }
