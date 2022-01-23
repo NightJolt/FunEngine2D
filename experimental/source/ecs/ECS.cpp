@@ -5,6 +5,8 @@ static std::vector <fun::ecs::Entity> entities;
 static fun::ecs::EntityID available;
 static fun::ecs::Entity next = NULLENTITY;
 
+fun::ecs::ComponentID fun::ecs::next_component_id = 0;
+
 typedef std::vector <fun::ecs::EntityV> dense_t;
 typedef std::vector <fun::ecs::EntityID> sparse_t;
 typedef std::vector <uint8_t> components_t;
@@ -106,7 +108,8 @@ auto fun::ecs::show_hierarchy() -> void {
 bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)> create_component) {
     if (!is_entity_alive(entity) || has_component(entity, component_id)) return false;
 
-    if (sizes.size() == component_id) {
+    // ! NEEDS OPTIMIZE
+    while (sizes.size() <= component_id) {
         denses.emplace_back(dense_t());
         sparses.emplace_back(sparse_t());
         components.emplace_back(components_t());
@@ -129,12 +132,14 @@ bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t com
             (*dense)[size] = entity_v;
         }
 
-        *size_p++;
+        (*size_p)++;
     }
+
+    auto tst = sizes[component_id];
 
     {
         if (sparse->size() <= entity_id) {
-            sparse->resize(entity_id + 1);
+            sparse->resize(entity_id + 1, NULLENTITY);
         }
 
         (*sparse)[entity_id] = size;
@@ -155,17 +160,18 @@ bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t com
 }
 
 bool fun::ecs::has_component(Entity entity, ComponentID component_id) {
-    if (sizes.size() == component_id) return false;
+    if (sizes.size() <= component_id) return false;
 
     EntityID entity_id = get_entity_id(entity);
     EntityV entity_v = get_entity_version(entity);
 
     auto* dense = &denses[component_id];
     auto* sparse = &sparses[component_id];
-
-    auto dense_index = (*sparse)[entity_id];
     
     if (sparse->size() <= entity_id) return false;
+
+    auto dense_index = (*sparse)[entity_id];
+
     if (sizes[component_id] <= dense_index) return false;
 
     return (*dense)[dense_index] == entity_v;

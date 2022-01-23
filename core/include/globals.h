@@ -55,7 +55,7 @@
 #define print(body) std::cout << body
 #define printsp(body) print(body) << " "
 #define println(body) print(body) << std::endl
-#define nextln() std::cout << std::endl
+#define printbr() std::cout << std::endl
 #endif
 
 #include <memory>
@@ -74,6 +74,7 @@
 #include <xhash>
 #include <utility>
 #include <functional>
+#include <algorithm>
 
 #pragma endregion
 

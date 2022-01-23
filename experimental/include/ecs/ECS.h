@@ -30,11 +30,12 @@ namespace fun::ecs {
 
     typedef uint8_t ComponentID;
 
+    extern ComponentID next_component_id;
     template <class T>
     bool get_component_id() {
-        static ComponentID id = 0;
+        static ComponentID id = next_component_id++;
 
-        return id++;
+        return id;
     }
 
     bool add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)>);
