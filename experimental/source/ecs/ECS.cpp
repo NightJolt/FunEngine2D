@@ -7,14 +7,14 @@ static fun::ecs::Entity next = NULLENTITY;
 
 fun::ecs::ComponentID fun::ecs::next_component_id = 0;
 
-typedef std::vector <fun::ecs::EntityV> dense_t;
-typedef std::vector <fun::ecs::EntityID> sparse_t;
+typedef std::vector <fun::ecs::Entity> dense_t;
+typedef std::vector <size_t> sparse_t;
 typedef std::vector <uint8_t> components_t;
 
 static std::vector <dense_t> denses;
 static std::vector <sparse_t> sparses;
 static std::vector <components_t> components;
-static std::vector <uint32_t> sizes;
+static std::vector <size_t> sizes;
 
 static fun::ecs::Entity entity_selected = NULLENTITY;
 
@@ -127,9 +127,9 @@ bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t com
     
     {
         if (dense->size() == size) {
-            dense->emplace_back(entity_v);
+            dense->emplace_back(entity);
         } else {
-            (*dense)[size] = entity_v;
+            (*dense)[size] = entity;
         }
 
         (*size_p)++;
@@ -139,15 +139,15 @@ bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t com
 
     {
         if (sparse->size() <= entity_id) {
-            sparse->resize(entity_id + 1, NULLENTITY);
+            sparse->resize(entity_id + 1, -1);
         }
 
         (*sparse)[entity_id] = size;
     }
 
     {
-        uint64_t length = static_cast <uint64_t> (size) * component_size;
-        uint64_t arr_length = t_componets->size();
+        size_t length = size * component_size;
+        size_t arr_length = t_componets->size();
 
         if (arr_length <= length) {
             t_componets->resize(arr_length + component_size);
@@ -155,6 +155,9 @@ bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t com
 
         create_component(&(*t_componets)[length]);
     }
+    
+    // ! TEST
+    // println(+component_id << " " << std::to_string <Entity> (denses[component_id])) << " " << components[component_id].size());
 
     return true;
 }
@@ -168,17 +171,50 @@ bool fun::ecs::has_component(Entity entity, ComponentID component_id) {
     auto* dense = &denses[component_id];
     auto* sparse = &sparses[component_id];
     
-    if (sparse->size() <= entity_id) return false;
+    if (sparse->size() <= entity_id || entity_id < 0) return false;
 
     auto dense_index = (*sparse)[entity_id];
 
     if (sizes[component_id] <= dense_index) return false;
 
-    return (*dense)[dense_index] == entity_v;
+    return get_entity_version((*dense)[dense_index]) == entity_v;
 }
 
 bool fun::ecs::remove_component(Entity entity, ComponentID component_id, size_t component_size) {
-    return false;
+    if (!is_entity_alive(entity) || !has_component(entity, component_id)) return false;
+
+    auto* dense = &denses[component_id];
+    auto* sparse = &sparses[component_id];
+    auto* t_componets = &components[component_id];
+    auto size = --sizes[component_id];
+
+    EntityID entity_id = get_entity_id(entity);
+    EntityV entity_v = get_entity_version(entity);
+    size_t entity_ind = (*sparse)[entity_id];
+
+    if (entity_ind == size) return true;
+
+    Entity other = (*dense)[size];
+
+    EntityID other_id = get_entity_id(other);
+    EntityV other_v = get_entity_version(other);
+    size_t other_ind = (*sparse)[other_id];
+
+    {
+        std::swap((*dense)[entity_ind], (*dense)[other_ind]);
+
+        (*sparse)[entity_id] = -1;
+        (*sparse)[other_id] = entity_ind;
+    }
+
+    {
+        uint8_t* entity_component = &(*t_componets)[entity_ind * component_size];
+        uint8_t* other_component = &(*t_componets)[other_ind * component_size];
+
+        std::memcpy(entity_component, other_component, component_size);
+    }
+
+    return true;
 }
 
 void fun::ecs::show_components() {

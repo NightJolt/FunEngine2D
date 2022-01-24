@@ -32,7 +32,7 @@ namespace fun::ecs {
 
     extern ComponentID next_component_id;
     template <class T>
-    bool get_component_id() {
+    ComponentID get_component_id() {
         static ComponentID id = next_component_id++;
 
         return id;
@@ -46,6 +46,11 @@ namespace fun::ecs {
     bool add_component(Entity entity) {
         return add_component(entity, get_component_id <T> (), sizeof(T), [](uint8_t* ptr) -> void { *reinterpret_cast <T*> (ptr) = T(); });
     }
+
+    // template <class T>
+    // T* get_component(Entity entity) {
+    //     return new T;
+    // }
 
     template <class T>
     bool has_component(Entity entity) {

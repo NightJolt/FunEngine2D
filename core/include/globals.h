@@ -165,6 +165,30 @@ namespace fun {
     }
 }
 
+namespace std {
+    template <typename T>
+    inline std::string to_string(const std::vector<T>& v, function <std::string(size_t, const T&)> converter = [](size_t i, const T& t) -> std::string { return std::to_string(t); }) {
+        size_t size = v.size();
+
+        std::string result;
+
+        result.reserve(size * (sizeof(v) + 2));
+
+        result.append("[");
+
+        for (int i = 0; i < size - 1; i++) {
+            result.append(converter(i, v[i]));
+            result.append(", ");
+        }
+
+        if (!v.empty()) result.append(converter(v.size() - 1, v[v.size() - 1]));
+        
+        result.append("]");
+
+        return result;
+    }
+}
+
 template <typename T>
 inline std::ostream& operator <<(std::ostream& out, const sf::Vector2<T>& a) {
     return out << to_string(a);
