@@ -38,19 +38,57 @@ namespace fun::ecs {
         return id;
     }
 
-    bool add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)>);
-    bool has_component(Entity entity, ComponentID component_id);
-    bool remove_component(Entity entity, ComponentID component_id, size_t component_size);
+    // get_entities <T, ...>
 
     template <class T>
-    bool add_component(Entity entity) {
-        return add_component(entity, get_component_id <T> (), sizeof(T), [](uint8_t* ptr) -> void { *reinterpret_cast <T*> (ptr) = T(); });
+    struct ComponentIterator {
+        ComponentIterator(std::vector <uint8_t>* array) {
+            component_size = sizeof(T);
+
+            current = &*array->begin();
+
+            if (array->empty()) {
+                end = current;
+            } else {
+                end = &*(array->end() - 1) + 1;
+            }
+        }
+
+        bool empty() {
+            return current == end;
+        }
+
+        T& get() {
+            return *reinterpret_cast <T*> (current);
+        }
+
+        void next() {
+            current += component_size;
+        }
+
+        size_t component_size;
+        uint8_t* current;
+        uint8_t* end;
+    };
+
+    std::vector <uint8_t>* get_components_array(ComponentID component_id);
+    std::vector <Entity>*  get_entities_array(ComponentID component_id);
+
+    template <class T>
+    ComponentIterator <T> iterate_components() {
+        return ComponentIterator <T> (get_components_array(get_component_id <T> ()));
     }
 
-    // template <class T>
-    // T* get_component(Entity entity) {
-    //     return new T;
-    // }
+    // todo: support multiple components
+    template <class T>
+    std::vector <Entity>& get_entities() {
+        return *get_entities_array(get_component_id <T> ());
+    }
+
+    bool has_component(Entity entity, ComponentID component_id);
+    void add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)>);
+    uint8_t* get_component(Entity entity, ComponentID component_id, size_t component_size);
+    void remove_component(Entity entity, ComponentID component_id, size_t component_size);
 
     template <class T>
     bool has_component(Entity entity) {
@@ -58,8 +96,18 @@ namespace fun::ecs {
     }
 
     template <class T>
-    bool remove_component(Entity entity) {
-        return remove_component(entity, get_component_id <T> (), sizeof(T));
+    void add_component(Entity entity) {
+        add_component(entity, get_component_id <T> (), sizeof(T), [](uint8_t* ptr) -> void { *reinterpret_cast <T*> (ptr) = T(); });
+    }
+
+    template <class T>
+    T& get_component(Entity entity) {
+        return *reinterpret_cast <T*> (get_component(entity, get_component_id <T> (), sizeof(T)));
+    }
+
+    template <class T>
+    void remove_component(Entity entity) {
+        remove_component(entity, get_component_id <T> (), sizeof(T));
     }
 
     void show_components();

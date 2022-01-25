@@ -105,15 +105,40 @@ auto fun::ecs::show_hierarchy() -> void {
 
 
 
-bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)> create_component) {
-    if (!is_entity_alive(entity) || has_component(entity, component_id)) return false;
+components_t* fun::ecs::get_components_array(ComponentID component_id){
+    return &components[component_id];
+}
 
-    // ! NEEDS OPTIMIZE
-    while (sizes.size() <= component_id) {
-        denses.emplace_back(dense_t());
-        sparses.emplace_back(sparse_t());
-        components.emplace_back(components_t());
-        sizes.emplace_back(0);
+dense_t* fun::ecs::get_entities_array(ComponentID component_id){
+    return &denses[component_id];
+}
+
+bool fun::ecs::has_component(Entity entity, ComponentID component_id) {
+    if (!is_entity_alive(entity) || sizes.size() <= component_id) return false;
+
+    EntityID entity_id = get_entity_id(entity);
+    EntityV entity_v = get_entity_version(entity);
+
+    auto* dense = &denses[component_id];
+    auto* sparse = &sparses[component_id];
+    
+    if (sparse->size() <= entity_id) return false;
+
+    auto dense_index = (*sparse)[entity_id];
+
+    if (sizes[component_id] <= dense_index || dense_index < 0) return false;
+
+    return get_entity_version((*dense)[dense_index]) == entity_v;
+}
+
+void fun::ecs::add_component(Entity entity, ComponentID component_id, size_t component_size, std::function <void(uint8_t*)> create_component) {
+    if (sizes.size() <= component_id) {
+        auto new_size = component_id + 1;
+
+        denses.resize(new_size, dense_t());
+        sparses.resize(new_size, sparse_t());
+        components.resize(new_size, components_t());
+        sizes.resize(new_size, 0);
     }
 
     EntityID entity_id = get_entity_id(entity);
@@ -155,34 +180,13 @@ bool fun::ecs::add_component(Entity entity, ComponentID component_id, size_t com
 
         create_component(&(*t_componets)[length]);
     }
-    
-    // ! TEST
-    // println(+component_id << " " << std::to_string <Entity> (denses[component_id])) << " " << components[component_id].size());
-
-    return true;
 }
 
-bool fun::ecs::has_component(Entity entity, ComponentID component_id) {
-    if (sizes.size() <= component_id) return false;
-
-    EntityID entity_id = get_entity_id(entity);
-    EntityV entity_v = get_entity_version(entity);
-
-    auto* dense = &denses[component_id];
-    auto* sparse = &sparses[component_id];
-    
-    if (sparse->size() <= entity_id || entity_id < 0) return false;
-
-    auto dense_index = (*sparse)[entity_id];
-
-    if (sizes[component_id] <= dense_index) return false;
-
-    return get_entity_version((*dense)[dense_index]) == entity_v;
+uint8_t* fun::ecs::get_component(Entity entity, ComponentID component_id, size_t component_size) {
+    return &components[component_id][component_size * sparses[component_id][get_entity_id(entity)]];
 }
 
-bool fun::ecs::remove_component(Entity entity, ComponentID component_id, size_t component_size) {
-    if (!is_entity_alive(entity) || !has_component(entity, component_id)) return false;
-
+void fun::ecs::remove_component(Entity entity, ComponentID component_id, size_t component_size) {
     auto* dense = &denses[component_id];
     auto* sparse = &sparses[component_id];
     auto* t_componets = &components[component_id];
@@ -192,7 +196,7 @@ bool fun::ecs::remove_component(Entity entity, ComponentID component_id, size_t 
     EntityV entity_v = get_entity_version(entity);
     size_t entity_ind = (*sparse)[entity_id];
 
-    if (entity_ind == size) return true;
+    if (entity_ind == size) return;
 
     Entity other = (*dense)[size];
 
@@ -213,8 +217,6 @@ bool fun::ecs::remove_component(Entity entity, ComponentID component_id, size_t 
 
         std::memcpy(entity_component, other_component, component_size);
     }
-
-    return true;
 }
 
 void fun::ecs::show_components() {

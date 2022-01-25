@@ -75,6 +75,7 @@
 #include <utility>
 #include <functional>
 #include <algorithm>
+#include <tuple>
 
 #pragma endregion
 
