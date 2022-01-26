@@ -21,9 +21,10 @@ namespace fun {
         void CheckConnectionRequests();
         void CheckDisconnectedClients();
 
-        static bool IsConnected(const sf::TcpSocket&);
+        static bool IsConnected(const sf::TcpSocket*);
 
-        std::vector <sf::TcpSocket> clients;
+        sf::TcpSocket* potential_client;
+        std::vector <sf::TcpSocket*> clients;
 
         sf::TcpListener listener;
     };

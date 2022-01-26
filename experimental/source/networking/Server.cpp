@@ -3,10 +3,14 @@
 fun::Server::Server() {
     listener.setBlocking(false);
 
-    clients.emplace_back(sf::TcpSocket());
+    potential_client = new sf::TcpSocket;
 }
 
 fun::Server::~Server() {
+    for (auto* client : clients) {
+        delete client;
+    }
+
     Close();
 }
 
@@ -25,12 +29,14 @@ void fun::Server::Listen() {
 }
 
 void fun::Server::CheckDisconnectedClients() {
-    for (int i = 0; i < clients.size() - 1; i++) {
+    for (int i = 0; i < clients.size(); i++) {
         //std::cout << "Connection status for " << i << " : " << clients[i]->getRemoteAddress() << ", " << clients[i]->getRemotePort() << std::endl;
 
         // todo: swap memory with last elementh and then erase
         if (!IsConnected(clients[i])) {
             //std::cout << "Disconnected " << i << std::endl;
+
+            delete clients[i];
 
             clients.erase(clients.begin() + i);
         }
@@ -38,9 +44,15 @@ void fun::Server::CheckDisconnectedClients() {
 }
 
 void fun::Server::CheckConnectionRequests() {
-    if (listener.accept(clients.back()) == sf::Socket::Done) {
-        clients.back().setBlocking(false);
-        clients.emplace_back(sf::TcpSocket());
+    next_client:
+
+    if (listener.accept(*potential_client) == sf::Socket::Done) {
+        potential_client->setBlocking(false);
+        clients.emplace_back(potential_client);
+
+        potential_client = new sf::TcpSocket;
+
+        goto next_client;
     }
 }
 
@@ -48,16 +60,16 @@ void fun::Server::ReceiveData() {
     for (int i = 0; i < clients.size() - 1; i++) {
         sf::Packet packet;
 
-        if (clients[i].receive(packet) == sf::Socket::Done) {
+        if (clients[i]->receive(packet) == sf::Socket::Done) {
             for (int j = 0; j < clients.size(); j++) {
                 if (i == j) continue;
 
-                while (clients[j].send(packet) == sf::Socket::Partial) {} // !
+                while (clients[j]->send(packet) == sf::Socket::Partial) {} // !
             }
         }
     }
 }
 
-bool fun::Server::IsConnected(const sf::TcpSocket& socket) {
-    return socket.getRemoteAddress() != sf::IpAddress::None; // todo: not working
+bool fun::Server::IsConnected(const sf::TcpSocket* socket) {
+    return socket->getRemoteAddress() != sf::IpAddress::None; // todo: not working
 }
