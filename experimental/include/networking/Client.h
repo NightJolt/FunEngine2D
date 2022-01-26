@@ -11,12 +11,12 @@ namespace fun {
         bool Connect(const std::string&, unsigned short);
         void Disconnect();
 
-        void Update();
+        void RecieveData();
 
         void Send(const std::string&);
 
         std::string ReadNext();
-        int UnreadCount();
+        int PacketsLeft();
 
     private:
 

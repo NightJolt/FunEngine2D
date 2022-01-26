@@ -20,7 +20,7 @@ void fun::Client::Disconnect() {
     tcp_socket.disconnect();
 }
 
-void fun::Client::Update() {
+void fun::Client::RecieveData() {
     sf::Packet incoming_packet;
 
     if (tcp_socket.receive(incoming_packet) == sf::Socket::Done) {
@@ -47,6 +47,6 @@ std::string fun::Client::ReadNext() {
     return data;
 }
 
-int fun::Client::UnreadCount() {
+int fun::Client::PacketsLeft() {
     return packets.size();
 }

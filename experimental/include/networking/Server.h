@@ -9,22 +9,21 @@ namespace fun {
         Server();
         ~Server();
 
-        void Close();
+        bool SetPort(unsigned short);
 
         void Listen();
-
-        bool SetPort(unsigned short);
+        void Close();
 
     private:
 
-        void ListenRequests();
-        void ListenData();
+        void ReceiveData();
 
-        void CollectGarbage();
+        void CheckConnectionRequests();
+        void CheckDisconnectedClients();
 
-        static bool IsConnected(const sf::TcpSocket*);
+        static bool IsConnected(const sf::TcpSocket&);
 
-        std::vector <sf::TcpSocket*> clients;
+        std::vector <sf::TcpSocket> clients;
 
         sf::TcpListener listener;
     };
