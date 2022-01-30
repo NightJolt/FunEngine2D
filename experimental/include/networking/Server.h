@@ -10,7 +10,7 @@ namespace fun {
         ~Server();
 
         bool SetPort(unsigned short);
-
+        
         void Listen();
         void Close();
 

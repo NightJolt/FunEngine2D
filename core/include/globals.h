@@ -77,6 +77,10 @@
 #include <algorithm>
 #include <tuple>
 
+#include <any>
+#include <variant>
+#include <optional>
+
 #pragma endregion
 
 /*#pragma region tilemap

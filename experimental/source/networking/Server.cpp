@@ -32,13 +32,13 @@ void fun::Server::CheckDisconnectedClients() {
     for (int i = 0; i < clients.size(); i++) {
         //std::cout << "Connection status for " << i << " : " << clients[i]->getRemoteAddress() << ", " << clients[i]->getRemotePort() << std::endl;
 
-        // todo: swap memory with last elementh and then erase
         if (!IsConnected(clients[i])) {
             //std::cout << "Disconnected " << i << std::endl;
 
             delete clients[i];
 
-            clients.erase(clients.begin() + i);
+            std::swap(clients[i], clients.back());
+            clients.erase(clients.end() - 1);
         }
     }
 }

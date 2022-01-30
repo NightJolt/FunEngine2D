@@ -5,7 +5,6 @@
 #include "../../../core/include/_Math.h"
 #include "../../../core/include/Input.h"
 
-#include "../ecs/Entity.h"
 #include "Interaction.h"
 
 namespace fun {

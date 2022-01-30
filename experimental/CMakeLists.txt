@@ -5,8 +5,7 @@ include_directories(source)
 
 file (
         GLOB_RECURSE FE2D_EXPERIMENTAL
-
-        include/*.h
+        
         source/*.cpp
 )
 
