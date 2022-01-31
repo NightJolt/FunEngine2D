@@ -12,10 +12,34 @@ fun::wndmgr::WindowData::WindowData(const std::string& name, const sf::Vector2u&
 
 void fun::wndmgr::init(const WindowData& data) {
     main_window = new Window(data);
+
+#if defined(USES_IMGUI)
+    main_window->render.resetGLStates();
+    main_window->render.setFramerateLimit(60);
+    main_window->render.setVerticalSyncEnabled(false);
+
+    ImGui::SFML::Init(main_window->render);
+#endif
+}
+
+void fun::wndmgr::update() {
+    main_window->PollEvents();
+
+#if defined(USES_IMGUI)
+    ImGui::SFML::Update(main_window->render, fun::time::delta_time_object());
+#endif
+}
+
+void fun::wndmgr::close() {
+#if defined(USES_IMGUI)
+    ImGui::SFML::Shutdown();
+#endif
+
+    delete main_window;
 }
 
 fun::wndmgr::Window::Window(const WindowData& data) :
-    render_window(sf::VideoMode(data.size.x, data.size.y), data.name, data.style, data.settings),
+    render(sf::VideoMode(data.size.x, data.size.y), data.name, data.style, data.settings),
     is_focused(false),
     zoom(1)
 {
@@ -25,9 +49,9 @@ fun::wndmgr::Window::Window(const WindowData& data) :
 }
 
 void fun::wndmgr::Window::RefreshWindow() {
-    const sf::Vector2u& new_resolution = render_window.getSize();
+    const sf::Vector2u& new_resolution = render.getSize();
 
-    world_buffer.create(new_resolution.x, new_resolution.y, render_window.getSettings());
+    world_buffer.create(new_resolution.x, new_resolution.y, render.getSettings());
     world_view.setSize((sf::Vector2f)new_resolution);
     world_view.zoom(zoom);
     world_render.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), (sf::Vector2i)new_resolution));
@@ -53,14 +77,14 @@ void fun::wndmgr::Window::Display(const sf::Color& bg_color) {
 
     world_render.setTexture(world_buffer.getTexture());
 
-    render_window.setView(final_view);
-    render_window.draw(world_render/*, fun::R::shaders[0]*/);
+    render.setView(final_view);
+    render.draw(world_render/*, fun::R::shaders[0]*/);
 
 #if defined(USES_IMGUI)
-    ImGui::SFML::Render(render_window);
+    ImGui::SFML::Render(render);
 #endif
 
-    render_window.display();
+    render.display();
 
     world_queue.Clear();
 }
@@ -70,13 +94,13 @@ void fun::wndmgr::Window::PollEvents() {
 
     float curr_zoom_value;
 
-    while (render_window.pollEvent(event)) {
+    while (render.pollEvent(event)) {
 #if defined(USES_IMGUI)
         ImGui::SFML::ProcessEvent(event);
 #endif
         switch (event.type) {
             case sf::Event::Closed:
-                render_window.close();
+                render.close();
 
                 break;
             case sf::Event::GainedFocus:
@@ -108,7 +132,7 @@ void fun::wndmgr::Window::PollEvents() {
 }
 
 sf::Vector2i fun::wndmgr::Window::GetMouseScreenPosition() {
-    return sf::Mouse::getPosition(render_window);
+    return sf::Mouse::getPosition(render);
 }
 
 sf::Vector2f fun::wndmgr::Window::GetMouseWorldPosition() {

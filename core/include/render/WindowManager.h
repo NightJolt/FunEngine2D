@@ -5,6 +5,7 @@
 #include "RenderQueue.h"
 #include "../_Math.h"
 #include "../tools/Debugger.h"
+#include "../_Time.h"
 
 namespace fun::wndmgr {
     struct WindowData {
@@ -17,7 +18,7 @@ namespace fun::wndmgr {
     };
 
     struct Window {
-        sf::RenderWindow render_window;
+        sf::RenderWindow render;
 
         // render queues
         RenderQueue world_queue;
@@ -61,4 +62,6 @@ namespace fun::wndmgr {
     extern Window* main_window;
 
     void init(const WindowData&);
+    void update();
+    void close();
 }
