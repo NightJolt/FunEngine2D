@@ -5,9 +5,7 @@ void fun::resources::load_texture(const std::string& key, const std::string& fil
 
     auto it = textures.find(key);
 
-    if (!it->second.loadFromFile(textures_directory + file)) {
-        textures.erase(it);
-    }
+    assert(it->second.loadFromFile(textures_directory + file));
 }
 
 const sf::Texture& fun::resources::get_texture(const std::string& key) {
@@ -19,13 +17,25 @@ void fun::resources::load_font(const std::string& key, const std::string& file) 
 
     auto it = fonts.find(key);
 
-    if (!it->second.loadFromFile(fonts_directory + file)) {
-        fonts.erase(it);
-    }
+    assert(it->second.loadFromFile(fonts_directory + file));
 }
 
 const sf::Font& fun::resources::get_font(const std::string& key) {
     return fonts.at(key);
+}
+
+void fun::resources::load_shader(const std::string& key, const std::string& file) {
+    assert(!shaders.contains(key));
+
+    shaders.emplace(key, new sf::Shader());
+
+    auto it = shaders.find(key);
+
+    it->second->loadFromFile(shaders_directory + file + ".vert", shaders_directory + file + ".frag");
+}
+
+const sf::Shader* fun::resources::get_shader(const std::string& key) {
+    return shaders.at(key);
 }
 
 // void LoadResources() {

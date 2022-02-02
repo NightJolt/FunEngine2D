@@ -90,33 +90,33 @@ auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
     {
         size_t arr_size = component_arr.size();
 
-        if (arr_size <= size) {
-            component_arr.resize(arr_size + 1);
+        if (arr_size == size) {
+            component_arr.reserve(arr_size + 1);
+            component_arr.emplace_back(std::forward <Args> (args)...);
+        } else {
+            component_arr[size] = T(std::forward <Args> (args)...);
         }
-
-        component_arr[size] = T(std::forward <Args> (args)...);
     }
 }
 
 template <class T>
 auto fun::ecs::remove_component(Entity entity) -> void {
     const ComponentID component_id = get_component_id <T> ();
-
-    if (!components[component_id].has_value()) return;
-
-    auto& dense = denses[component_id];
-    auto& sparse = sparses[component_id];
-    auto& component_arr = std::any_cast <std::vector <T>&> (components[component_id]);
+    
     auto size = --sizes[component_id];
-
+    
     EntityID entity_id = get_entity_id(entity);
-    EntityV entity_v = get_entity_version(entity);
+    auto& sparse = sparses[component_id];
     auto entity_ind = sparse[entity_id];
 
     if (entity_ind == size) return;
 
-    Entity other = dense[size];
+    auto& dense = denses[component_id];
+    auto& component_arr = std::any_cast <std::vector <T>&> (components[component_id]);
 
+    EntityV entity_v = get_entity_version(entity);
+
+    Entity other = dense[size];
     EntityID other_id = get_entity_id(other);
     EntityV other_v = get_entity_version(other);
     auto other_ind = sparse[other_id];
@@ -131,4 +131,11 @@ auto fun::ecs::remove_component(Entity entity) -> void {
     {
         component_arr[entity_ind] = component_arr[other_ind];
     }
+}
+
+template <class T>
+auto fun::ecs::get_entity(const T* component_ptr) -> Entity {
+    const ComponentID component_id = get_component_id <T> ();
+
+    return denses[component_id][component_ptr - &std::any_cast <std::vector <T>&> (components[component_id])[0]];
 }

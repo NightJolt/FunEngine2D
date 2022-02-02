@@ -68,7 +68,7 @@ void fun::wndmgr::Window::DrawUI(const sf::Drawable& drawable, int order) {
     ui_queue.Add(drawable, order);
 }
 
-void fun::wndmgr::Window::Display(const sf::Color& bg_color) {
+void fun::wndmgr::Window::Display(const sf::Color& bg_color, const sf::Shader* shader) {
     world_buffer.clear(bg_color);
 
     world_buffer.setView(world_view);
@@ -78,7 +78,7 @@ void fun::wndmgr::Window::Display(const sf::Color& bg_color) {
     world_render.setTexture(world_buffer.getTexture());
 
     render.setView(final_view);
-    render.draw(world_render/*, fun::R::shaders[0]*/);
+    render.draw(world_render, shader);
 
 #if defined(USES_IMGUI)
     ImGui::SFML::Render(render);

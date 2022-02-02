@@ -50,7 +50,7 @@ namespace fun::wndmgr {
         void DrawUI(const sf::Drawable&, int);
 
         void PollEvents();
-        void Display(const sf::Color&);
+        void Display(const sf::Color&, const sf::Shader* = nullptr);
 
         sf::Vector2i GetMouseScreenPosition();
         sf::Vector2f GetMouseWorldPosition();

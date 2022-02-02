@@ -12,8 +12,8 @@ namespace fun::resources {
     void load_font(const std::string&, const std::string&);
     const sf::Font& get_font(const std::string&);
 
-    // void LoadShader(const std::string&, const std::string&);
-    // const sf::Shader& GetShader(const std::string&);
+    void load_shader(const std::string&, const std::string&);
+    const sf::Shader* get_shader(const std::string&);
 
     // todo: audio
     // todo: lua scripts
@@ -21,7 +21,7 @@ namespace fun::resources {
     static std::unordered_map <std::string, sf::Texture> textures;
     static std::unordered_map <std::string, sf::Font> fonts;
     // static std::unordered_map <std::string, sf::Image> images;
-    // static std::unordered_map <std::string, sf::Shader*> shaders;
+    static std::unordered_map <std::string, sf::Shader*> shaders;
 
     const std::string resources_directory =
     #if defined(RELEASE_BUILD)

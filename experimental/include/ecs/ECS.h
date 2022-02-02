@@ -63,6 +63,9 @@ namespace fun::ecs {
     template <class T>
     void remove_component(Entity);
 
+    template <class T>
+    Entity get_entity(const T*);
+
 
     // void show_hierarchy();
     // void show_components();
