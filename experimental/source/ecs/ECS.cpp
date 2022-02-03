@@ -12,6 +12,9 @@ std::vector <fun::ecs::sparse_t> fun::ecs::sparses = std::vector <sparse_t> ();
 std::vector <std::any> fun::ecs::components = std::vector <std::any> ();
 std::vector <size_t> fun::ecs::sizes = std::vector <size_t> ();
 
+std::vector <std::any> fun::ecs::oncreate_callbacks = std::vector <std::any> ();
+std::vector <std::any> fun::ecs::ondestroy_callbacks = std::vector <std::any> ();
+
 fun::ecs::ComponentID fun::ecs::next_component_id = 0;
 
 auto fun::ecs::get_entity_id(Entity entity) -> EntityID {

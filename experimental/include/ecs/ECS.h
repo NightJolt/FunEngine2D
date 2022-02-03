@@ -24,6 +24,9 @@ namespace fun::ecs {
     extern std::vector <std::any> components;
     extern std::vector <size_t> sizes;
 
+    extern std::vector <std::any> oncreate_callbacks;
+    extern std::vector <std::any> ondestroy_callbacks;
+
     extern ComponentID next_component_id;
 
 
@@ -65,6 +68,12 @@ namespace fun::ecs {
 
     template <class T>
     Entity get_entity(const T*);
+
+    template <class T>
+    void oncreate_callback(std::function <void(T&)>&&);
+
+    template <class T>
+    void ondestroy_callback(std::function <void(T&)>&&);
 
 
     // void show_hierarchy();

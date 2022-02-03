@@ -52,12 +52,12 @@ namespace fun::math {
 
     template <class T>
     float distance(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-        return Magnitude(b - a);
+        return magnitude(b - a);
     }
 
     template <class T>
     sf::Vector2f direction(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-        return Normalize((sf::Vector2f)(b - a));
+        return normalize((sf::Vector2f)(b - a));
     }
 
     template <class T>

@@ -96,6 +96,16 @@ auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
         } else {
             component_arr[size] = T(std::forward <Args> (args)...);
         }
+
+        if (oncreate_callbacks.size() > component_id) {
+            auto& callback_any = oncreate_callbacks[component_id];
+
+            if (callback_any.type() != typeid(nullptr_t)) {
+                auto& callback = std::any_cast <std::function <void(T&)>&> (callback_any);
+
+                callback(component_arr[size]);
+            } 
+        }
     }
 }
 
@@ -129,6 +139,16 @@ auto fun::ecs::remove_component(Entity entity) -> void {
     }
 
     {
+        if (ondestroy_callbacks.size() > component_id) {
+            auto& callback_any = ondestroy_callbacks[component_id];
+
+            if (callback_any.type() != typeid(nullptr_t)) {
+                auto& callback = std::any_cast <std::function <void(T&)>&> (callback_any);
+
+                callback(component_arr[entity_ind]);
+            } 
+        }
+
         component_arr[entity_ind] = component_arr[other_ind];
     }
 }
@@ -138,4 +158,26 @@ auto fun::ecs::get_entity(const T* component_ptr) -> Entity {
     const ComponentID component_id = get_component_id <T> ();
 
     return denses[component_id][component_ptr - &std::any_cast <std::vector <T>&> (components[component_id])[0]];
+}
+
+template <class T>
+auto fun::ecs::oncreate_callback(std::function <void(T&)>&& f) -> void {
+    const ComponentID component_id = get_component_id <T> ();
+
+    if (oncreate_callbacks.size() <= component_id) {
+        oncreate_callbacks.resize(component_id + 1, nullptr);
+    }
+
+    oncreate_callbacks[component_id] = f;
+}
+
+template <class T>
+auto fun::ecs::ondestroy_callback(std::function <void(T&)>&& f) -> void {
+    const ComponentID component_id = get_component_id <T> ();
+
+    if (ondestroy_callbacks.size() <= component_id) {
+        ondestroy_callbacks.resize(component_id + 1, nullptr);
+    }
+
+    ondestroy_callbacks[component_id] = f;
 }
