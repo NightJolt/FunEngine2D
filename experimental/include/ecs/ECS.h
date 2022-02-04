@@ -48,8 +48,35 @@ namespace fun::ecs {
     ComponentID get_component_id();
 
     // todo: support multiple components
+    // ! Needs iterator
+    // template <class T>
+    // std::vector <Entity>& get_entities();
+
     template <class T>
-    std::vector <Entity>& get_entities();
+    struct ComponentIterator {
+        T* begin_p;
+        T* end_p;
+        T* ptr;
+
+        ComponentIterator(std::vector <T>& v, size_t n) : begin_p(&v[0]), end_p(&v[n - 1] + 1), ptr(begin_p) {}
+
+        T* begin() { return begin_p; }
+        const T* begin() const { return begin_p; }
+        T* end() { return end_p; }
+        const T* end() const { return end_p; }
+
+        // T& operator *() { return *ptr; }
+        // T* operator ->() { return ptr; }
+        // void operator ++() { ++ptr; }
+        // bool operator !=(T* t) { return ptr != t; }
+
+    };
+
+    template <class T>
+    bool does_component_exist();
+
+    template <class T>
+    ComponentIterator <T> iterate_component();
 
     template <class T>
     std::vector <T>& get_component_array();

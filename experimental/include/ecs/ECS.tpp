@@ -7,9 +7,23 @@ auto fun::ecs::get_component_id() -> ComponentID {
     return id;
 }
 
+// template <class T>
+// auto fun::ecs::get_entities() -> std::vector <Entity>& {
+//     return denses[get_component_id <T> ()];
+// }
+
 template <class T>
-auto fun::ecs::get_entities() -> std::vector <Entity>& {
-    return denses[get_component_id <T> ()];
+auto fun::ecs::does_component_exist() -> bool {
+    const ComponentID component_id = get_component_id <T> ();
+
+    return components.size() > component_id && components[component_id].has_value();
+}
+
+template <class T>
+auto fun::ecs::iterate_component() -> ComponentIterator <T> {
+    const ComponentID component_id = get_component_id <T> ();
+
+    return ComponentIterator <T> (std::any_cast <std::vector <T>&> (components[component_id]), sizes[component_id]);
 }
 
 template <class T>
@@ -100,7 +114,7 @@ auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
         if (oncreate_callbacks.size() > component_id) {
             auto& callback_any = oncreate_callbacks[component_id];
 
-            if (callback_any.type() != typeid(nullptr_t)) {
+            if (callback_any.has_value()) {
                 auto& callback = std::any_cast <std::function <void(T&)>&> (callback_any);
 
                 callback(component_arr[size]);
@@ -142,7 +156,7 @@ auto fun::ecs::remove_component(Entity entity) -> void {
         if (ondestroy_callbacks.size() > component_id) {
             auto& callback_any = ondestroy_callbacks[component_id];
 
-            if (callback_any.type() != typeid(nullptr_t)) {
+            if (callback_any.has_value()) {
                 auto& callback = std::any_cast <std::function <void(T&)>&> (callback_any);
 
                 callback(component_arr[entity_ind]);
@@ -165,7 +179,7 @@ auto fun::ecs::oncreate_callback(std::function <void(T&)>&& f) -> void {
     const ComponentID component_id = get_component_id <T> ();
 
     if (oncreate_callbacks.size() <= component_id) {
-        oncreate_callbacks.resize(component_id + 1, nullptr);
+        oncreate_callbacks.resize(component_id + 1);
     }
 
     oncreate_callbacks[component_id] = f;
@@ -176,7 +190,7 @@ auto fun::ecs::ondestroy_callback(std::function <void(T&)>&& f) -> void {
     const ComponentID component_id = get_component_id <T> ();
 
     if (ondestroy_callbacks.size() <= component_id) {
-        ondestroy_callbacks.resize(component_id + 1, nullptr);
+        ondestroy_callbacks.resize(component_id + 1);
     }
 
     ondestroy_callbacks[component_id] = f;
