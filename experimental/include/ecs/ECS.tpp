@@ -175,7 +175,7 @@ auto fun::ecs::get_entity(const T* component_ptr) -> Entity {
 }
 
 template <class T>
-auto fun::ecs::oncreate_callback(std::function <void(T&)>&& f) -> void {
+auto fun::ecs::oncreate_callback(const std::function <void(T&)>& f) -> void {
     const ComponentID component_id = get_component_id <T> ();
 
     if (oncreate_callbacks.size() <= component_id) {
@@ -186,7 +186,7 @@ auto fun::ecs::oncreate_callback(std::function <void(T&)>&& f) -> void {
 }
 
 template <class T>
-auto fun::ecs::ondestroy_callback(std::function <void(T&)>&& f) -> void {
+auto fun::ecs::ondestroy_callback(const std::function <void(T&)>& f) -> void {
     const ComponentID component_id = get_component_id <T> ();
 
     if (ondestroy_callbacks.size() <= component_id) {

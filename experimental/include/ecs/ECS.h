@@ -58,7 +58,7 @@ namespace fun::ecs {
         T* end_p;
         T* ptr;
 
-        ComponentIterator(std::vector <T>& v, size_t n) : begin_p(&v[0]), end_p(&v[n - 1] + 1), ptr(begin_p) {}
+        ComponentIterator(std::vector <T>& v, size_t n) : begin_p(n ? &v[0] : nullptr), end_p(n ? &v[n - 1] + 1 : begin_p), ptr(begin_p) {}
 
         T* begin() { return begin_p; }
         const T* begin() const { return begin_p; }
@@ -97,10 +97,10 @@ namespace fun::ecs {
     Entity get_entity(const T*);
 
     template <class T>
-    void oncreate_callback(std::function <void(T&)>&&);
+    void oncreate_callback(const std::function <void(T&)>&);
 
     template <class T>
-    void ondestroy_callback(std::function <void(T&)>&&);
+    void ondestroy_callback(const std::function <void(T&)>&);
 
 
     // void show_hierarchy();
