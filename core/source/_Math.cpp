@@ -38,7 +38,7 @@ float fun::math::q_rsqrt(float v) {
 }
 
 float fun::math::radians(float degrees) {
-    return degrees * 0.017435f;
+    return degrees * 0.0174532f;
 }
 
 float fun::math::degrees(float radians) {

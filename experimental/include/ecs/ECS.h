@@ -11,8 +11,8 @@ namespace fun::ecs {
     typedef std::vector <Entity> dense_t;
     typedef std::vector <size_t> sparse_t;
 
-    constexpr int NULLENTITY = -1;
-    constexpr int NULLADDR = -1;
+    constexpr uint64_t NULLENTITY = ~(uint64_t)0;
+    constexpr size_t NULLADDR = ~(size_t)0;
     
     extern std::vector <Entity> entities;
 
@@ -58,7 +58,8 @@ namespace fun::ecs {
         T* end_p;
         T* ptr;
 
-        ComponentIterator(std::vector <T>& v, size_t n) : begin_p(n ? &v[0] : nullptr), end_p(n ? &v[n - 1] + 1 : begin_p), ptr(begin_p) {}
+        ComponentIterator() : begin_p(nullptr), end_p(nullptr) {}
+        ComponentIterator(std::vector <T>& v, size_t n) : begin_p(n ? &v[0] : nullptr), end_p(n ? &v[n - 1] + 1 : nullptr), ptr(begin_p) {}
 
         T* begin() { return begin_p; }
         const T* begin() const { return begin_p; }
@@ -73,7 +74,7 @@ namespace fun::ecs {
     };
 
     template <class T>
-    bool does_component_exist();
+    bool component_exist();
 
     template <class T>
     ComponentIterator <T> iterate_component();
@@ -94,7 +95,7 @@ namespace fun::ecs {
     void remove_component(Entity);
 
     template <class T>
-    Entity get_entity(const T*);
+    Entity get_entity(T*);
 
     template <class T>
     void oncreate_callback(const std::function <void(T&)>&);

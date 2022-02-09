@@ -5,7 +5,7 @@ fun::Client::~Client() {
 }
 
 bool fun::Client::Connect(const std::string& ip, unsigned short port) {
-    tcp_socket.setBlocking(true);
+    tcp_socket.setBlocking(true); // ?
 
     if (tcp_socket.connect(ip, port) == sf::Socket::Done) {
         tcp_socket.setBlocking(false);

@@ -34,7 +34,7 @@ void fun::resources::load_shader(const std::string& key, const std::string& file
     it->second->loadFromFile(shaders_directory + file + ".vert", shaders_directory + file + ".frag");
 }
 
-const sf::Shader* fun::resources::get_shader(const std::string& key) {
+sf::Shader* fun::resources::get_shader(const std::string& key) {
     return shaders.at(key);
 }
 

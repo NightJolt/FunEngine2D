@@ -58,6 +58,7 @@
 #define printbr() std::cout << std::endl
 #endif
 
+#include <stdint.h>
 #include <memory>
 #include <cstring>
 #include <sstream>
@@ -118,7 +119,37 @@ typedef uint64_t uuid_t;
 
 namespace fun {
     void glob_init();
+}
 
+namespace fun {
+    template <class T>
+    struct Vec2 {
+        T x, y;
+
+        Vec2() : x(0), y(0) {}
+        Vec2(T x, T y) : x(0), y(0) {}
+    };
+
+    typedef Vec2 <int32_t> Vec2i;
+    typedef Vec2 <uint32_t> Vec2u;
+    typedef Vec2 <float> Vec2f;
+}
+
+namespace fun {
+    struct Transform {
+        Vec2f position;
+        float rotation;
+        Vec2f scale;
+
+        explicit Transform(Vec2f p = { 0, 0 }, float r = 0, Vec2f s = { 1, 1 }) {
+            position = p;
+            rotation = r;
+            scale = s;
+        }
+    };
+}
+
+namespace fun {
     namespace uuid {
         uuid_t generate();
     }
@@ -158,7 +189,7 @@ namespace std {
 #pragma region sfml_vec2
 #if defined(SFML_VEC2_OVERLOADS)
 
-namespace fun {
+namespace sf {
     template <typename T>
     inline std::string to_string_key(const sf::Vector2<T>& a) {
         return std::to_string(a.x) + ' ' + std::to_string(a.y);
@@ -166,7 +197,7 @@ namespace fun {
 
     template <typename T>
     inline std::string to_string(const sf::Vector2<T>& a) {
-        return "Vector2(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ")";
+        return "V2(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ")";
     }
 }
 
@@ -196,7 +227,7 @@ namespace std {
 
 template <typename T>
 inline std::ostream& operator <<(std::ostream& out, const sf::Vector2<T>& a) {
-    return out << to_string(a);
+    return out << sf::to_string(a);
 }
 
 template <typename T>
@@ -265,7 +296,7 @@ inline bool operator >=(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
 #pragma region sfml_vec3
 #if defined(SFML_VEC3_OVERLOADS)
 
-namespace fun {
+namespace sf {
     template <typename T>
     std::string to_string_key(const sf::Vector3<T>& a) {
         return std::to_string(a.x) + ' ' + std::to_string(a.y) + ' ' + std::to_string(a.z);
@@ -273,7 +304,7 @@ namespace fun {
 
     template <typename T>
     std::string to_string(const sf::Vector3<T>& a) {
-        return "Vector3(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ", " + std::to_string(a.z) + ")";
+        return "V3(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ", " + std::to_string(a.z) + ")";
     }
 }
 

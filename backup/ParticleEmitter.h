@@ -1,5 +1,4 @@
-#include "../Core/globals.h"
-
+#include "../Core/Globals.h"
 #include "../Core/Math.h"
 #include "../Core/Time.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../core/include/globals.h"
+#include "../../../core/include/Globals.h"
 #include "../../../core/include/tools/Debugger.h"
 
 namespace fun::ecs {

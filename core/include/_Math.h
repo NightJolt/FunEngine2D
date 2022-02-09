@@ -1,6 +1,6 @@
 #pragma once
 
-#include "globals.h"
+#include "Globals.h"
 
 namespace fun::math {
     int random(int, int); // TODO change to C++11 random

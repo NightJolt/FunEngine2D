@@ -1,6 +1,6 @@
 #pragma once
 
-#include "globals.h"
+#include "Globals.h"
 
 namespace fun::time {
     void recalculate();

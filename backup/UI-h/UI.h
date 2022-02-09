@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../../Core/globals.h"
+#include "../../Core/Globals.h"
 
 class UI : public sf::Drawable {
 public:

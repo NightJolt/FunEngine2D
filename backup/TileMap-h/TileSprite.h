@@ -1,10 +1,7 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
+#include "../../Core/Globals.h"
 #include "../../Core/Math.h"
-
-#include "../../Core/globals.h"
 
 #define TILE_TOP_MASK 1
 #define TILE_RIGHT_MASK 2

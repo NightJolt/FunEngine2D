@@ -1,7 +1,6 @@
 #pragma once
 
-#include "globals.h"
-
+#include "Globals.h"
 #include "_Math.h"
 
 #define ENABLE_MOUSE

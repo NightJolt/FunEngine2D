@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../globals.h"
-
+#include "../Globals.h"
 #include "WindowManager.h"
 
 namespace fun {

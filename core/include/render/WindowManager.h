@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../globals.h"
-
+#include "../Globals.h"
 #include "RenderQueue.h"
 #include "../_Math.h"
 #include "../tools/Debugger.h"

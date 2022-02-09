@@ -13,7 +13,7 @@ auto fun::ecs::get_component_id() -> ComponentID {
 // }
 
 template <class T>
-auto fun::ecs::does_component_exist() -> bool {
+auto fun::ecs::component_exist() -> bool {
     const ComponentID component_id = get_component_id <T> ();
 
     return components.size() > component_id && components[component_id].has_value();
@@ -23,7 +23,10 @@ template <class T>
 auto fun::ecs::iterate_component() -> ComponentIterator <T> {
     const ComponentID component_id = get_component_id <T> ();
 
-    return ComponentIterator <T> (std::any_cast <std::vector <T>&> (components[component_id]), sizes[component_id]);
+    if (component_exist <T> ())
+        return ComponentIterator <T> (std::any_cast <std::vector <T>&> (components[component_id]), sizes[component_id]);
+    else
+        return ComponentIterator <T> ();
 }
 
 template <class T>
@@ -163,12 +166,12 @@ auto fun::ecs::remove_component(Entity entity) -> void {
             } 
         }
 
-        component_arr[entity_ind] = component_arr[other_ind];
+        component_arr[entity_ind] = std::move(component_arr[other_ind]);
     }
 }
 
 template <class T>
-auto fun::ecs::get_entity(const T* component_ptr) -> Entity {
+auto fun::ecs::get_entity(T* component_ptr) -> Entity {
     const ComponentID component_id = get_component_id <T> ();
 
     return denses[component_id][component_ptr - &std::any_cast <std::vector <T>&> (components[component_id])[0]];

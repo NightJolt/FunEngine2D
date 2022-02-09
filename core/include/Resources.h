@@ -1,6 +1,6 @@
 #pragma once
 
-#include "globals.h"
+#include "Globals.h"
 
 namespace fun::resources {
     void load_texture(const std::string&, const std::string&);
@@ -13,7 +13,7 @@ namespace fun::resources {
     const sf::Font& get_font(const std::string&);
 
     void load_shader(const std::string&, const std::string&);
-    const sf::Shader* get_shader(const std::string&);
+    sf::Shader* get_shader(const std::string&);
 
     // todo: audio
     // todo: lua scripts

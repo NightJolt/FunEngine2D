@@ -1,4 +1,4 @@
-#include "globals.h"
+#include "Globals.h"
 
 void fun::glob_init() {
 #if defined(ENABLE_DEBUGGING)
