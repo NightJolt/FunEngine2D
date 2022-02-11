@@ -2,7 +2,7 @@
 
 fun::RenderQueue::RenderItem::RenderItem(const sf::Drawable& d, int o) : drawable(&d), order(o) {}
 
-void fun::RenderQueue::Add(const sf::Drawable &drawable, int order) {
+void fun::RenderQueue::Add(const sf::Drawable& drawable, int order) {
     queue.emplace_back(drawable, order);
 }
 

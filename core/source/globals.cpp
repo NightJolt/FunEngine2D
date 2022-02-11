@@ -46,6 +46,7 @@ fun::UniqueKey::operator uint64_t() const {
     return uuid;
 }
 
+// ? use math::random_64
 static std::random_device _random_device_;
 static std::mt19937_64 _engine_(_random_device_());
 static std::uniform_int_distribution _uniform_distribution_;

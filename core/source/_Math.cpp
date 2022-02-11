@@ -1,24 +1,35 @@
 #include "_Math.h"
 
-int fun::math::random(int a, int b) {
-    return rand() % (b - a) + a;
+static std::random_device _random_device_;
+static std::mt19937 _engine32_(_random_device_());
+static std::mt19937_64 _engine64_(_random_device_());
+static std::uniform_int_distribution <int32_t> _uniform_int32_distribution_;
+static std::uniform_int_distribution <int64_t> _uniform_int64_distribution_;
+static std::uniform_real_distribution <float> _uniform_float_distribution_;
+
+int32_t fun::math::random_32(int32_t a, int32_t b) {
+    return _uniform_int32_distribution_(_engine32_, std::uniform_int <int32_t> :: param_type(a, b));
 }
 
-float fun::math::random(float a, float b) {
-    return random((int)a, (int)b);
+int64_t fun::math::random_64(int64_t a, int64_t b) {
+    return _uniform_int64_distribution_(_engine64_, std::uniform_int <int64_t> :: param_type(a, b));
 }
 
-bool fun::math::random_chance(const int& chance) {
-    return random(1, 100) <= chance;
+float fun::math::random_f(float a, float b) {
+    return _uniform_float_distribution_(_engine32_, std::uniform_real <float> :: param_type(a, b));
 }
 
-int fun::math::mod(const int& a, const int& m) {
+bool fun::math::random_chance(float chance) {
+    return random_f(0, 100) <= chance;
+}
+
+int fun::math::mod(int a, int m) {
     const int r = a % m;
 
     return r >= 0 ? r : m - r;
 }
 
-float fun::math::map_value(const float& n, const float& a, const float& b, const float& c, const float& d) {
+float fun::math::map_value(float n, float a, float b, float c, float d) {
     return (d - c) / (b - a) * (n - a) + c;
 }
 

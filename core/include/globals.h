@@ -82,6 +82,9 @@
 #include <variant>
 #include <optional>
 
+#include <thread>
+#include <future>
+
 #pragma endregion
 
 /*#pragma region tilemap
@@ -136,15 +139,25 @@ namespace fun {
 }
 
 namespace fun {
-    struct Transform {
-        Vec2f position;
-        float rotation;
-        Vec2f scale;
+    // struct Transform {
+    //     Vec2f position;
+    //     float rotation;
+    //     Vec2f scale;
 
-        explicit Transform(Vec2f p = { 0, 0 }, float r = 0, Vec2f s = { 1, 1 }) {
+    //     explicit Transform(Vec2f p = { 0, 0 }, float r = 0, Vec2f s = { 1, 1 }) {
+    //         position = p;
+    //         rotation = r;
+    //         scale = s;
+    //     }
+    // };
+
+    struct Transform {
+        sf::Vector2f position;
+        float rotation;
+
+        explicit Transform(sf::Vector2f p = { 0, 0 }, float r = 0) {
             position = p;
             rotation = r;
-            scale = s;
         }
     };
 }
