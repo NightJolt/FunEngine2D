@@ -12,6 +12,28 @@ fun::Particler::Particler(RenderType rt, uint32_t max_primitive_count, uint8_t t
 
 fun::Particler::~Particler() = default;
 
+
+
+// fun::Particler::Particler(Particler&& other) noexcept {
+//     transform = other.transform;
+
+//     particles = std::move(other.particles);
+//     vertices = std::move(other.vertices);
+// }
+
+// fun::Particler& fun::Particler::operator =(Particler&& other) noexcept {
+//     if (this == &other) return *this;
+
+//     this->~Particler();
+
+//     transform = other.transform;
+
+//     particles = std::move(other.particles);
+//     vertices = std::move(other.vertices);
+
+//     return *this;
+// }
+
 void fun::Particler::Emit(uint32_t count, const EmitData& data) {
     if (size == particles.size() || count == 0) return;
 
@@ -32,14 +54,18 @@ void fun::Particler::Emit(uint32_t count, const EmitData& data) {
 }
 
 void fun::Particler::Update() {
+    UpdateRange(0, size);
+}
+
+void fun::Particler::UpdateRange(size_t index, uint32_t count) {
     const float delta_time = fun::time::delta_time();
 
-    size_t vertex_index = 0;
+    size_t vertex_index = index * 4;
 
     float x;
     float y;
 
-    for (auto particle = particles.begin(); particle != particles.begin() + size; particle++) {
+    for (auto particle = particles.begin() + index; particle != particles.begin() + index + count; particle++) {
         particle->position += sf::Vector2(sin(particle->direction_angle), cos(particle->direction_angle)) * particle->velocity * delta_time;
 
         {

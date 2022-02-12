@@ -27,8 +27,6 @@ namespace fun {
                 float min_lifetime;
                 float max_lifetime;
 
-                // bool random_body_rotation;
-
                 float min_direction_angle;
                 float max_direction_angle;
                 float direction_angle_step;
@@ -65,12 +63,17 @@ namespace fun {
             Particler(RenderType, uint32_t, uint8_t = 4);
             ~Particler() final;
 
+            // Particler(Particler&&) noexcept;
+            // Particler& operator =(Particler&&) noexcept;
+
             void Emit(uint32_t, const EmitData&);
             void Update();
 
             fun::Transform transform;
 
         private:
+
+            void UpdateRange(size_t, uint32_t);
 
             void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
