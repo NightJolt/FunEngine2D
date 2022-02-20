@@ -13,10 +13,11 @@ fun::wndmgr::WindowData::WindowData(const std::string& name, const sf::Vector2u&
 void fun::wndmgr::init(const WindowData& data) {
     main_window = new Window(data);
 
-#if defined(USES_IMGUI)
-    main_window->render.resetGLStates();
     main_window->render.setFramerateLimit(60);
     main_window->render.setVerticalSyncEnabled(false);
+
+#if defined(USES_IMGUI)
+    main_window->render.resetGLStates();
 
     ImGui::SFML::Init(main_window->render);
 #endif

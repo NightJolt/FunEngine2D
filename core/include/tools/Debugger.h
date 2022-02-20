@@ -14,5 +14,7 @@ namespace fun::debugger {
     void push_cmd(const Command&, const std::string& = "main");
     void display_debug_log();
 
+    void log(std::string);
+
     // void display_unit_lines(uint32_t, sf::Color, const std::string&);
 }

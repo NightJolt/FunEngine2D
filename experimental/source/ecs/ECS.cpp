@@ -18,7 +18,7 @@ std::vector <std::any> fun::ecs::ondestroy_callbacks = std::vector <std::any> ()
 fun::ecs::ComponentID fun::ecs::next_component_id = 0;
 
 auto fun::ecs::get_entity_id(Entity entity) -> EntityID {
-    return entity >> bits(EntityV);
+    return entity >> M_BITS(EntityV);
 }
 
 auto fun::ecs::get_entity_version(Entity entity) -> EntityV {
@@ -26,7 +26,7 @@ auto fun::ecs::get_entity_version(Entity entity) -> EntityV {
 }
 
 auto fun::ecs::generate_entity_uuid(EntityID id, EntityV version) -> Entity {
-    return ((Entity)id << bits(EntityV)) | version;
+    return ((Entity)id << M_BITS(EntityV)) | version;
 }
 
 auto fun::ecs::create_entity() -> Entity {

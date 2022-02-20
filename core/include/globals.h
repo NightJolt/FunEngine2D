@@ -84,6 +84,9 @@
 
 #include <thread>
 #include <future>
+#include <mutex>
+#include <condition_variable>
+#include <semaphore>
 
 #pragma endregion
 
@@ -115,10 +118,10 @@ typedef uint8_t mask8_t;
 
 typedef uint64_t uuid_t;
 
-#define to_lambda(type, args, body) [this] args -> type body
-#define is_type_of(type, obj) (dynamic_cast <type*> (obj) != nullptr)
+#define M_TO_LAMBDA(type, args, body) [this] args -> type body
+#define M_IS_TYPE_OF(type, obj) (dynamic_cast <type*> (obj) != nullptr)
 
-#define bits(expr) (sizeof(expr) << 3)
+#define M_BITS(expr) (sizeof(expr) << 3)
 
 namespace fun {
     void glob_init();

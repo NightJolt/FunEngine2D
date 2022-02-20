@@ -8,6 +8,10 @@ static bool debug_log_enabled;
 
 void fun::debugger::display_debug_menu() {
     ImGui::Begin("Debug Menu");
+        
+        ImGui::Text(("fps: " + std::to_string((int)fun::time::fps())).c_str());
+
+        ImGui::NewLine();
     
         ImGui::Checkbox("unit coord display", &unit_coord_enabled);
         ImGui::Checkbox("debug log display", &debug_log_enabled);
@@ -100,6 +104,18 @@ void fun::debugger::display_debug_log() {
 
         ImGui::EndTabBar();
     ImGui::End();
+}
+
+
+
+static std::mutex log_mutex;
+
+void fun::debugger::log(std::string str) {
+    log_mutex.lock();
+
+    println(str);
+
+    log_mutex.unlock();
 }
 
 
