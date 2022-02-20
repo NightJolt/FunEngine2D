@@ -1,29 +1,14 @@
 #pragma once
 
-#include "../../../core/include/globals.h"
-
+#include "../../../core/include/Globals.h"
 #include "../../../core/include/render/WindowManager.h"
+#include "../../../experimental/include/ecs/ECS.h"
 
 #include "Interactable.h"
 
-namespace fun {
-    class Interactable;
+namespace fun::interaction {
+    void update();
 
-    class Interaction {
-    public:
-
-        static void Add(Interactable*);
-        static void Update();
-        static void Dispose(Interactable*);
-
-        static Interactable* ObjectAtPos(const sf::Vector2f&);
-        static bool IsAnythingInteracted();
-
-    private:
-
-        static Interactable* obj_active;
-        static Interactable* obj_last;
-
-        static std::vector <Interactable*> interactables;
-    };
+    Interactable* object_at_pos(sf::Vector2f);
+    bool is_anything_interacted();
 }

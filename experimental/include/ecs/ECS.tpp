@@ -185,7 +185,7 @@ auto fun::ecs::oncreate_callback(const std::function <void(T&)>& f) -> void {
         oncreate_callbacks.resize(component_id + 1);
     }
 
-    oncreate_callbacks[component_id] = f;
+    oncreate_callbacks[component_id] = std::move(f);
 }
 
 template <class T>
@@ -196,5 +196,5 @@ auto fun::ecs::ondestroy_callback(const std::function <void(T&)>& f) -> void {
         ondestroy_callbacks.resize(component_id + 1);
     }
 
-    ondestroy_callbacks[component_id] = f;
+    ondestroy_callbacks[component_id] = std::move(f);
 }

@@ -5,50 +5,42 @@
 #include "../../../core/include/_Math.h"
 #include "../../../core/include/Input.h"
 
-#include "Interaction.h"
-
 namespace fun {
-    class Interaction;
+    struct Interactable {
+        typedef int32_t layer_t;
 
-    class Interactable {
-        friend Interaction;
+        explicit Interactable(const std::function <bool(sf::Vector2f)>&, layer_t = 0);
 
-    public:
+        void SetInteractionLayer(uint32_t);
+        uint32_t GetInteractionLayer() const;
 
-        Interactable();
-        virtual ~Interactable() noexcept = 0;
+        [[nodiscard]] bool RightPressed() const;
+        [[nodiscard]] bool RightHold() const;
+        [[nodiscard]] bool RightReleased() const;
 
-        void Interactable_SetInteractionLayer(uint32_t);
-        uint32_t Interactable_GetInteractionLayer() const;
+        [[nodiscard]] bool LeftPressed() const;
+        [[nodiscard]] bool LeftHold() const;
+        [[nodiscard]] bool LeftReleased() const;
 
-        [[nodiscard]] bool Interactable_RightPressed() const;
-        [[nodiscard]] bool Interactable_RightHold() const;
-        [[nodiscard]] bool Interactable_RightReleased() const;
+        [[nodiscard]] bool HoverEnter() const;
+        [[nodiscard]] bool Hovered() const;
+        [[nodiscard]] bool HoverExit() const;
 
-        [[nodiscard]] bool Interactable_LeftPressed() const;
-        [[nodiscard]] bool Interactable_LeftHold() const;
-        [[nodiscard]] bool Interactable_LeftReleased() const;
 
-        [[nodiscard]] bool Interactable_HoverEnter() const;
-        [[nodiscard]] bool Interactable_Hovered() const;
-        [[nodiscard]] bool Interactable_HoverExit() const;
+        bool m_r_pressed;
+        bool m_r_hold;
+        bool m_r_released;
 
-        virtual bool Interactable_Interaction(const sf::Vector2f&) = 0;
+        bool m_l_pressed;
+        bool m_l_hold;
+        bool m_l_released;
 
-    private:
+        bool m_hover_enter;
+        bool m_hovered;
+        bool m_hover_exit;
 
-        bool r_pressed;
-        bool r_hold;
-        bool r_released;
+        layer_t m_layer;
 
-        bool l_pressed;
-        bool l_hold;
-        bool l_released;
-
-        bool hover_enter;
-        bool hovered;
-        bool hover_exit;
-
-        uint32_t layer;
+        std::function <bool(sf::Vector2f)> m_interaction_fun;
     };
 }

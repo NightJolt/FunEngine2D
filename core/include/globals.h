@@ -111,12 +111,14 @@
 // typedef unsigned long long u64;     //                          0 to 18,446,744,073,709,551,615
 // typedef unsigned long u32_64;
 
-typedef uint64_t mask64_t;
-typedef uint32_t mask32_t;
-typedef uint16_t mask16_t;
-typedef uint8_t mask8_t;
+namespace fun {
+    typedef uint64_t mask64_t;
+    typedef uint32_t mask32_t;
+    typedef uint16_t mask16_t;
+    typedef uint8_t mask8_t;
 
-typedef uint64_t uuid_t;
+    typedef uint64_t uuid_t;
+}
 
 #define M_TO_LAMBDA(type, args, body) [this] args -> type body
 #define M_IS_TYPE_OF(type, obj) (dynamic_cast <type*> (obj) != nullptr)

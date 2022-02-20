@@ -87,12 +87,14 @@ namespace fun::ecs {
 
     template <class T>
     bool has_component(Entity);
+    bool has_component(Entity, ComponentID);
 
     template <class T, class... Args>
     void add_component(Entity, Args&&...);
 
     template <class T>
     void remove_component(Entity);
+    void remove_component(Entity, ComponentID);
 
     template <class T>
     Entity get_entity(T*);
