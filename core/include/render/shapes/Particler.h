@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../../core/include/Globals.h"
-#include "../../../core/include/_Math.h"
-#include "../../../core/include/_Time.h"
-#include "../../../core/include/tools/Debugger.h"
+#include "../../Globals.h"
+#include "../../_Math.h"
+#include "../../_Time.h"
+#include "../../tools/Debugger.h"
 
 namespace fun {
     class Particler : public sf::Drawable {

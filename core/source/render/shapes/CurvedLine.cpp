@@ -1,4 +1,4 @@
-#include "drawable/CurvedLine.h"
+#include "render/shapes/CurvedLine.h"
 
 fun::CurvedLine::CurvedLine() {
     Build();

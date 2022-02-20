@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../../../core/include/globals.h"
-
-#include "../../../core/include/_Math.h"
+#include "../../Globals.h"
+#include "../../_Math.h"
 
 namespace fun {
     class RoundedRect final : public sf::Drawable {

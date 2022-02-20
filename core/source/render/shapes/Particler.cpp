@@ -1,4 +1,4 @@
-#include "drawable/Particler.h"
+#include "render/shapes/Particler.h"
 
 fun::Particler::Particler(RenderType rt, uint32_t mc, uint8_t tc) : render_type(rt), max_count(mc), thread_count(tc) {
 #if defined(ENABLE_DEBUGGING)
