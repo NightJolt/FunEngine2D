@@ -1,6 +1,6 @@
 #pragma once
 
-// DISCLAIMER : I do not own any of the following code
+// ! DISCLAIMER : I do not own any of the following code
 
 #include <cstddef>  // size_t
 
