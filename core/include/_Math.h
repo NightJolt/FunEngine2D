@@ -83,7 +83,7 @@ namespace fun::math {
 
     template <class T>
     sf::Vector2 <T> lerp(const sf::Vector2 <T>& a, const sf::Vector2 <T>& b, float v) {
-        return sf::Vector2 <T> (Lerp(a.x, b.x, v), Lerp(a.y, b.y, v));
+        return sf::Vector2 <T> (lerp(a.x, b.x, v), lerp(a.y, b.y, v));
     }
 
     template <class T>
@@ -102,7 +102,7 @@ namespace fun::math {
     }
 
     template <class T>
-    T clamp(T v, T a, float b) {
+    T clamp(T v, T a, T b) {
         return v < a ? a : v > b ? b : v;
     }
 

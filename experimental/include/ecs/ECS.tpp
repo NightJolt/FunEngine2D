@@ -74,7 +74,7 @@ auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
     }
 
     EntityID entity_id = get_entity_id(entity);
-    EntityID entity_v = get_entity_version(entity);
+    EntityV entity_v = get_entity_version(entity);
 
     if (!components[component_id].has_value()) {
         components[component_id] = std::vector <T> ();
@@ -136,7 +136,7 @@ auto fun::ecs::remove_component(Entity entity) -> void {
     auto& sparse = sparses[component_id];
     auto entity_ind = sparse[entity_id];
 
-    if (entity_ind == size) return;
+    if (entity_ind == size) goto skip_index_swap;
 
     auto& dense = denses[component_id];
     auto& component_arr = std::any_cast <std::vector <T>&> (components[component_id]);
@@ -155,6 +155,8 @@ auto fun::ecs::remove_component(Entity entity) -> void {
         sparse[other_id] = entity_ind;
     }
 
+    skip_index_swap:
+
     {
         if (ondestroy_callbacks.size() > component_id) {
             auto& callback_any = ondestroy_callbacks[component_id];
@@ -171,10 +173,10 @@ auto fun::ecs::remove_component(Entity entity) -> void {
 }
 
 template <class T>
-auto fun::ecs::get_entity(T* component_ptr) -> Entity {
+auto fun::ecs::get_entity(T& component) -> Entity {
     const ComponentID component_id = get_component_id <T> ();
 
-    return denses[component_id][component_ptr - &std::any_cast <std::vector <T>&> (components[component_id])[0]];
+    return denses[component_id][&component - &std::any_cast <std::vector <T>&> (components[component_id])[0]];
 }
 
 template <class T>

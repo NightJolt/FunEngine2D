@@ -97,7 +97,7 @@ namespace fun::ecs {
     void remove_component(Entity, ComponentID);
 
     template <class T>
-    Entity get_entity(T*);
+    Entity get_entity(T&);
 
     template <class T>
     void oncreate_callback(const std::function <void(T&)>&);
