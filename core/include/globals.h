@@ -362,8 +362,8 @@ inline void operator +=(sf::Vector3<T>& a, const T& b) {
 }
 
 template <typename T>
-inline sf::Vector3<T> operator -(const sf::Vector3<T>& a, const T& b) {
-    return sf::Vector3<T>(a.x - b, a.y - b, a.z - b);
+inline sf::Vector3 <T> operator -(const sf::Vector3<T>& a, const T& b) {
+    return sf::Vector3 <T> (a.x - b, a.y - b, a.z - b);
 }
 
 template <typename T>

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../core/include/Globals.h"
-#include "../../../core/include/render/WindowManager.h"
-#include "../../../experimental/include/ecs/ECS.h"
+#include "../Globals.h"
+#include "../render/WindowManager.h"
+#include "../ecs/ECS.h"
 
 #include "Interactable.h"
 

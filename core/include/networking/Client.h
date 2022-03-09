@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../core/include/globals.h"
+#include "../Globals.h"
 
 namespace fun {
     class Client {

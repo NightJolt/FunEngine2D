@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../core/include/globals.h"
-#include "../../../core/include/_Time.h"
+#include "../Globals.h"
+#include "../_Time.h"
 
 namespace fun::physics {
     void set_simulation_scale(float);

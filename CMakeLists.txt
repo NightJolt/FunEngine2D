@@ -1,3 +1,7 @@
+set(FUN_LINUX UNIX AND NOT APPLE)
+set(FUN_WINDOWS WIN32)
+set(FUN_APPLE APPLE)
+
 set(SFML_ROOT "${CMAKE_CURRENT_LIST_DIR}/libs/sfml")
 set(CMAKE_MODULE_PATH "${SFML_ROOT}/lib/cmake")
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -13,15 +17,15 @@ find_package(box2d REQUIRED)
 set(BOX2D_LIBS box2d::box2d)
 
 add_subdirectory(core)
-add_subdirectory(experimental)
+# add_subdirectory(experimental)
 
-if (UNIX AND NOT APPLE)
+if (${FUN_LINUX})
 	add_subdirectory(kernel)
 endif()
 
 target_link_libraries(${PROJECT_NAME} fe2d_core)
-target_link_libraries(${PROJECT_NAME} fe2d_experimental)
+# target_link_libraries(${PROJECT_NAME} fe2d_experimental)
 
-if (UNIX AND NOT APPLE)
+if (${FUN_LINUX})
 	target_link_libraries(${PROJECT_NAME} fe2d_kernel)
 endif()

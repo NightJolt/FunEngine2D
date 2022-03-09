@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../../../core/include/globals.h"
-
-#include "../../../core/include/_Math.h"
-#include "../../../core/include/Input.h"
+#include "../Globals.h"
+#include "../_Math.h"
+#include "../Input.h"
 
 namespace fun {
     struct Interactable {
