@@ -1,13 +1,13 @@
 #pragma once
 
+
 #pragma region flags
 
 #define WIN
 // #define UNIX
 // #define OSX
 
-#define ENABLE_DEBUGGING
-// define RELEASE_BUILD
+#define DEBUG_BUILD
 
 #define USES_SFML
 #define USES_IMGUI
@@ -22,7 +22,8 @@
 
 #pragma endregion
 
-#pragma region libsWW
+
+#pragma region libs
 
 #if defined(USES_SFML)
 
@@ -47,9 +48,10 @@
 
 #pragma endregion
 
+
 #pragma region stdlibs
 
-#if defined(ENABLE_DEBUGGING)
+#if defined(DEBUG_BUILD)
 #include <iostream>
 
 #define print(body) std::cout << body
@@ -90,7 +92,8 @@
 
 #pragma endregion
 
-/*#pragma region tilemap
+/*
+#pragma region tilemap
 
 #define CHUNK_SIZE 16
 #define TILE_SIZE 8.f
@@ -98,18 +101,8 @@
 #define TILE_ATLAS_SIZE 256
 #define RAND_TEXTURE_COUNT 2
 
-#pragma endregion*/
-
-// typedef char i8;                     //                       -127 to 127
-// typedef short i16;                   //                    -32,768 to 32,767
-// typedef int i32;                     //             -2,147,483,648 to 2,147,483,647
-// typedef long long i64;               // -9,223,372,036,854,775,807 to 9,223,372,036,854,775,807
-// typedef long i32_64;
-// typedef unsigned char u8;           //                          0 to 255
-// typedef unsigned short u16;         //                          0 to 65,535
-// typedef unsigned int u32;           //                          0 to 4,294,967,295
-// typedef unsigned long long u64;     //                          0 to 18,446,744,073,709,551,615
-// typedef unsigned long u32_64;
+#pragma endregion
+*/
 
 namespace fun {
     typedef uint64_t mask64_t;
@@ -120,10 +113,7 @@ namespace fun {
     typedef uint64_t uuid_t;
 }
 
-#define M_TO_LAMBDA(type, args, body) [this] args -> type body
-#define M_IS_TYPE_OF(type, obj) (dynamic_cast <type*> (obj) != nullptr)
-
-#define M_BITS(expr) (sizeof(expr) << 3)
+#define BITS(expr) (sizeof(expr) << 3)
 
 namespace fun {
     void glob_init();
@@ -131,16 +121,16 @@ namespace fun {
 
 namespace fun {
     template <class T>
-    struct Vec2 {
+    struct vec2_t {
         T x, y;
 
-        Vec2() : x(0), y(0) {}
-        Vec2(T x, T y) : x(0), y(0) {}
+        vec2_t() : x(0), y(0) {}
+        vec2_t(T x, T y) : x(0), y(0) {}
     };
 
-    typedef Vec2 <int32_t> Vec2i;
-    typedef Vec2 <uint32_t> Vec2u;
-    typedef Vec2 <float> Vec2f;
+    typedef vec2_t <int32_t> vec2i_t;
+    typedef vec2_t <uint32_t> vec2u_t;
+    typedef vec2_t <float> vec2f_t;
 }
 
 namespace fun {
