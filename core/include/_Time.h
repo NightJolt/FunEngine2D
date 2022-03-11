@@ -12,8 +12,4 @@ namespace fun::time {
 
     void set_time_scale(float);
     void get_time_scale(float);
-
-    void register_clock(const UniqueKey&, float);
-    float get_clock(const UniqueKey&);
-    void remove_clock(const UniqueKey&);
 }

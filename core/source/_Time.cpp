@@ -9,8 +9,6 @@ static float _scaled_delta_time_ = 0;
 static float _time_scale_ = 1;
 static float _fps_ = 0;
 
-static std::unordered_map <fun::UniqueKey, float> _clocks_;
-
 void fun::time::recalculate() {
     _delta_time_ = _delta_clock_.restart();
     _unscaled_delta_time_ = _delta_time_.asSeconds();
@@ -18,10 +16,6 @@ void fun::time::recalculate() {
     _time_elapsed_ += _unscaled_delta_time_;
 
     _fps_ = 1.f / _unscaled_delta_time_;
-
-    for (auto& clock : _clocks_) {
-        if (clock.second > 0) clock.second -= _scaled_delta_time_;
-    }
 }
 
 float fun::time::unscaled_delta_time() {
@@ -50,16 +44,4 @@ void fun::time::set_time_scale(float val) {
 
 void fun::time::get_time_scale(float val) {
     _time_scale_ *= val;
-}
-
-void fun::time::register_clock(const UniqueKey& ukey, float val) {
-    _clocks_[ukey] = val;
-}
-
-float fun::time::get_clock(const UniqueKey& ukey) {
-    return _clocks_[ukey];
-}
-
-void fun::time::remove_clock(const UniqueKey& ukey) {
-    _clocks_.erase(ukey);
 }

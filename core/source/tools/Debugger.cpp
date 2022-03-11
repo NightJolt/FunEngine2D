@@ -33,7 +33,7 @@ void fun::debugger::display_unit_coord(const sf::Vector2f& pos, float character_
     unit_coord_text.setCharacterSize(character_size);
     unit_coord_text.setScale({ zoom, zoom });
     unit_coord_text.setPosition(pos + sf::Vector2f(0, 20.f * zoom));
-    unit_coord_text.setString(sf::to_string(static_cast <sf::Vector2i> (pos)));
+    // unit_coord_text.setString(sf::to_string(static_cast <sf::Vector2i> (pos)));
 
     fun::wndmgr::main_window->DrawWorld(unit_coord_text, layer);
 }
