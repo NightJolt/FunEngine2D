@@ -120,20 +120,6 @@ namespace fun {
 }
 
 namespace fun {
-    template <class T>
-    struct vec2_t {
-        T x, y;
-
-        vec2_t() : x(0), y(0) {}
-        vec2_t(T x, T y) : x(0), y(0) {}
-    };
-
-    typedef vec2_t <int32_t> vec2i_t;
-    typedef vec2_t <uint32_t> vec2u_t;
-    typedef vec2_t <float> vec2f_t;
-}
-
-namespace fun {
     // struct Transform {
     //     Vec2f position;
     //     float rotation;
@@ -157,57 +143,25 @@ namespace fun {
     };
 }
 
-namespace fun {
-    namespace uuid {
-        uuid_t generate();
-    }
-
-    struct UniqueKey {
-        UniqueKey();
-        UniqueKey(uuid_t, const char*);
-        // ~UniqueKey();
-
-        UniqueKey(const UniqueKey&);
-        UniqueKey& operator =(const UniqueKey&);
-        UniqueKey(UniqueKey&&) noexcept;
-
-		operator uint64_t() const;
-
-        uuid_t uuid;
-        char key[16];
-    };
+namespace fun::uuid {
+    uuid_t generate();
 }
 
-namespace std {
-    template <>
-    struct hash <fun::UniqueKey> {
-        std::size_t operator()(const fun::UniqueKey& ukey) const {
-            size_t h = 5381;
-            int c;
-            const char* s = ukey.key;
+// namespace std {
+//     template <>
+//     struct hash <fun::UniqueKey> {
+//         std::size_t operator()(const fun::UniqueKey& ukey) const {
+//             size_t h = 5381;
+//             int c;
+//             const char* s = ukey.key;
 
-			while ((c = *s++))
-				h = ((h << 5) + h) + c;
+// 			while ((c = *s++))
+// 				h = ((h << 5) + h) + c;
 
-            return hash <uint64_t> ()(ukey) + h;
-        }
-    };
-}
-
-#pragma region sfml_vec2
-#if defined(SFML_VEC2_OVERLOADS)
-
-namespace sf {
-    template <typename T>
-    inline std::string to_string_key(const sf::Vector2<T>& a) {
-        return std::to_string(a.x) + ' ' + std::to_string(a.y);
-    }
-
-    template <typename T>
-    inline std::string to_string(const sf::Vector2<T>& a) {
-        return "V2(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ")";
-    }
-}
+//             return hash <uint64_t> ()(ukey) + h;
+//         }
+//     };
+// }
 
 namespace std {
     template <typename T>
@@ -232,154 +186,3 @@ namespace std {
         return result;
     }
 }
-
-template <typename T>
-inline std::ostream& operator <<(std::ostream& out, const sf::Vector2<T>& a) {
-    return out << sf::to_string(a);
-}
-
-template <typename T>
-inline sf::Vector2<T> operator *(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    return sf::Vector2<T>(a.x * b.x, a.y * b.y);
-}
-
-template <typename T>
-inline void operator *=(sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    a = a * b;
-}
-
-template <typename T>
-inline sf::Vector2<T> operator /(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    return sf::Vector2<T>(a.x / b.x, a.y / b.y);
-}
-
-template <typename T>
-inline void operator /=(sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    a = a / b;
-}
-
-template <typename T>
-inline sf::Vector2<T> operator +(const sf::Vector2<T>& a, const T& b) {
-    return sf::Vector2<T>(a.x + b, a.y + b);
-}
-
-template <typename T>
-inline void operator +=(sf::Vector2<T>& a, const T& b) {
-    a = a + b;
-}
-
-template <typename T>
-inline sf::Vector2<T> operator -(const sf::Vector2<T>& a, const T& b) {
-    return sf::Vector2<T>(a.x - b, a.y - b);
-}
-
-template <typename T>
-inline void operator -=(sf::Vector2<T>& a, const T& b) {
-    a = a - b;
-}
-
-template <typename T>
-inline bool operator <(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    return a.x < b.x && a.y < b.y;
-}
-
-template <typename T>
-inline bool operator <=(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    return a < b || a == b;
-}
-
-template <typename T>
-inline bool operator >(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    return b < a;
-}
-
-template <typename T>
-inline bool operator >=(const sf::Vector2<T>& a, const sf::Vector2<T>& b) {
-    return b <= a;
-}
-
-#endif
-#pragma endregion
-
-#pragma region sfml_vec3
-#if defined(SFML_VEC3_OVERLOADS)
-
-namespace sf {
-    template <typename T>
-    std::string to_string_key(const sf::Vector3<T>& a) {
-        return std::to_string(a.x) + ' ' + std::to_string(a.y) + ' ' + std::to_string(a.z);
-    }
-
-    template <typename T>
-    std::string to_string(const sf::Vector3<T>& a) {
-        return "V3(" + std::to_string(a.x) + ", " + std::to_string(a.y) + ", " + std::to_string(a.z) + ")";
-    }
-}
-
-template <typename T>
-inline std::ostream& operator <<(std::ostream& out, const sf::Vector3<T>& a) {
-    return out << to_string(a);
-}
-
-template <typename T>
-inline sf::Vector3<T> operator *(const sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    return sf::Vector3<T>(a.x * b.x, a.y * b.y, a.z * b.z);
-}
-
-template <typename T>
-inline void operator *=(sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    a = a * b;
-}
-
-template <typename T>
-inline sf::Vector3<T> operator /(const sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    return sf::Vector3<T>(a.x / b.x, a.y / b.y, a.z / b.z);
-}
-
-template <typename T>
-inline void operator /=(sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    a = a / b;
-}
-
-template <typename T>
-inline sf::Vector3<T> operator +(const sf::Vector3<T>& a, const T& b) {
-    return sf::Vector3<T>(a.x + b, a.y + b, a.z + b);
-}
-
-template <typename T>
-inline void operator +=(sf::Vector3<T>& a, const T& b) {
-    a = a + b;
-}
-
-template <typename T>
-inline sf::Vector3 <T> operator -(const sf::Vector3<T>& a, const T& b) {
-    return sf::Vector3 <T> (a.x - b, a.y - b, a.z - b);
-}
-
-template <typename T>
-inline void operator -=(sf::Vector3<T>& a, const T& b) {
-    a = a - b;
-}
-
-template <typename T>
-inline bool operator <(const sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    return a.x < b.x && a.y < b.y && a.z < b.z;
-}
-
-template <typename T>
-inline bool operator <=(const sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    return a < b || a == b;
-}
-
-template <typename T>
-inline bool operator >(const sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    return b < a;
-}
-
-template <typename T>
-inline bool operator >=(const sf::Vector3<T>& a, const sf::Vector3<T>& b) {
-    return b <= a;
-}
-
-#endif
-#pragma endregion

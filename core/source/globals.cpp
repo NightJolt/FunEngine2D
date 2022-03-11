@@ -11,41 +11,6 @@ void fun::glob_init() {
 // #endif
 }
 
-fun::UniqueKey::UniqueKey() : uuid(0), key("") {}
-
-fun::UniqueKey::UniqueKey(uuid_t uuid, const char* _key) : uuid(uuid) {
-    assert(sizeof _key <= sizeof key);
-
-    strncat(key, _key, sizeof key);
-}
-
-// fun::UniqueKey::~UniqueKey() { free(key); }
-
-fun::UniqueKey::UniqueKey(const UniqueKey& other) {
-    uuid = other.uuid;
-    strncat(key, other.key, sizeof key);
-}
-
-fun::UniqueKey& fun::UniqueKey::operator =(const UniqueKey& other) {
-    if (&other == this) return *this;
-
-    uuid = other.uuid;
-    strncat(key, other.key, sizeof key);
-
-    return *this;
-}
-
-fun::UniqueKey::UniqueKey(UniqueKey&& other) noexcept {
-    uuid = other.uuid;
-    strncat(key, other.key, sizeof key);
-
-    other.uuid = 0;
-}
-
-fun::UniqueKey::operator uint64_t() const {
-    return uuid;
-}
-
 // ? use math::random_64
 static std::random_device _random_device_;
 static std::mt19937_64 _engine_(_random_device_());
