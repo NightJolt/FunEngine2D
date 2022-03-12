@@ -23,8 +23,8 @@ bool fun::math::random_chance(float chance) {
     return random_f(0, 100) <= chance;
 }
 
-int fun::math::mod(int a, int m) {
-    const int r = a % m;
+int32_t fun::math::mod(int32_t a, int32_t m) {
+    const int32_t r = a % m;
 
     return r >= 0 ? r : m - r;
 }
@@ -33,7 +33,7 @@ float fun::math::map_value(float n, float a, float b, float c, float d) {
     return (d - c) / (b - a) * (n - a) + c;
 }
 
-sf::Vector2f fun::math::normalize(const sf::Vector2f& v) {
+fun::vec2f_t fun::math::normalize(const vec2f_t& v) {
     const float l = magnitude(v);
 
     return l ? v / l : v;
@@ -78,12 +78,12 @@ float fun::math::degrees(float radians) {
 //     return sf::Vector2i(Math::Mod(p.x, CHUNK_SIZE), Math::Mod(p.y, CHUNK_SIZE));
 // }
 
-sf::Vector2f fun::math::gravitational_acceleration(sf::Vector2f p1, sf::Vector2f p2, float m2) {
-    sf::Vector2f segment = p2 - p1;
+fun::vec2f_t fun::math::gravitational_acceleration(vec2f_t p1, vec2f_t p2, float m2) {
+    fun::vec2f_t segment = p2 - p1;
 
     return normalize(segment) * m2 / scalar(segment, segment);
 }
 
-sf::Vector2f fun::math::gravitational_pull(sf::Vector2f p1, float m1, sf::Vector2f p2, float m2) {
+fun::vec2f_t fun::math::gravitational_pull(vec2f_t p1, float m1, vec2f_t p2, float m2) {
     return gravitational_acceleration(p1, p2, m2) * m1;
 }

@@ -1,4 +1,22 @@
-#include "Resources.h"
+#include "resources.h"
+
+static std::unordered_map <std::string, sf::Texture> textures;
+static std::unordered_map <std::string, sf::Font> fonts;
+// static std::unordered_map <std::string, sf::Image> images;
+static std::unordered_map <std::string, sf::Shader*> shaders;
+
+const std::string resources_directory =
+#if defined(RELEASE_BUILD)
+"/resources/"
+#else
+"../resources/"
+#endif
+;
+
+const std::string textures_directory = resources_directory + "textures/";
+const std::string images_directory = resources_directory + "images/";
+const std::string fonts_directory = resources_directory + "fonts/";
+const std::string shaders_directory = resources_directory + "shaders/";
 
 void fun::resources::load_texture(const std::string& key, const std::string& file) {
     textures.insert_or_assign(key, sf::Texture());

@@ -5,8 +5,8 @@ static bool _mouse_button_pressed_[MOUSE_BUTTON_COUNT];
 static bool _mouse_button_released_[MOUSE_BUTTON_COUNT];
 static bool _mouse_button_hold_[MOUSE_BUTTON_COUNT];
 
-static sf::Vector2f _mouse_position_ = sf::Vector2f(0, 0);
-static sf::Vector2f _mouse_delta_ = sf::Vector2f(0, 0);
+static fun::vec2f_t _mouse_position_ = fun::vec2f_t();
+static fun::vec2f_t _mouse_delta_ = fun::vec2f_t();
 #endif
 
 #if defined(ENABLE_KEYBOARD)
@@ -40,7 +40,7 @@ void fun::input::listen() {
         }
     }
 
-    _mouse_delta_ = (sf::Vector2f)sf::Mouse::getPosition() - _mouse_position_;
+    _mouse_delta_ = (vec2f_t)(vec2i_t)sf::Mouse::getPosition() - _mouse_position_;
     _mouse_position_ += _mouse_delta_;
 #endif
 
@@ -102,7 +102,7 @@ bool fun::input::hold(sf::Mouse::Button button) {
     return _mouse_button_hold_[button];
 }
 
-sf::Vector2f fun::input::mouse_2d() {
+fun::vec2f_t fun::input::mouse_2d() {
     return _mouse_delta_;
 }
 #endif
@@ -130,8 +130,8 @@ int fun::input::vertical(sf::Keyboard::Key a, sf::Keyboard::Key b) {
     return _keyboard_key_hold_[b] - _keyboard_key_hold_[a];
 }
 
-sf::Vector2f fun::input::keyboard_2d(sf::Keyboard::Key a, sf::Keyboard::Key b, sf::Keyboard::Key c, sf::Keyboard::Key d) {
-    return math::normalize(sf::Vector2f(horizontal(a, b), vertical(c, d)));
+fun::vec2f_t fun::input::keyboard_2d(sf::Keyboard::Key a, sf::Keyboard::Key b, sf::Keyboard::Key c, sf::Keyboard::Key d) {
+    return math::normalize(vec2f_t(horizontal(a, b), vertical(c, d)));
 }
 #endif
 
@@ -169,7 +169,7 @@ float fun::input::value(JoystickAxis axis, int index) {
     }
 }
 
-sf::Vector2f fun::input::joystick_2d(JoystickAxis a, JoystickAxis b) {
-    return math::normalize(sf::Vector2f(value(a), value(b)));
+fun::vec2f_t fun::input::joystick_2d(JoystickAxis a, JoystickAxis b) {
+    return math::normalize(vec2f_t(value(a), value(b)));
 }
 #endif

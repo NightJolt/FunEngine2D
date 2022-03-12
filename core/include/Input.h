@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "_Math.h"
+#include "vec2.h"
 
 #define ENABLE_MOUSE
 #define ENABLE_KEYBOARD
@@ -20,7 +21,7 @@ namespace fun::input {
     bool pressed(sf::Mouse::Button);
     bool released(sf::Mouse::Button);
     bool hold(sf::Mouse::Button);
-    sf::Vector2f mouse_2d();
+    fun::vec2f_t mouse_2d();
 #endif
 
 #if defined(ENABLE_KEYBOARD)
@@ -29,7 +30,7 @@ namespace fun::input {
     bool hold(sf::Keyboard::Key);
     int horizontal(sf::Keyboard::Key = sf::Keyboard::Key::A, sf::Keyboard::Key = sf::Keyboard::Key::D);
     int vertical(sf::Keyboard::Key = sf::Keyboard::Key::S, sf::Keyboard::Key = sf::Keyboard::Key::W);
-    sf::Vector2f keyboard_2d(
+    fun::vec2f_t keyboard_2d(
             sf::Keyboard::Key = sf::Keyboard::Key::A,
             sf::Keyboard::Key = sf::Keyboard::Key::D,
             sf::Keyboard::Key = sf::Keyboard::Key::S,
@@ -69,7 +70,7 @@ namespace fun::input {
     bool released(JoystickButton, int = 0);
     bool hold(JoystickButton, int = 0);
     float value(JoystickAxis, int = 0);
-    sf::Vector2f joystick_2d(
+    fun::vec2f_t joystick_2d(
             JoystickAxis = JoystickAxis::L3X,
             JoystickAxis = JoystickAxis::L3Y
     );
