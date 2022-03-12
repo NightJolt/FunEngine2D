@@ -1,4 +1,4 @@
-#include "Noise.h"
+#include "external/Noise.h"
 
 #include <cstdint>  // int32_t/uint8_t
 

@@ -8,11 +8,11 @@
 
 namespace fun::wndmgr {
     struct WindowData {
-        explicit WindowData(const std::string& = "unnamed", const sf::Vector2u& = { 856, 482 }, uint32_t = sf::Style::Default, const sf::ContextSettings& = sf::ContextSettings());
+        explicit WindowData(const std::string& = "unnamed", const vec2u_t = { 856, 482 }, fun::mask32_t = sf::Style::Default, const sf::ContextSettings& = sf::ContextSettings());
 
         std::string name;
-        sf::Vector2u size;
-        uint32_t style;
+        vec2u_t size;
+        fun::mask32_t style;
         sf::ContextSettings settings;
     };
 
@@ -51,11 +51,11 @@ namespace fun::wndmgr {
         void PollEvents();
         void Display(const sf::Color&, const sf::Shader* = nullptr);
 
-        sf::Vector2i GetMouseScreenPosition();
-        sf::Vector2f GetMouseWorldPosition();
+        vec2i_t GetMouseScreenPosition();
+        vec2f_t GetMouseWorldPosition();
 
-        sf::Vector2f ScreenToWorld(const sf::Vector2i&);
-        sf::Vector2i WorldToScreen(const sf::Vector2f&);
+        vec2f_t ScreenToWorld(const vec2i_t&);
+        vec2i_t WorldToScreen(const vec2f_t&);
     };
 
     extern Window* main_window;

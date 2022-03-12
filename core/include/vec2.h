@@ -15,7 +15,8 @@ namespace fun {
 
 #if defined(USES_SFML)
         vec2_t(sf::Vector2<T>);
-#endif
+        sf::Vector2<T> to_sf() const;
+#endif  
     };
 
     typedef vec2_t <int32_t> vec2i_t;
@@ -45,6 +46,11 @@ fun::vec2_t<T>::vec2_t(const vec2_t<U>& vec2) : x((T)vec2.x), y((T)vec2.y) {}
 #if defined(USES_SFML)
 template <class T>
 fun::vec2_t<T>::vec2_t(sf::Vector2<T> sf_vec2) : x(sf_vec2.x), y(sf_vec2.y) {}
+
+template <class T>
+sf::Vector2<T> fun::vec2_t<T>::to_sf() const {
+    return sf::Vector2 <T> (x, y);
+}
 #endif
 
 
@@ -85,7 +91,7 @@ inline void operator /=(fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
 
 template <typename T>
 inline fun::vec2_t<T> operator /(const fun::vec2_t<T>& a, const T& b) {
-    return vec2_t <T> (a.x / b, a.y / b);
+    return fun::vec2_t <T> (a.x / b, a.y / b);
 }
 
 template <typename T>
@@ -95,7 +101,7 @@ inline void operator /=(fun::vec2_t<T>& a, const T& b) {
 
 template <typename T>
 inline fun::vec2_t<T> operator +(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-    return vec2_t <T> (a.x + b.x, a.y + b.y);
+    return fun::vec2_t <T> (a.x + b.x, a.y + b.y);
 }
 
 template <typename T>
@@ -105,7 +111,7 @@ inline void operator +=(fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
 
 template <typename T>
 inline fun::vec2_t<T> operator +(const fun::vec2_t<T>& a, const T& b) {
-    return vec2_t <T> (a.x + b, a.y + b);
+    return fun::vec2_t <T> (a.x + b, a.y + b);
 }
 
 template <typename T>

@@ -17,7 +17,7 @@ fun::Command::Command(const std::string& cmd) {
     bool ignore_special_keys = false;
     bool ignore_brackets = false;
 
-    for (int i = 0; i <= cmd.size(); i++) {
+    for (uint32_t i = 0; i <= cmd.size(); i++) {
         char c = i == cmd.size() ? ' ' : cmd[i];
 
         if (i == 0 && c == '/') continue;
@@ -91,7 +91,7 @@ const std::string& fun::Command::GetCommand() {
     return command;
 }
 
-const std::string& fun::Command::GetArgument(int index) {
+const std::string& fun::Command::GetArgument(uint32_t index) {
     return args[index];
 }
 

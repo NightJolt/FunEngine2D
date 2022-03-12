@@ -6,16 +6,16 @@ namespace fun {
     class RenderQueue : public sf::Drawable {
     public:
 
-        void Add(const sf::Drawable&, int);
+        void Add(const sf::Drawable&, uint32_t);
         void Clear();
 
     private:
 
         struct RenderItem {
-            RenderItem(const sf::Drawable&, int);
+            RenderItem(const sf::Drawable&, uint32_t);
 
             const sf::Drawable* drawable;
-            int order;
+            int layer;
         };
 
         void draw(sf::RenderTarget&, sf::RenderStates) const override;

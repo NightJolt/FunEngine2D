@@ -23,7 +23,7 @@ namespace fun::math {
     float random_f(float, float);
     bool random_chance(float);
 
-    int mod(int, int);
+    int32_t mod(int32_t, int32_t);
     float map_value(float, float, float, float, float);
     vec2f_t normalize(const vec2f_t&);
     float q_rsqrt(float);

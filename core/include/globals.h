@@ -1,56 +1,41 @@
 #pragma once
 
-
-#pragma region flags
-
-#define WIN
-// #define UNIX
-// #define OSX
-
+#pragma region BUILD_FLAGS
 #define DEBUG_BUILD
+#pragma endregion
 
+#pragma region TARGET_PLATFORM
+#define WIN
+// #define LINUX
+// #define APPLE
+#pragma endregion
+
+#pragma region LIBS
 #define USES_SFML
 #define USES_IMGUI
 // #define USES_CUDA
 // #define USES_LUA
 #define USES_BOX2D
-
-#if defined(USES_SFML)
-#define SFML_VEC2_OVERLOADS
-#define SFML_VEC3_OVERLOADS
-#endif
-
 #pragma endregion
 
-
-#pragma region libs
-
+#pragma region LIBS_IMPORTS
 #if defined(USES_SFML)
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
-
 #endif
 
 #if defined(USES_IMGUI)
-
 #include <imgui.h>
 #include <imgui-SFML.h>
-
 #endif
 
 #if defined(USES_BOX2D)
-
 #include <box2d/box2d.h>
-
 #endif
-
 #pragma endregion
 
-
-#pragma region stdlibs
-
+#pragma region STD_LIBS_IMPORT
 #if defined(DEBUG_BUILD)
 #include <iostream>
 
@@ -60,7 +45,7 @@
 #define printbr() std::cout << std::endl
 #endif
 
-#include <stdint.h>
+#include <cstdint>
 #include <memory>
 #include <cstring>
 #include <sstream>
@@ -89,7 +74,6 @@
 #include <mutex>
 #include <condition_variable>
 #include <semaphore>
-
 #pragma endregion
 
 /*
@@ -104,16 +88,18 @@
 #pragma endregion
 */
 
+#pragma region MACROS
+#define BITS(expr) (sizeof(expr) << 3)
+#pragma endregion
+
 namespace fun {
     typedef uint64_t mask64_t;
     typedef uint32_t mask32_t;
     typedef uint16_t mask16_t;
     typedef uint8_t mask8_t;
 
-    typedef uint64_t uuid_t;
+    typedef int32_t layer_t;
 }
-
-#define BITS(expr) (sizeof(expr) << 3)
 
 namespace fun {
     void glob_init();
@@ -143,10 +129,6 @@ namespace fun {
     };
 }
 
-namespace fun::uuid {
-    uuid_t generate();
-}
-
 // namespace std {
 //     template <>
 //     struct hash <fun::UniqueKey> {
@@ -163,26 +145,26 @@ namespace fun::uuid {
 //     };
 // }
 
-namespace std {
-    template <typename T>
-    inline std::string to_string(const std::vector<T>& v, function <std::string(size_t, const T&)> converter = [](size_t i, const T& t) -> std::string { return std::to_string(t); }) {
-        size_t size = v.size();
+// namespace std {
+//     template <typename T>
+//     inline std::string to_string(const std::vector<T>& v, function <std::string(size_t, const T&)> converter = [](size_t i, const T& t) -> std::string { return std::to_string(t); }) {
+//         size_t size = v.size();
 
-        std::string result;
+//         std::string result;
 
-        result.reserve(size * (sizeof(v) + 2));
+//         result.reserve(size * (sizeof(v) + 2));
 
-        result.append("[");
+//         result.append("[");
 
-        for (int i = 0; i < size - 1; i++) {
-            result.append(converter(i, v[i]));
-            result.append(", ");
-        }
+//         for (int i = 0; i < size - 1; i++) {
+//             result.append(converter(i, v[i]));
+//             result.append(", ");
+//         }
 
-        if (!v.empty()) result.append(converter(v.size() - 1, v[v.size() - 1]));
+//         if (!v.empty()) result.append(converter(v.size() - 1, v[v.size() - 1]));
         
-        result.append("]");
+//         result.append("]");
 
-        return result;
-    }
-}
+//         return result;
+//     }
+// }

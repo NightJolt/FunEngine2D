@@ -1,15 +1,12 @@
 #include "tools/Debugger.h"
 
-
-
 static bool unit_coord_enabled;
 static bool debug_log_enabled;
-
 
 void fun::debugger::display_debug_menu() {
     ImGui::Begin("Debug Menu");
         
-        ImGui::Text(("fps: " + std::to_string((int)fun::time::fps())).c_str());
+        ImGui::Text(("fps: " + std::to_string((uint32_t)fun::time::fps())).c_str());
 
         ImGui::NewLine();
     
@@ -19,11 +16,9 @@ void fun::debugger::display_debug_menu() {
     ImGui::End();
 }
 
-
-
 sf::Text unit_coord_text;
 
-void fun::debugger::display_unit_coord(const sf::Vector2f& pos, float character_size, int layer, sf::Color color, const std::string& font_name) {
+void fun::debugger::display_unit_coord(const vec2f_t& pos, float character_size, fun::layer_t layer, sf::Color color, const std::string& font_name) {
     if (!unit_coord_enabled) return;
 
     const float zoom = fun::wndmgr::main_window->zoom;
@@ -32,23 +27,20 @@ void fun::debugger::display_unit_coord(const sf::Vector2f& pos, float character_
     unit_coord_text.setColor(color);
     unit_coord_text.setCharacterSize(character_size);
     unit_coord_text.setScale({ zoom, zoom });
-    unit_coord_text.setPosition(pos + sf::Vector2f(0, 20.f * zoom));
+    unit_coord_text.setPosition((pos + vec2f_t(0, 20.f * zoom)).to_sf());
     // unit_coord_text.setString(sf::to_string(static_cast <sf::Vector2i> (pos)));
 
     fun::wndmgr::main_window->DrawWorld(unit_coord_text, layer);
 }
 
-
-
 static std::vector <std::string> channels = std::vector <std::string> ();
 static std::vector <std::vector <std::string>> logs = std::vector <std::vector <std::string>> ();
 static std::vector <std::pair <uint32_t, uint32_t>> order = std::vector <std::pair <uint32_t, uint32_t>> ();
 
-
 void fun::debugger::push_msg(const std::string& msg, const std::string& channel) {
-    int ind = -1;
+    uint32_t ind = -1;
 
-    for (int i = 0 ; i < channels.size(); i++) {
+    for (uint32_t i = 0 ; i < channels.size(); i++) {
         if (channels[i] == channel) {
             ind = i;
 
@@ -86,7 +78,7 @@ void fun::debugger::display_debug_log() {
             ImGui::EndTabItem();
         }
 
-        for (int i = 0 ; i < channels.size(); i++) {
+        for (uint32_t i = 0 ; i < channels.size(); i++) {
             if (ImGui::BeginTabItem(channels[i].c_str())) {
                     ImGui::BeginChild(("##" + channels[i]).c_str());
 
@@ -106,8 +98,6 @@ void fun::debugger::display_debug_log() {
     ImGui::End();
 }
 
-
-
 static std::mutex log_mutex;
 
 void fun::debugger::log(std::string str) {
@@ -117,8 +107,6 @@ void fun::debugger::log(std::string str) {
 
     log_mutex.unlock();
 }
-
-
 
 // void fun::debugger::display_unit_lines(uint32_t layer, sf::Color color, const std::string& font_name) {
     // const auto& font = fun::resources::get_font(font_name);

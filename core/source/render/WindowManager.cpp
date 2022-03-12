@@ -2,7 +2,7 @@
 
 fun::wndmgr::Window* fun::wndmgr::main_window = nullptr;
 
-fun::wndmgr::WindowData::WindowData(const std::string& name, const sf::Vector2u& size, uint32_t style, const sf::ContextSettings& settings) :
+fun::wndmgr::WindowData::WindowData(const std::string& name, const vec2u_t size, fun::mask32_t style, const sf::ContextSettings& settings) :
     name(name),
     size(size),
     style(style),
@@ -50,23 +50,23 @@ fun::wndmgr::Window::Window(const WindowData& data) :
 }
 
 void fun::wndmgr::Window::RefreshWindow() {
-    const sf::Vector2u& new_resolution = render.getSize();
+    const vec2u_t& new_resolution = render.getSize();
 
     world_buffer.create(new_resolution.x, new_resolution.y, render.getSettings());
-    world_view.setSize((sf::Vector2f)new_resolution);
+    world_view.setSize(((vec2f_t)new_resolution).to_sf());
     world_view.zoom(zoom);
-    world_render.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), (sf::Vector2i)new_resolution));
+    world_render.setTextureRect(sf::IntRect(vec2i_t(0, 0).to_sf(), ((vec2i_t)new_resolution).to_sf()));
 
-    final_view.setSize((sf::Vector2f)new_resolution);
-    final_view.setCenter((sf::Vector2f)new_resolution * .5f);
+    final_view.setSize(((vec2f_t)new_resolution).to_sf());
+    final_view.setCenter(((vec2f_t)new_resolution * .5f).to_sf());
 }
 
-void fun::wndmgr::Window::DrawWorld(const sf::Drawable& drawable, int order) {
-    world_queue.Add(drawable, order);
+void fun::wndmgr::Window::DrawWorld(const sf::Drawable& drawable, fun::layer_t layer) {
+    world_queue.Add(drawable, layer);
 }
 
-void fun::wndmgr::Window::DrawUI(const sf::Drawable& drawable, int order) {
-    ui_queue.Add(drawable, order);
+void fun::wndmgr::Window::DrawUI(const sf::Drawable& drawable, fun::layer_t layer) {
+    ui_queue.Add(drawable, layer);
 }
 
 void fun::wndmgr::Window::Display(const sf::Color& bg_color, const sf::Shader* shader) {
@@ -132,22 +132,22 @@ void fun::wndmgr::Window::PollEvents() {
     }
 }
 
-sf::Vector2i fun::wndmgr::Window::GetMouseScreenPosition() {
+fun::vec2i_t fun::wndmgr::Window::GetMouseScreenPosition() {
     return sf::Mouse::getPosition(render);
 }
 
-sf::Vector2f fun::wndmgr::Window::GetMouseWorldPosition() {
+fun::vec2f_t fun::wndmgr::Window::GetMouseWorldPosition() {
     return ScreenToWorld(GetMouseScreenPosition());
 }
 
-sf::Vector2f fun::wndmgr::Window::ScreenToWorld(const sf::Vector2i& p) {
+fun::vec2f_t fun::wndmgr::Window::ScreenToWorld(const fun::vec2i_t& p) {
     world_buffer.setView(world_view);
 
-    return world_buffer.mapPixelToCoords(p);
+    return world_buffer.mapPixelToCoords(p.to_sf());
 }
 
-sf::Vector2i fun::wndmgr::Window::WorldToScreen(const sf::Vector2f& p) {
+fun::vec2i_t fun::wndmgr::Window::WorldToScreen(const fun::vec2f_t& p) {
     world_buffer.setView(world_view);
 
-    return world_buffer.mapCoordsToPixel(p);
+    return world_buffer.mapCoordsToPixel(p.to_sf());
 }

@@ -4,7 +4,7 @@ static fun::Interactable* obj_active;
 static fun::Interactable* obj_last;
 
 void fun::interaction::update() {
-    sf::Vector2 mouse_pos = wndmgr::main_window->GetMouseWorldPosition();
+    vec2f_t mouse_pos = wndmgr::main_window->GetMouseWorldPosition();
 
     if (obj_last) {
         obj_last->m_r_released = false;

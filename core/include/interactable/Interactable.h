@@ -40,6 +40,6 @@ namespace fun {
 
         layer_t m_layer;
 
-        std::function <bool(sf::Vector2f)> m_interaction_fun;
+        std::function <bool(vec2f_t)> m_interaction_fun;
     };
 }
