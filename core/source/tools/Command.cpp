@@ -1,10 +1,12 @@
-#include "tools/Command.h"
+#include "tools/command.h"
 
-fun::Command::Command(const std::string& cmd) {
-    key_vals = std::unordered_map <std::string, std::vector <std::string>> ();
-    flags = std::unordered_set <std::string> ();
-    args = std::vector <std::string> ();
+fun::command_t::command_t(const std::string& cmd) :
 
+m_key_vals(std::unordered_map <std::string, std::vector <std::string>> ()),
+m_flags(std::unordered_set <std::string> ()),
+m_args(std::vector <std::string> ())
+
+{
     bool is_command = true;
     bool is_key = false;
     bool is_val = false;
@@ -40,22 +42,22 @@ fun::Command::Command(const std::string& cmd) {
             if (c == ' ' && !ignore_special_keys) {
                 is_command = false;
             } else {
-                command += c;
+                m_command.push_back(c);
             }
         } else {
             if (c == ' ' && !ignore_special_keys) {
                 if (is_arg) {
                     is_arg = false;
 
-                    args.emplace_back(val);
+                    m_args.emplace_back(val);
                 } else if (is_flag) {
                     is_flag = false;
 
-                    flags.emplace(val);
+                    m_flags.emplace(val);
                 } else if (is_val) {
                     is_val = false;
 
-                    if (val.length()) key_vals[key].emplace_back(val);
+                    if (val.length()) m_key_vals[key].emplace_back(val);
                 } else if (is_key) is_key = false;
 
                 key.clear();
@@ -75,7 +77,7 @@ fun::Command::Command(const std::string& cmd) {
                     is_key = false;
                     is_val = true;
 
-                    if (val.length()) key_vals[key].emplace_back(val);
+                    if (val.length()) m_key_vals[key].emplace_back(val);
 
                     val.clear();
                 } else {
@@ -87,30 +89,30 @@ fun::Command::Command(const std::string& cmd) {
     }
 }
 
-const std::string& fun::Command::GetCommand() {
-    return command;
+const std::string& fun::command_t::get_command() {
+    return m_command;
 }
 
-const std::string& fun::Command::GetArgument(uint32_t index) {
-    return args[index];
+const std::string& fun::command_t::get_arg(uint32_t index) {
+    return m_args[index];
 }
 
-const std::vector <std::string>& fun::Command::GetArguments() {
-    return args;
+const std::vector <std::string>& fun::command_t::get_args() {
+    return m_args;
 }
 
-bool fun::Command::HasFlag(const std::string& flag) {
-    return flags.contains(flag);
+bool fun::command_t::has_flag(const std::string& flag) {
+    return m_flags.contains(flag);
 }
 
-bool fun::Command::HasKey(const std::string& key) {
-    return key_vals.contains(key);
+bool fun::command_t::has_key(const std::string& key) {
+    return m_key_vals.contains(key);
 }
 
-const std::string& fun::Command::GetValueForKey(const std::string& key) {
-    return key_vals[key][0];
+const std::string& fun::command_t::get_val(const std::string& key) {
+    return m_key_vals[key][0];
 }
 
-const std::vector <std::string>& fun::Command::GetValuesForKey(const std::string& key) {
-    return key_vals[key];
+const std::vector <std::string>& fun::command_t::get_vals(const std::string& key) {
+    return m_key_vals[key];
 }

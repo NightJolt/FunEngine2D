@@ -1,26 +1,26 @@
 #pragma once
 
-#include "../Globals.h"
+#include "../globals.h"
 
 namespace fun {
-    class Command {
+    class command_t {
     public:
 
-        explicit Command(const std::string&);
+        explicit command_t(const std::string&);
 
-        const std::string& GetCommand();
-        const std::string& GetArgument(uint32_t);
-        const std::vector <std::string>& GetArguments();
-        bool HasFlag(const std::string&);
-        bool HasKey(const std::string&);
-        const std::string& GetValueForKey(const std::string&);
-        const std::vector <std::string>& GetValuesForKey(const std::string&);
+        const std::string& get_command();
+        const std::string& get_arg(uint32_t);
+        const std::vector <std::string>& get_args();
+        bool has_flag(const std::string&);
+        bool has_key(const std::string&);
+        const std::string& get_val(const std::string&);
+        const std::vector <std::string>& get_vals(const std::string&);
 
     private:
 
-        std::unordered_map <std::string, std::vector <std::string>> key_vals;
-        std::unordered_set <std::string> flags;
-        std::vector <std::string> args;
-        std::string command;
+        std::unordered_map <std::string, std::vector <std::string>> m_key_vals;
+        std::unordered_set <std::string> m_flags;
+        std::vector <std::string> m_args;
+        std::string m_command;
     };
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 namespace fun {
     template <class T>

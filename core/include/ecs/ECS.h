@@ -1,51 +1,51 @@
 #pragma once
 
-#include "../Globals.h"
+#include "../globals.h"
 
 namespace fun::ecs {
-    typedef uint64_t Entity;
-    typedef uint32_t EntityID;
-    typedef uint32_t EntityV;
-    typedef uint8_t ComponentID;
+    typedef uint64_t entity_t;
+    typedef uint32_t entity_id_t;
+    typedef uint32_t entity_ver_t;
+    typedef uint8_t component_id_t;
 
-    typedef std::vector <Entity> dense_t;
-    typedef std::vector <size_t> sparse_t;
+    typedef std::vector <entity_t> dense_t;
+    typedef std::vector <uint32_t> sparse_t;
 
-    constexpr uint64_t NULLENTITY = ~(uint64_t)0;
-    constexpr size_t NULLADDR = ~(size_t)0;
+    constexpr entity_t nullentity = ~(uint64_t)0;
+    constexpr uint32_t nulladdr = ~(uint32_t)0;
     
-    extern std::vector <Entity> entities;
+    extern std::vector <fun::ecs::entity_t> entities;
 
-    extern EntityID available;
-    extern Entity next;
+    extern entity_id_t available;
+    extern entity_t next;
 
     extern std::vector <dense_t> denses;
     extern std::vector <sparse_t> sparses;
     extern std::vector <std::any> components;
-    extern std::vector <size_t> sizes;
+    extern std::vector <uint32_t> sizes;
 
     extern std::vector <std::any> oncreate_callbacks;
     extern std::vector <std::any> ondestroy_callbacks;
 
-    extern ComponentID next_component_id;
+    extern component_id_t next_component_id;
 
 
-    EntityID get_entity_id(Entity);
-    EntityV get_entity_version(Entity);
+    entity_id_t get_entity_id(entity_t);
+    entity_ver_t get_entity_version(entity_t);
 
-    Entity generate_entity_uuid(EntityID, EntityV);
-    Entity create_entity();
-    Entity recycle_entity();
-    void destroy_entity(Entity);
-    bool is_entity_recyclable(Entity);
+    entity_t generate_entity_uuid(entity_id_t, entity_ver_t);
+    entity_t create_entity();
+    entity_t recycle_entity();
+    void destroy_entity(entity_t);
+    bool is_entity_recyclable(entity_t);
 
-    bool is_entity_alive(Entity);
-    bool is_id_alive(EntityID);
-    Entity new_entity();
+    bool is_entity_alive(entity_t);
+    bool is_id_alive(entity_id_t);
+    entity_t new_entity();
 
 
     template <class T>
-    ComponentID get_component_id();
+    component_id_t get_component_id();
 
     // todo: support multiple components
     // ! Needs iterator
@@ -83,21 +83,21 @@ namespace fun::ecs {
     std::vector <T>& get_component_array();
 
     template <class T>
-    T& get_component(Entity);
+    T& get_component(entity_t);
 
     template <class T>
-    bool has_component(Entity);
-    bool has_component(Entity, ComponentID);
+    bool has_component(entity_t);
+    bool has_component(entity_t, component_id_t);
 
     template <class T, class... Args>
-    void add_component(Entity, Args&&...);
+    void add_component(entity_t, Args&&...);
 
     template <class T>
-    void remove_component(Entity);
-    void remove_component(Entity, ComponentID);
+    void remove_component(entity_t);
+    void remove_component(entity_t, component_id_t);
 
     template <class T>
-    Entity get_entity(T&);
+    entity_t get_entity(T&);
 
     template <class T>
     void oncreate_callback(const std::function <void(T&)>&);
@@ -120,8 +120,8 @@ namespace fun::ecs {
 
 
 template <class T>
-auto fun::ecs::get_component_id() -> ComponentID {
-    static ComponentID id = next_component_id++;
+auto fun::ecs::get_component_id() -> component_id_t {
+    static component_id_t id = next_component_id++;
 
     return id;
 }
@@ -133,14 +133,14 @@ auto fun::ecs::get_component_id() -> ComponentID {
 
 template <class T>
 auto fun::ecs::component_exist() -> bool {
-    const ComponentID component_id = get_component_id <T> ();
+    const component_id_t component_id = get_component_id <T> ();
 
     return components.size() > component_id && components[component_id].has_value();
 }
 
 template <class T>
 auto fun::ecs::iterate_component() -> ComponentIterator <T> {
-    const ComponentID component_id = get_component_id <T> ();
+    const component_id_t component_id = get_component_id <T> ();
 
     if (component_exist <T> ())
         return ComponentIterator <T> (std::any_cast <std::vector <T>&> (components[component_id]), sizes[component_id]);
@@ -154,18 +154,18 @@ auto fun::ecs::get_component_array() -> std::vector <T>& {
 }
 
 template <class T>
-auto fun::ecs::get_component(Entity entity) -> T& {
+auto fun::ecs::get_component(entity_t entity) -> T& {
     return get_component_array <T> ()[sparses[get_component_id <T> ()][get_entity_id(entity)]];
 }
 
 template <class T>
-auto fun::ecs::has_component(Entity entity) -> bool {
-    const ComponentID component_id = get_component_id <T> ();
+auto fun::ecs::has_component(entity_t entity) -> bool {
+    const component_id_t component_id = get_component_id <T> ();
 
     if (!is_entity_alive(entity) || sizes.size() <= component_id) return false;
 
-    EntityID entity_id = get_entity_id(entity);
-    EntityV entity_v = get_entity_version(entity);
+    entity_id_t entity_id = get_entity_id(entity);
+    entity_ver_t entity_v = get_entity_version(entity);
 
     auto& dense = denses[component_id];
     auto& sparse = sparses[component_id];
@@ -180,8 +180,8 @@ auto fun::ecs::has_component(Entity entity) -> bool {
 }
 
 template <class T, class... Args>
-auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
-    const ComponentID component_id = get_component_id <T> ();
+auto fun::ecs::add_component(entity_t entity, Args&&... args) -> void {
+    const component_id_t component_id = get_component_id <T> ();
 
     if (sizes.size() <= component_id) {
         auto new_size = component_id + 1;
@@ -192,8 +192,8 @@ auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
         sizes.resize(new_size, 0);
     }
 
-    EntityID entity_id = get_entity_id(entity);
-    EntityV entity_v = get_entity_version(entity);
+    entity_id_t entity_id = get_entity_id(entity);
+    entity_ver_t entity_v = get_entity_version(entity);
 
     if (!components[component_id].has_value()) {
         components[component_id] = std::vector <T> ();
@@ -217,7 +217,7 @@ auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
 
     {
         if (sparse.size() <= entity_id) {
-            sparse.resize(entity_id + 1, NULLADDR);
+            sparse.resize(entity_id + 1, nulladdr);
         }
 
         sparse[entity_id] = size;
@@ -246,12 +246,12 @@ auto fun::ecs::add_component(Entity entity, Args&&... args) -> void {
 }
 
 template <class T>
-auto fun::ecs::remove_component(Entity entity) -> void {
-    const ComponentID component_id = get_component_id <T> ();
+auto fun::ecs::remove_component(entity_t entity) -> void {
+    const component_id_t component_id = get_component_id <T> ();
     
     auto size = --sizes[component_id];
     
-    EntityID entity_id = get_entity_id(entity);
+    entity_id_t entity_id = get_entity_id(entity);
     auto& sparse = sparses[component_id];
     auto entity_ind = sparse[entity_id];
 
@@ -260,17 +260,17 @@ auto fun::ecs::remove_component(Entity entity) -> void {
     auto& dense = denses[component_id];
     auto& component_arr = std::any_cast <std::vector <T>&> (components[component_id]);
 
-    EntityV entity_v = get_entity_version(entity);
+    entity_ver_t entity_v = get_entity_version(entity);
 
-    Entity other = dense[size];
-    EntityID other_id = get_entity_id(other);
-    EntityV other_v = get_entity_version(other);
+    entity_t other = dense[size];
+    entity_id_t other_id = get_entity_id(other);
+    entity_ver_t other_v = get_entity_version(other);
     auto other_ind = sparse[other_id];
 
     {
         std::swap(dense[entity_ind], dense[other_ind]);
 
-        sparse[entity_id] = NULLADDR;
+        sparse[entity_id] = nulladdr;
         sparse[other_id] = entity_ind;
     }
 
@@ -292,15 +292,15 @@ auto fun::ecs::remove_component(Entity entity) -> void {
 }
 
 template <class T>
-auto fun::ecs::get_entity(T& component) -> Entity {
-    const ComponentID component_id = get_component_id <T> ();
+auto fun::ecs::get_entity(T& component) -> entity_t {
+    const component_id_t component_id = get_component_id <T> ();
 
     return denses[component_id][&component - &std::any_cast <std::vector <T>&> (components[component_id])[0]];
 }
 
 template <class T>
 auto fun::ecs::oncreate_callback(const std::function <void(T&)>& f) -> void {
-    const ComponentID component_id = get_component_id <T> ();
+    const component_id_t component_id = get_component_id <T> ();
 
     if (oncreate_callbacks.size() <= component_id) {
         oncreate_callbacks.resize(component_id + 1);
@@ -311,7 +311,7 @@ auto fun::ecs::oncreate_callback(const std::function <void(T&)>& f) -> void {
 
 template <class T>
 auto fun::ecs::ondestroy_callback(const std::function <void(T&)>& f) -> void {
-    const ComponentID component_id = get_component_id <T> ();
+    const component_id_t component_id = get_component_id <T> ();
 
     if (ondestroy_callbacks.size() <= component_id) {
         ondestroy_callbacks.resize(component_id + 1);

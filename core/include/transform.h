@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 #include "vec2.h"
 
 namespace fun {
@@ -16,10 +16,10 @@ namespace fun {
     //     }
     // };
 
-    struct Transform {
+    struct transform_t {
         vec2f_t position;
         float rotation;
 
-        explicit Transform(vec2f_t = { 0, 0 }, float = 0);
+        explicit transform_t(vec2f_t = { 0, 0 }, float = 0);
     };
 }

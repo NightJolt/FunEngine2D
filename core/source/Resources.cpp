@@ -1,4 +1,4 @@
-#include "Resources.h"
+#include "resources.h"
 
 static std::unordered_map <std::string, sf::Texture> textures;
 static std::unordered_map <std::string, sf::Font> fonts;

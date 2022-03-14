@@ -1,4 +1,4 @@
-#include "_Time.h"
+#include "_time.h"
 
 static sf::Clock _delta_clock_;
 static sf::Time _delta_time_;

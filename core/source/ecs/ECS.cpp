@@ -1,54 +1,54 @@
-#include "ecs/ECS.h"
+#include "ecs/ecs.h"
     
-std::vector <fun::ecs::Entity> fun::ecs::entities = std::vector <Entity> ();
+std::vector <fun::ecs::entity_t> fun::ecs::entities = std::vector <fun::ecs::entity_t> ();
 
-fun::ecs::EntityID fun::ecs::available = EntityID();
-fun::ecs::Entity fun::ecs::next = NULLENTITY;
+fun::ecs::entity_id_t fun::ecs::available = fun::ecs::entity_id_t();
+fun::ecs::entity_t fun::ecs::next = nullentity;
 
-static fun::ecs::Entity entity_selected = fun::ecs::NULLENTITY;
+static fun::ecs::entity_t entity_selected = fun::ecs::nullentity;
 
 std::vector <fun::ecs::dense_t> fun::ecs::denses = std::vector <dense_t> ();
 std::vector <fun::ecs::sparse_t> fun::ecs::sparses = std::vector <sparse_t> ();
 std::vector <std::any> fun::ecs::components = std::vector <std::any> ();
-std::vector <size_t> fun::ecs::sizes = std::vector <size_t> ();
+std::vector <uint32_t> fun::ecs::sizes = std::vector <uint32_t> ();
 
 std::vector <std::any> fun::ecs::oncreate_callbacks = std::vector <std::any> ();
 std::vector <std::any> fun::ecs::ondestroy_callbacks = std::vector <std::any> ();
 
-fun::ecs::ComponentID fun::ecs::next_component_id = 0;
+fun::ecs::component_id_t fun::ecs::next_component_id = 0;
 
-auto fun::ecs::get_entity_id(Entity entity) -> EntityID {
-    return entity >> BITS(EntityV);
+auto fun::ecs::get_entity_id(entity_t entity) -> entity_id_t {
+    return entity >> BITS(entity_ver_t);
 }
 
-auto fun::ecs::get_entity_version(Entity entity) -> EntityV {
+auto fun::ecs::get_entity_version(entity_t entity) -> entity_ver_t {
     return entity;
 }
 
-auto fun::ecs::generate_entity_uuid(EntityID id, EntityV version) -> Entity {
-    return ((Entity)id << BITS(EntityV)) | version;
+auto fun::ecs::generate_entity_uuid(entity_id_t id, entity_ver_t version) -> entity_t {
+    return ((entity_t)id << BITS(entity_ver_t)) | version;
 }
 
-auto fun::ecs::create_entity() -> Entity {
+auto fun::ecs::create_entity() -> entity_t {
     return entities.emplace_back(generate_entity_uuid(entities.size(), 0));
 }
 
-auto fun::ecs::recycle_entity() -> Entity {
+auto fun::ecs::recycle_entity() -> entity_t {
     available--;
 
-    Entity entity = next;
+    entity_t entity = next;
 
     std::swap(next, entities[get_entity_id(next)]);
 
     return entity;
 }
 
-auto fun::ecs::destroy_entity(Entity entity) -> void {
+auto fun::ecs::destroy_entity(entity_t entity) -> void {
     if (!is_entity_alive(entity)) return;
 
-    if (entity_selected == entity) entity_selected = NULLENTITY; // ?
+    if (entity_selected == entity) entity_selected = nullentity; // ?
 
-    EntityID id = get_entity_id(entity);
+    entity_id_t id = get_entity_id(entity);
 
     entity++;
 
@@ -61,19 +61,19 @@ auto fun::ecs::destroy_entity(Entity entity) -> void {
     }
 }
 
-auto fun::ecs::is_entity_recyclable(Entity entity) -> bool {
-    return ~(EntityV)entity;
+auto fun::ecs::is_entity_recyclable(entity_t entity) -> bool {
+    return ~(entity_ver_t)entity;
 }
 
-auto fun::ecs::is_entity_alive(Entity entity) -> bool {
+auto fun::ecs::is_entity_alive(entity_t entity) -> bool {
     return get_entity_id(entity) < entities.size() && entities[get_entity_id(entity)] == entity;
 }
 
-auto fun::ecs::is_id_alive(EntityID id) -> bool {
+auto fun::ecs::is_id_alive(entity_id_t id) -> bool {
     return id < entities.size() && get_entity_id(entities[id]) == id;
 }
 
-auto fun::ecs::new_entity() -> Entity {
+auto fun::ecs::new_entity() -> entity_t {
     if (available)
         return recycle_entity();
     else
@@ -85,7 +85,7 @@ auto fun::ecs::new_entity() -> Entity {
 // auto fun::ecs::show_hierarchy() -> void {
 //     ImGui::Begin("Entities");
     
-//     for (Entity entity : entities) {
+//     for (entity_t entity : entities) {
 //         if (!is_entity_alive(entity)) continue;
 
 //         if (ImGui::Button(("ID: " + std::to_string(get_entity_id(entity)) + " | Ver: " + std::to_string(get_entity_version(entity))).c_str(), ImVec2(-FLT_MIN, 0.0f))) {
@@ -99,7 +99,7 @@ auto fun::ecs::new_entity() -> Entity {
 // void fun::ecs::show_components() {
 //     ImGui::Begin("Components");
 
-//     if (entity_selected == NULLENTITY) {
+//     if (entity_selected == nullentity) {
 //         ImGui::End();
 
 //         return;

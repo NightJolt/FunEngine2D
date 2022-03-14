@@ -79,7 +79,7 @@ namespace fun {
             void Emit(uint32_t, const EmitData&);
             void Update();
 
-            fun::Transform transform;
+            fun::transform_t transform;
 
         private:
 

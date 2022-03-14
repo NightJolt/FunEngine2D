@@ -1,4 +1,4 @@
-#include "Input.h"
+#include "input.h"
 
 #if defined(ENABLE_MOUSE)
 static bool _mouse_button_pressed_[MOUSE_BUTTON_COUNT];

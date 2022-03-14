@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 
 namespace fun::resources {
     void load_texture(const std::string&, const std::string&);

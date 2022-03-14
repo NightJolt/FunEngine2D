@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 #include "_Math.h"
 #include "vec2.h"
 

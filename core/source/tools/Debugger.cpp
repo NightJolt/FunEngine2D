@@ -1,4 +1,4 @@
-#include "tools/Debugger.h"
+#include "tools/debugger.h"
 
 static bool unit_coord_enabled;
 static bool debug_log_enabled;
@@ -18,7 +18,7 @@ void fun::debugger::display_debug_menu() {
 
 sf::Text unit_coord_text;
 
-void fun::debugger::display_unit_coord(const vec2f_t& pos, float character_size, fun::layer_t layer, sf::Color color, const std::string& font_name) {
+void fun::debugger::display_unit_coord(const vec2f_t& pos, float character_size, layer_t layer, sf::Color color, const std::string& font_name) {
     if (!unit_coord_enabled) return;
 
     const float zoom = fun::wndmgr::main_window->zoom;
@@ -59,7 +59,7 @@ void fun::debugger::push_msg(const std::string& msg, const std::string& channel)
     order.emplace_back(ind, logs[ind].size() - 1);
 }
 
-void fun::debugger::push_cmd(const fun::Command& cmd, const std::string& channel) {}
+void fun::debugger::push_cmd(const command_t& cmd, const std::string& channel) {}
 
 void fun::debugger::display_debug_log() {
     if (!debug_log_enabled) return;
