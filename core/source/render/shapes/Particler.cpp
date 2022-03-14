@@ -297,7 +297,7 @@ void fun::Particler::UpdateRange(uint32_t index, uint32_t size) {
 
         particle->lifetime -= delta_time;
 
-        particle->position += sf::Vector2(sin(particle->direction_angle), cos(particle->direction_angle)) * particle->velocity * delta_time;
+        particle->position += vec2_t(sin(particle->direction_angle), cos(particle->direction_angle)) * particle->velocity * delta_time;
 
         particle->velocity += particle->velocity_step * delta_time;
 

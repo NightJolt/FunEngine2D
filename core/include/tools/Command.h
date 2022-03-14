@@ -9,7 +9,7 @@ namespace fun {
         explicit Command(const std::string&);
 
         const std::string& GetCommand();
-        const std::string& GetArgument(int);
+        const std::string& GetArgument(uint32_t);
         const std::vector <std::string>& GetArguments();
         bool HasFlag(const std::string&);
         bool HasKey(const std::string&);

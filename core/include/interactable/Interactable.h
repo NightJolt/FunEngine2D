@@ -8,7 +8,7 @@ namespace fun {
     struct Interactable {
         typedef int32_t layer_t;
 
-        explicit Interactable(const std::function <bool(sf::Vector2f)>&, layer_t = 0);
+        explicit Interactable(const std::function <bool(vec2f_t)>&, layer_t = 0);
 
         void SetInteractionLayer(uint32_t);
         uint32_t GetInteractionLayer() const;

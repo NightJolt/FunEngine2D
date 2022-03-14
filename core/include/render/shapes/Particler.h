@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../Globals.h"
+#include "../../transform.h"
 #include "../../_Math.h"
 #include "../../_Time.h"
 #include "../../tools/Debugger.h"
@@ -58,7 +59,7 @@ namespace fun {
 
             struct ParticleData {
                 float lifetime;
-                sf::Vector2f position;
+                vec2f_t position;
                 float direction_angle;
                 float velocity;
                 float velocity_step;

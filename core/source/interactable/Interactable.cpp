@@ -1,6 +1,6 @@
 #include "interactable/Interactable.h"
 
-fun::Interactable::Interactable(const std::function <bool(sf::Vector2f)>& interaction_fun, layer_t layer) : m_interaction_fun(std::move(interaction_fun)), m_layer(layer) {
+fun::Interactable::Interactable(const std::function <bool(vec2f_t)>& interaction_fun, layer_t layer) : m_interaction_fun(std::move(interaction_fun)), m_layer(layer) {
     m_r_pressed = false;
     m_r_hold = false;
     m_r_released = false;

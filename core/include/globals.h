@@ -105,30 +105,6 @@ namespace fun {
     void glob_init();
 }
 
-namespace fun {
-    // struct Transform {
-    //     Vec2f position;
-    //     float rotation;
-    //     Vec2f scale;
-
-    //     explicit Transform(Vec2f p = { 0, 0 }, float r = 0, Vec2f s = { 1, 1 }) {
-    //         position = p;
-    //         rotation = r;
-    //         scale = s;
-    //     }
-    // };
-
-    struct Transform {
-        sf::Vector2f position;
-        float rotation;
-
-        explicit Transform(sf::Vector2f p = { 0, 0 }, float r = 0) {
-            position = p;
-            rotation = r;
-        }
-    };
-}
-
 // namespace std {
 //     template <>
 //     struct hash <fun::UniqueKey> {

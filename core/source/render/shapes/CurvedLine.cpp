@@ -61,33 +61,33 @@ void fun::CurvedLine::Build() const {
         int ind = -1;
         float inv_x = from.x < to.x ? 1 : -1;
         float inv_y = from.y > to.y ? 1 : -1;
-        sf::Vector2f round_pnt_from = sf::Vector2f(mid_x, from.y) - radius * sf::Vector2f(inv_x, inv_y);
-        sf::Vector2f round_pnt_to = sf::Vector2f(mid_x, to.y) + radius * sf::Vector2f(inv_x, inv_y);
+        vec2f_t round_pnt_from = vec2f_t(mid_x, from.y) - vec2f_t(inv_x, inv_y) * radius;
+        vec2f_t round_pnt_to = vec2f_t(mid_x, to.y) + vec2f_t(inv_x, inv_y) * radius;
 
         points[++ind].position = from;
         points[++ind].position = sf::Vector2f(mid_x - radius * inv_x, from.y);
 
         for (int i = 1; i <= smoothness; i++) {
-            points[++ind].position = round_pnt_from + math::normalize(vec2f_t(mid_x - (radius - step * (float)i) * inv_x, from.y) - round_pnt_from) * radius;
+            points[++ind].position = (round_pnt_from + math::normalize(vec2f_t(mid_x - (radius - step * (float)i) * inv_x, from.y) - round_pnt_from) * radius).to_sf();
         }
 
-        points[++ind].position = round_pnt_from + math::normalize(vec2f_t(mid_x, from.y) - round_pnt_from) * radius;
+        points[++ind].position = (round_pnt_from + math::normalize(vec2f_t(mid_x, from.y) - round_pnt_from) * radius).to_sf();
 
         for (int i = 1; i <= smoothness; i++) {
-            points[++ind].position = round_pnt_from + math::normalize(vec2f_t(mid_x, from.y - step * (float)i * inv_y) - round_pnt_from) * radius;
+            points[++ind].position = (round_pnt_from + math::normalize(vec2f_t(mid_x, from.y - step * (float)i * inv_y) - round_pnt_from) * radius).to_sf();
         }
 
         points[++ind].position = sf::Vector2f(mid_x, from.y - radius * inv_y);
         points[++ind].position = sf::Vector2f(mid_x, to.y + radius * inv_y);
 
         for (int i = smoothness; i >= 1; i--) {
-            points[++ind].position = round_pnt_to + math::normalize(vec2f_t(mid_x, to.y + step * (float)i * (from.y > to.y ? 1.f : -1.f)) - round_pnt_to) * radius;
+            points[++ind].position = (round_pnt_to + math::normalize(vec2f_t(mid_x, to.y + step * (float)i * (from.y > to.y ? 1.f : -1.f)) - round_pnt_to) * radius).to_sf();
         }
 
-        points[++ind].position = round_pnt_to + math::normalize(vec2f_t(mid_x, to.y) - round_pnt_to) * radius;
+        points[++ind].position = (round_pnt_to + math::normalize(vec2f_t(mid_x, to.y) - round_pnt_to) * radius).to_sf();
 
         for (int i = 1; i <= smoothness; i++) {
-            points[++ind].position = round_pnt_to + math::normalize(vec2f_t(mid_x + step * (float)i * (from.x < to.x ? 1.f : -1.f), to.y) - round_pnt_to) * radius;
+            points[++ind].position = (round_pnt_to + math::normalize(vec2f_t(mid_x + step * (float)i * (from.x < to.x ? 1.f : -1.f), to.y) - round_pnt_to) * radius).to_sf();
         }
 
         points[++ind].position = sf::Vector2f(mid_x + radius * inv_x, to.y);

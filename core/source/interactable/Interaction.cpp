@@ -85,7 +85,7 @@ void fun::interaction::update() {
 
     if (obj_active) {
         if (!(obj_active->m_l_hold || obj_active->m_r_hold)) {
-            Interactable* new_target = object_at_pos(mouse_pos);
+            Interactable* new_target = object_at_pos(mouse_pos.to_sf());
 
             if (!new_target) new_target = obj_active;
 
@@ -98,7 +98,7 @@ void fun::interaction::update() {
             }
         }
     } else {
-        obj_active = object_at_pos(mouse_pos);
+        obj_active = object_at_pos(mouse_pos.to_sf());
 
         if (!obj_active) return;
 
