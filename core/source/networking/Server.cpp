@@ -1,33 +1,33 @@
-#include "networking/Server.h"
+#include "networking/server.h"
 
-fun::Server::Server() {
+fun::server::server() {
     listener.setBlocking(false);
 
     potential_client = new sf::TcpSocket;
 }
 
-fun::Server::~Server() {
+fun::server::~server() {
     for (auto* client : clients) {
         delete client;
     }
 
-    Close();
+    terminate();
 }
 
-bool fun::Server::Launch(unsigned short port) {
+bool fun::server::launch(unsigned short port) {
     return listener.listen(port) == sf::Socket::Done;
 }
 
-void fun::Server::Close() {
+void fun::server::terminate() {
     listener.close();
 }
 
-void fun::Server::Listen() {
-    CheckConnectionRequests();
-    ReceiveData();
+void fun::server::listen() {
+    check_connection_requests();
+    receive_data();
 }
 
-void fun::Server::CheckConnectionRequests() {
+void fun::server::check_connection_requests() {
     next_client:
 
     auto status = listener.accept(*potential_client);
@@ -42,7 +42,7 @@ void fun::Server::CheckConnectionRequests() {
     }
 }
 
-void fun::Server::ReceiveData() {
+void fun::server::receive_data() {
     for (int i = 0; i < clients.size(); i++) {
         sf::Packet packet;
 
@@ -59,14 +59,14 @@ void fun::Server::ReceiveData() {
         }
 
         if (status == sf::Socket::Disconnected) {
-            CloseConnectionWithClient(i);
+            close_connection_with_client(i);
 
             i--;
         }
     }
 }
 
-void fun::Server::CloseConnectionWithClient(size_t i) {
+void fun::server::close_connection_with_client(size_t i) {
     delete clients[i];
     
     std::swap(clients[i], clients.back());

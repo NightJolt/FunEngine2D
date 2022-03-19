@@ -1,22 +1,22 @@
 #pragma once
 
-#include "../Globals.h"
+#include "../globals.h"
 
 namespace fun {
-    class Client {
+    class client {
     public:
 
-        ~Client();
+        ~client();
 
-        bool Connect(const std::string&, unsigned short);
-        void Disconnect();
+        bool connect(const std::string&, unsigned short);
+        void disconnect();
 
-        void RecieveData();
+        void receive_data();
 
-        void Send(const std::string&);
+        void send(const std::string&);
 
-        std::string ReadNext();
-        int PacketsLeft();
+        std::string read_next();
+        int packets_left();
 
     private:
 

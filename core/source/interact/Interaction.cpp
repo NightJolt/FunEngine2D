@@ -1,4 +1,4 @@
-#include "interact/Interaction.h"
+#include "interact/interaction.h"
 
 static fun::ecs::entity_t entity_active = fun::ecs::nullentity;
 static fun::ecs::entity_t entity_last = fun::ecs::nullentity;
@@ -19,9 +19,9 @@ void fun::interaction::update() {
         entity_last = ecs::nullentity;
     }
 
-    auto& interactable = ecs::get_component <interactable_t> (entity_active);
-
     if (entity_active != fun::ecs::nullentity) {
+        auto& interactable = ecs::get_component <interactable_t> (entity_active);
+
         bool is_mouse_interacted = interactable.interaction_fun(mouse_pos);
         bool is_left_interacted = interactable.left_pressed || interactable.left_hold || interactable.left_released;
         bool is_right_interacted = interactable.right_pressed || interactable.right_hold || interactable.right_released;
@@ -93,6 +93,8 @@ void fun::interaction::update() {
     }
 
     if (entity_active != fun::ecs::nullentity) {
+        auto& interactable = ecs::get_component <interactable_t> (entity_active);
+        
         if (!interactable.left_hold && !interactable.right_hold) {
             ecs::entity_t new_entity = entity_at_pos(mouse_pos.to_sf());
 

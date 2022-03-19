@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Globals.h"
+#include "globals.h"
 #include "vec2.h"
 
 namespace fun::math {

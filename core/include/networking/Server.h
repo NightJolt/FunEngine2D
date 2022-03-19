@@ -1,24 +1,23 @@
 #pragma once
 
-#include "../Globals.h"
+#include "../globals.h"
 
 namespace fun {
-    class Server {
+    class server {
     public:
 
-        Server();
-        ~Server();
+        server();
+        ~server();
 
-        bool Launch(unsigned short);
-        
-        void Listen();
-        void Close();
+        bool launch(unsigned short);
+        void listen();
+        void terminate();
 
     private:
 
-        void ReceiveData();
-        void CheckConnectionRequests();
-        void CloseConnectionWithClient(size_t);
+        void receive_data();
+        void check_connection_requests();
+        void close_connection_with_client(size_t);
 
         sf::TcpSocket* potential_client;
         std::vector <sf::TcpSocket*> clients;

@@ -16,7 +16,12 @@ namespace fun {
 #if defined(USES_SFML)
         vec2_t(sf::Vector2<T>);
         sf::Vector2<T> to_sf() const;
-#endif  
+#endif
+
+#if defined(USES_BOX2D)
+        vec2_t(b2Vec2);
+        b2Vec2 to_b2() const;
+#endif
     };
 
     typedef vec2_t <int32_t> vec2i_t;
@@ -50,6 +55,17 @@ fun::vec2_t<T>::vec2_t(sf::Vector2<T> sf_vec2) : x(sf_vec2.x), y(sf_vec2.y) {}
 template <class T>
 sf::Vector2<T> fun::vec2_t<T>::to_sf() const {
     return sf::Vector2 <T> (x, y);
+}
+#endif
+
+
+#if defined(USES_BOX2D)
+template <class T>
+fun::vec2_t<T>::vec2_t(b2Vec2 b2_vec2) : x(b2_vec2.x), y(b2_vec2.y) {}
+
+template <class T>
+b2Vec2 fun::vec2_t<T>::to_b2() const {
+    return b2Vec2(x, y);
 }
 #endif
 

@@ -1,4 +1,4 @@
-#include "physics/Physics.h"
+#include "physics/physics.h"
 
 static float simulation_scale = 1;
 static b2World world = b2World(b2Vec2(0, 0));
@@ -16,8 +16,8 @@ float fun::physics::get_simulation_scale() {
     return simulation_scale;
 }
 
-void fun::physics::set_gravity(b2Vec2 gravity) {
-    world.SetGravity(gravity);
+void fun::physics::set_gravity(vec2f_t gravity) {
+    world.SetGravity(gravity.to_b2());
 }
 
 void set_timestep(float ts) {

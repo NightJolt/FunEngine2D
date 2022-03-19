@@ -1,7 +1,7 @@
 #pragma once
 
 #include "globals.h"
-#include "_Math.h"
+#include "_math.h"
 #include "vec2.h"
 
 #define ENABLE_MOUSE

@@ -1,10 +1,9 @@
 #pragma once
 
-#include "../Globals.h"
+#include "../globals.h"
 #include "../render/WindowManager.h"
 #include "../ecs/ecs.h"
-
-#include "Interactable.h"
+#include "interactable.h"
 
 namespace fun::interaction {
     void update();
