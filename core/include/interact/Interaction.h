@@ -2,13 +2,13 @@
 
 #include "../Globals.h"
 #include "../render/WindowManager.h"
-#include "../ecs/ECS.h"
+#include "../ecs/ecs.h"
 
 #include "Interactable.h"
 
 namespace fun::interaction {
     void update();
 
-    Interactable* object_at_pos(sf::Vector2f);
+    ecs::entity_t entity_at_pos(vec2f_t);
     bool is_anything_interacted();
 }

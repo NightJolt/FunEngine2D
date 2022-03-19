@@ -80,6 +80,10 @@ auto fun::ecs::new_entity() -> entity_t {
         return create_entity();
 }
 
+auto fun::ecs::validate_entity(entity_t entity) -> entity_t {
+    return is_entity_alive(entity) ? entity : nullentity;
+}
+
 
 
 // auto fun::ecs::show_hierarchy() -> void {

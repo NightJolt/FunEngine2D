@@ -43,6 +43,8 @@ namespace fun::ecs {
     bool is_id_alive(entity_id_t);
     entity_t new_entity();
 
+    entity_t validate_entity(entity_t);
+
 
     template <class T>
     component_id_t get_component_id();

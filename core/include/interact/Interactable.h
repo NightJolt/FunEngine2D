@@ -20,6 +20,8 @@ namespace fun {
         bool hover_hold;
         bool hover_exit;
 
+        vec2f_t mouse_offset;
+
         layer_t layer;
 
         std::function <bool(vec2f_t)> interaction_fun;
