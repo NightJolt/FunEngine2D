@@ -1,12 +1,12 @@
 #include "networking/server.h"
 
-fun::server::server() {
+fun::server_t::server_t() {
     listener.setBlocking(false);
 
     potential_client = new sf::TcpSocket;
 }
 
-fun::server::~server() {
+fun::server_t::~server_t() {
     for (auto* client : clients) {
         delete client;
     }
@@ -14,20 +14,20 @@ fun::server::~server() {
     terminate();
 }
 
-bool fun::server::launch(unsigned short port) {
+bool fun::server_t::launch(unsigned short port) {
     return listener.listen(port) == sf::Socket::Done;
 }
 
-void fun::server::terminate() {
+void fun::server_t::terminate() {
     listener.close();
 }
 
-void fun::server::listen() {
+void fun::server_t::listen() {
     check_connection_requests();
     receive_data();
 }
 
-void fun::server::check_connection_requests() {
+void fun::server_t::check_connection_requests() {
     next_client:
 
     auto status = listener.accept(*potential_client);
@@ -42,7 +42,7 @@ void fun::server::check_connection_requests() {
     }
 }
 
-void fun::server::receive_data() {
+void fun::server_t::receive_data() {
     for (int i = 0; i < clients.size(); i++) {
         sf::Packet packet;
 
@@ -66,7 +66,7 @@ void fun::server::receive_data() {
     }
 }
 
-void fun::server::close_connection_with_client(size_t i) {
+void fun::server_t::close_connection_with_client(size_t i) {
     delete clients[i];
     
     std::swap(clients[i], clients.back());

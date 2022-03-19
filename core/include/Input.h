@@ -6,13 +6,13 @@
 
 #define ENABLE_MOUSE
 #define ENABLE_KEYBOARD
-#define ENABLE_JOYSTICKS
+#define ENABLE_GAMEPAD
 
 #define KEYBOARD_KEY_COUNT sf::Keyboard::Key::KeyCount
 #define MOUSE_BUTTON_COUNT sf::Mouse::Button::ButtonCount
-#define JOYSTICK_BUTTON_COUNT fun::input::JoystickButtonCount
-#define JOYSTICK_AXIS_COUNT fun::input::JoystickAxisCount
-#define MAX_JOYSTICK_COUNT 8
+#define GAMEPAD_BUTTON_COUNT fun::input::gamepad_button_count
+#define GAMEPAD_AXIS_COUNT fun::input::gamepad_axis_count
+#define MAX_GAMEPAD_COUNT 8
 
 namespace fun::input {
     void listen();
@@ -38,41 +38,41 @@ namespace fun::input {
     );
 #endif
 
-#if defined(ENABLE_JOYSTICKS)
-    enum JoystickButton {
-        X,
-        O,
-        T,
-        R,
-        L1,
-        R1,
-        L2I,
-        R2I,
+#if defined(ENABLE_GAMEPAD)
+    enum gamepad_button_t {
+        x,
+        o,
+        t,
+        r,
+        l1,
+        r1,
+        l2i,
+        r2i,
 
-        JoystickButtonCount
+        gamepad_button_count
     };
 
-    enum JoystickAxis {
-        L3X,
-        L3Y,
-        L2,
-        R2,
-        R3X,
-        R3Y,
-        DX,
-        DY,
+    enum gamepad_axis_t {
+        l3x,
+        l3y,
+        l2,
+        r2,
+        r3x,
+        r3y,
+        dx,
+        dy,
 
-        JoystickAxisCount
+        gamepad_axis_count
     };
 
-    bool is_joystick_connected(int = 0);
-    bool pressed(JoystickButton, int = 0);
-    bool released(JoystickButton, int = 0);
-    bool hold(JoystickButton, int = 0);
-    float value(JoystickAxis, int = 0);
-    fun::vec2f_t joystick_2d(
-            JoystickAxis = JoystickAxis::L3X,
-            JoystickAxis = JoystickAxis::L3Y
+    bool is_gamepad_connected(int = 0);
+    bool pressed(gamepad_button_t, int = 0);
+    bool released(gamepad_button_t, int = 0);
+    bool hold(gamepad_button_t, int = 0);
+    float value(gamepad_axis_t, int = 0);
+    fun::vec2f_t gamepad_2d(
+            gamepad_axis_t = gamepad_axis_t::l3x,
+            gamepad_axis_t = gamepad_axis_t::l3y
     );
 #endif
 }

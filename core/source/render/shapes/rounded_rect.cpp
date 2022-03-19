@@ -1,10 +1,10 @@
-#include "render/shapes/RoundedRect.h"
+#include "render/shapes/rounded_rect.h"
 
-fun::RoundedRect::RoundedRect() {
-    Build();
+fun::rounded_rect_t::rounded_rect_t() {
+    build();
 }
 
-void fun::RoundedRect::SetRadius(float r) {
+void fun::rounded_rect_t::set_raidus(float r) {
     if (radius == r) return;
 
     radius = r;
@@ -12,23 +12,23 @@ void fun::RoundedRect::SetRadius(float r) {
     should_update = true;
 }
 
-void fun::RoundedRect::SetPosition(const sf::Vector2f& p) {
+void fun::rounded_rect_t::set_position(vec2f_t p) {
     if (position == p) return;
 
     auto delta = p - position;
 
     for (auto& point : points) {
-        point.position += delta;
+        point.position += delta.to_sf();
     }
 
     position = p;
 }
 
-const sf::Vector2f& fun::RoundedRect::GetPosition() const {
+fun::vec2f_t fun::rounded_rect_t::get_position() const {
     return position;
 }
 
-void fun::RoundedRect::SetSize(const sf::Vector2f& s) {
+void fun::rounded_rect_t::set_size(vec2f_t s) {
     if (size == s) return;
 
     size = s;
@@ -36,11 +36,11 @@ void fun::RoundedRect::SetSize(const sf::Vector2f& s) {
     should_update = true;
 }
 
-const sf::Vector2f& fun::RoundedRect::GetSize() const {
+fun::vec2f_t fun::rounded_rect_t::get_size() const {
     return size;
 }
 
-void fun::RoundedRect::SetSmoothness(int s) {
+void fun::rounded_rect_t::set_smoothness(int s) {
     if (smoothness == s) return;
 
     smoothness = s;
@@ -48,7 +48,7 @@ void fun::RoundedRect::SetSmoothness(int s) {
     should_update = true;
 }
 
-void fun::RoundedRect::SetFillColor(const sf::Color& c) {
+void fun::rounded_rect_t::set_fill_color(sf::Color c) {
     if (color == c) return;
 
     color = c;
@@ -56,13 +56,13 @@ void fun::RoundedRect::SetFillColor(const sf::Color& c) {
     should_update = true;
 }
 
-void fun::RoundedRect::Build() const {
+void fun::rounded_rect_t::build() const {
     points.resize(10 + 4 * smoothness);
 
     points[0].position = { 0, 0 };
 
     int ind = 0;
-    const sf::Vector2f half_size = size * .5f;
+    vec2f_t half_size = size * .5f;
     float angle_step = math::radians(90) / (smoothness + 1);
     float angle;
     sf::Vector2f pos;
@@ -111,13 +111,13 @@ void fun::RoundedRect::Build() const {
 
     for (auto& point : points) {
         point.color = color;
-        point.position += position;
+        point.position += position.to_sf();
     }
 }
 
-void fun::RoundedRect::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
+void fun::rounded_rect_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
     if (should_update) {
-        Build();
+        build();
 
         should_update = false;
     }

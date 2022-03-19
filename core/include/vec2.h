@@ -71,6 +71,16 @@ b2Vec2 fun::vec2_t<T>::to_b2() const {
 
 
 template <typename T>
+bool operator ==(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+    return a.x == b.x && a.y == b.y;
+}
+
+template <typename T>
+bool operator !=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+    return a.x != b.x || a.y != b.y;
+}
+
+template <typename T>
 inline std::ostream& operator <<(std::ostream& out, const fun::vec2_t<T>& vec2) {
     return out << fun::to_string(vec2);
 }

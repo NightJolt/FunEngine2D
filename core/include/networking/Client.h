@@ -3,10 +3,10 @@
 #include "../globals.h"
 
 namespace fun {
-    class client {
+    class client_t {
     public:
 
-        ~client();
+        ~client_t();
 
         bool connect(const std::string&, unsigned short);
         void disconnect();

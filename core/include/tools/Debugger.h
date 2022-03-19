@@ -3,7 +3,7 @@
 #include "../globals.h"
 #include "command.h"
 #include "../resources.h"
-#include "../render/WindowManager.h"
+#include "../render/window_manager.h"
 
 namespace fun::debugger {
     void display_debug_menu();

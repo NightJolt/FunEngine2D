@@ -15,10 +15,10 @@ static bool _keyboard_key_released_[KEYBOARD_KEY_COUNT];
 static bool _keyboard_key_hold_[KEYBOARD_KEY_COUNT];
 #endif
 
-#if defined(ENABLE_JOYSTICKS)
-static bool _joystick_button_pressed_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-static bool _joystick_button_released_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
-static bool _joystick_button_hold_[JOYSTICK_BUTTON_COUNT][MAX_JOYSTICK_COUNT];
+#if defined(ENABLE_GAMEPAD)
+static bool _gamepad_button_pressed_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
+static bool _gamepad_button_released_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
+static bool _gamepad_button_hold_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 #endif
 
 void fun::input::listen() {
@@ -63,22 +63,22 @@ void fun::input::listen() {
     }
 #endif
 
-#if defined(ENABLE_JOYSTICKS)
-    for (int button = 0; button < JOYSTICK_BUTTON_COUNT; button++) {
-        for (int index = 0; index < MAX_JOYSTICK_COUNT; index++) {
-            _joystick_button_pressed_[button][index] = false;
-            _joystick_button_released_[button][index] = false;
+#if defined(ENABLE_GAMEPAD)
+    for (int button = 0; button < GAMEPAD_BUTTON_COUNT; button++) {
+        for (int index = 0; index < MAX_GAMEPAD_COUNT; index++) {
+            _gamepad_button_pressed_[button][index] = false;
+            _gamepad_button_released_[button][index] = false;
 
-            if (is_joystick_connected(index)) {
+            if (is_gamepad_connected(index)) {
                 if (sf::Joystick::isButtonPressed(index, button)) {
-                    if (_joystick_button_hold_[button][index]) {
-                        _joystick_button_pressed_[button][index] = true;
-                        _joystick_button_hold_[button][index] = true;
+                    if (_gamepad_button_hold_[button][index]) {
+                        _gamepad_button_pressed_[button][index] = true;
+                        _gamepad_button_hold_[button][index] = true;
                     }
                 } else {
-                    if (_joystick_button_hold_[button][index]) {
-                        _joystick_button_hold_[button][index] = false;
-                        _joystick_button_released_[button][index] = true;
+                    if (_gamepad_button_hold_[button][index]) {
+                        _gamepad_button_hold_[button][index] = false;
+                        _gamepad_button_released_[button][index] = true;
                     }
                 }
             }
@@ -137,27 +137,27 @@ fun::vec2f_t fun::input::keyboard_2d(sf::Keyboard::Key a, sf::Keyboard::Key b, s
 
 
 
-#if defined(ENABLE_JOYSTICKS)
-bool fun::input::is_joystick_connected(int index) {
+#if defined(ENABLE_GAMEPAD)
+bool fun::input::is_gamepad_connected(int index) {
     return sf::Joystick::isConnected(index);
 }
 
-bool fun::input::pressed(JoystickButton button, int index) {
-    return _joystick_button_pressed_[button][index];
+bool fun::input::pressed(gamepad_button_t button, int index) {
+    return _gamepad_button_pressed_[button][index];
 }
 
-bool fun::input::released(JoystickButton button, int index) {
-    return _joystick_button_released_[button][index];
+bool fun::input::released(gamepad_button_t button, int index) {
+    return _gamepad_button_released_[button][index];
 }
 
-bool fun::input::hold(JoystickButton button, int index) {
-    return _joystick_button_hold_[button][index];
+bool fun::input::hold(gamepad_button_t button, int index) {
+    return _gamepad_button_hold_[button][index];
 }
 
-float fun::input::value(JoystickAxis axis, int index) {
+float fun::input::value(gamepad_axis_t axis, int index) {
     auto jaxis = static_cast <sf::Joystick::Axis> (axis);
 
-    if (is_joystick_connected(index) && sf::Joystick::hasAxis(index, jaxis)) {
+    if (is_gamepad_connected(index) && sf::Joystick::hasAxis(index, jaxis)) {
         float value = sf::Joystick::getAxisPosition(index, jaxis);
 
         // if (axis == L2 || axis == R2) value = (value + 100) / 2;
@@ -169,7 +169,7 @@ float fun::input::value(JoystickAxis axis, int index) {
     }
 }
 
-fun::vec2f_t fun::input::joystick_2d(JoystickAxis a, JoystickAxis b) {
+fun::vec2f_t fun::input::gamepad_2d(gamepad_axis_t a, gamepad_axis_t b) {
     return math::normalize(vec2f_t(value(a), value(b)));
 }
 #endif

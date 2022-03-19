@@ -1,10 +1,10 @@
-#include "render/shapes/CurvedLine.h"
+#include "render/shapes/curved_line.h"
 
-fun::CurvedLine::CurvedLine() {
-    Build();
+fun::curved_line_t::curved_line_t() {
+    build();
 }
 
-void fun::CurvedLine::SetPoints(sf::Vector2f f, sf::Vector2f t) {
+void fun::curved_line_t::set_points(vec2f_t f, vec2f_t t) {
     if (from == f && to == t) return;
 
     from = f;
@@ -13,7 +13,7 @@ void fun::CurvedLine::SetPoints(sf::Vector2f f, sf::Vector2f t) {
     should_update = true;
 }
 
-void fun::CurvedLine::SetRadius(float r) {
+void fun::curved_line_t::set_radius(float r) {
     if (radius != r) return;
 
     radius = r;
@@ -21,7 +21,7 @@ void fun::CurvedLine::SetRadius(float r) {
     should_update = true;
 }
 
-void fun::CurvedLine::SetSmoothness(int s) {
+void fun::curved_line_t::set_smoothness(int s) {
     if (smoothness != s) return;
 
     smoothness = s;
@@ -29,7 +29,7 @@ void fun::CurvedLine::SetSmoothness(int s) {
     should_update = true;
 }
 
-void fun::CurvedLine::CurveAt(float c) {
+void fun::curved_line_t::curve_at(float c) {
     if (curving_point != c) return;
 
     curving_point = c;
@@ -37,7 +37,7 @@ void fun::CurvedLine::CurveAt(float c) {
     should_update = true;
 }
 
-void fun::CurvedLine::SetColor(const sf::Color& c) {
+void fun::curved_line_t::set_color(sf::Color c) {
     if (color == c) return;
 
     color = c;
@@ -47,12 +47,12 @@ void fun::CurvedLine::SetColor(const sf::Color& c) {
     }
 }
 
-void fun::CurvedLine::Build() const {
+void fun::curved_line_t::build() const {
     if (std::abs(to.x - from.x) < 2 * radius || std::abs(to.y - from.y) < 2 * radius) {
         points.resize(2);
 
-        points[0].position = from;
-        points[1].position = to;
+        points[0].position = from.to_sf();
+        points[1].position = to.to_sf();
     } else {
         points.resize(8 + 4 * smoothness);
 
@@ -64,7 +64,7 @@ void fun::CurvedLine::Build() const {
         vec2f_t round_pnt_from = vec2f_t(mid_x, from.y) - vec2f_t(inv_x, inv_y) * radius;
         vec2f_t round_pnt_to = vec2f_t(mid_x, to.y) + vec2f_t(inv_x, inv_y) * radius;
 
-        points[++ind].position = from;
+        points[++ind].position = from.to_sf();
         points[++ind].position = sf::Vector2f(mid_x - radius * inv_x, from.y);
 
         for (int i = 1; i <= smoothness; i++) {
@@ -91,7 +91,7 @@ void fun::CurvedLine::Build() const {
         }
 
         points[++ind].position = sf::Vector2f(mid_x + radius * inv_x, to.y);
-        points[++ind].position = to;
+        points[++ind].position = to.to_sf();
     }
 
     for (auto& point : points) {
@@ -99,9 +99,9 @@ void fun::CurvedLine::Build() const {
     }
 }
 
-void fun::CurvedLine::draw(sf::RenderTarget& render_target, sf::RenderStates rs) const {
+void fun::curved_line_t::draw(sf::RenderTarget& render_target, sf::RenderStates rs) const {
     if (should_update) {
-        Build();
+        build();
 
         should_update = false;
     }

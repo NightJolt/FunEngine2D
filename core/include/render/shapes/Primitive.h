@@ -1,10 +1,10 @@
-#include "../../Globals.h"
+#include "../../globals.h"
 
 namespace fun {
-    class Primitive : public sf::Drawable {
+    class primitive_t : public sf::Drawable {
         public:
 
-            Primitive(std::vector <sf::Vertex>&, sf::PrimitiveType);
+            primitive_t(std::vector <sf::Vertex>&, sf::PrimitiveType);
 
         private:
 

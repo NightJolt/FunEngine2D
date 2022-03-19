@@ -21,7 +21,7 @@ sf::Text unit_coord_text;
 void fun::debugger::display_unit_coord(const vec2f_t& pos, float character_size, layer_t layer, sf::Color color, const std::string& font_name) {
     if (!unit_coord_enabled) return;
 
-    const float zoom = fun::wndmgr::main_window->zoom;
+    const float zoom = fun::winmgr::main_window->zoom;
 
     unit_coord_text.setFont(fun::resources::get_font(font_name));
     unit_coord_text.setColor(color);
@@ -30,7 +30,7 @@ void fun::debugger::display_unit_coord(const vec2f_t& pos, float character_size,
     unit_coord_text.setPosition((pos + vec2f_t(0, 20.f * zoom)).to_sf());
     // unit_coord_text.setString(sf::to_string(static_cast <sf::Vector2i> (pos)));
 
-    fun::wndmgr::main_window->DrawWorld(unit_coord_text, layer);
+    fun::winmgr::main_window->draw_world(unit_coord_text, layer);
 }
 
 static std::vector <std::string> channels = std::vector <std::string> ();

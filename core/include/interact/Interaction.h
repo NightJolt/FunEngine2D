@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../globals.h"
-#include "../render/WindowManager.h"
+#include "../render/window_manager.h"
 #include "../ecs/ecs.h"
 #include "interactable.h"
 

@@ -3,11 +3,11 @@
 #include "../globals.h"
 
 namespace fun {
-    class server {
+    class server_t {
     public:
 
-        server();
-        ~server();
+        server_t();
+        ~server_t();
 
         bool launch(unsigned short);
         void listen();
