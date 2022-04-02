@@ -80,10 +80,12 @@ bool operator !=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
     return a.x != b.x || a.y != b.y;
 }
 
+#if defined(DEBUG_BUILD)
 template <typename T>
 inline std::ostream& operator <<(std::ostream& out, const fun::vec2_t<T>& vec2) {
     return out << fun::to_string(vec2);
 }
+#endif
 
 template <typename T>
 inline fun::vec2_t<T> operator *(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {

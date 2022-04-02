@@ -2,18 +2,24 @@
 
 static bool unit_coord_enabled;
 static bool debug_log_enabled;
+static bool debug_interaction_enabled;
 
-void fun::debugger::display_debug_menu() {
+void fun::debugger::display() {
     ImGui::Begin("Debug Menu");
         
         ImGui::Text(("fps: " + std::to_string((uint32_t)fun::time::fps())).c_str());
 
         ImGui::NewLine();
     
-        ImGui::Checkbox("unit coord display", &unit_coord_enabled);
         ImGui::Checkbox("debug log display", &debug_log_enabled);
+        ImGui::Checkbox("unit coord display", &unit_coord_enabled);
+        ImGui::Checkbox("interaction menu display", &debug_interaction_enabled);
 
     ImGui::End();
+
+    if (debug_log_enabled) display_debug_log();
+    // if (unit_coord_enabled)
+    if (debug_interaction_enabled) interaction::display_debug_window();
 }
 
 sf::Text unit_coord_text;
@@ -64,7 +70,7 @@ void fun::debugger::push_cmd(const command_t& cmd, const std::string& channel) {
 void fun::debugger::display_debug_log() {
     if (!debug_log_enabled) return;
 
-    ImGui::Begin("Debugger");
+    ImGui::Begin("Debug Log");
         ImGui::BeginTabBar("Channels");
 
         if (ImGui::BeginTabItem("all##tab")) {
@@ -100,7 +106,7 @@ void fun::debugger::display_debug_log() {
 
 static std::mutex log_mutex;
 
-void fun::debugger::log(std::string str) {
+void fun::debugger::print_synced(std::string str) {
     log_mutex.lock();
 
     println(str);

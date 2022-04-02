@@ -90,6 +90,7 @@
 
 #pragma region MACROS
 #define BITS(expr) (sizeof(expr) << 3)
+#define STR(str) (#str)
 #pragma endregion
 
 namespace fun {

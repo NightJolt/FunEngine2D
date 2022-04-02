@@ -9,7 +9,7 @@ void fun::interaction::update() {
     entity_active = ecs::validate_entity(entity_active);
     entity_last = ecs::validate_entity(entity_last);
 
-    if (entity_last != fun::ecs::nullentity) {
+    if (entity_last != ecs::nullentity) {
         auto& interactable = ecs::get_component <interactable_t> (entity_last);
 
         interactable.right_released = false;
@@ -19,12 +19,12 @@ void fun::interaction::update() {
         entity_last = ecs::nullentity;
     }
 
-    if (entity_active != fun::ecs::nullentity) {
+    if (entity_active != ecs::nullentity) {
         auto& interactable = ecs::get_component <interactable_t> (entity_active);
 
         bool is_mouse_interacted = interactable.interaction_fun(mouse_pos);
-        bool is_left_interacted = interactable.left_pressed || interactable.left_hold || interactable.left_released;
-        bool is_right_interacted = interactable.right_pressed || interactable.right_hold || interactable.right_released;
+        bool is_left_interacted = interactable.left_pressed || interactable.left_hold;// || interactable.left_released;
+        bool is_right_interacted = interactable.right_pressed || interactable.right_hold;// || interactable.right_released;
         bool is_interacted = is_mouse_interacted || is_left_interacted || is_right_interacted;
 
         if (is_interacted) {
@@ -92,7 +92,7 @@ void fun::interaction::update() {
         }
     }
 
-    if (entity_active != fun::ecs::nullentity) {
+    if (entity_active != ecs::nullentity) {
         auto& interactable = ecs::get_component <interactable_t> (entity_active);
         
         if (!interactable.left_hold && !interactable.right_hold) {
@@ -118,7 +118,7 @@ void fun::interaction::update() {
 }
 
 fun::ecs::entity_t fun::interaction::entity_at_pos(vec2f_t pos) {
-    fun::ecs::entity_t target = ecs::nullentity;
+    ecs::entity_t target = ecs::nullentity;
     layer_t target_layer = 0;
 
     for (auto& interactable : ecs::iterate_component <interactable_t> ()) {
@@ -138,3 +138,27 @@ fun::ecs::entity_t fun::interaction::entity_at_pos(vec2f_t pos) {
 bool fun::interaction::is_anything_interacted() {
     return ecs::validate_entity(entity_active) != ecs::nullentity;
 }
+
+#if defined(DEBUG_BUILD)
+void fun::interaction::display_debug_window() {
+    ImGui::Begin("Interaction Info");
+
+        if (entity_active == ecs::nullentity) {
+            ImGui::Text("entity active: null");
+        } else {
+            ImGui::Text(("id(" + std::to_string(ecs::get_entity_id(entity_active)) + ") ver(" + std::to_string(ecs::get_entity_version(entity_active)) + ")").c_str());
+
+            ImGui::NewLine();
+
+            auto& interactable = ecs::get_component <interactable_t> (entity_active);
+            
+            ImGui::Text(("right hold " + std::to_string(interactable.right_hold)).c_str());
+            ImGui::Text(("left hold " + std::to_string(interactable.left_hold)).c_str());
+            ImGui::Text(("hover hold " + std::to_string(interactable.hover_hold)).c_str());
+            ImGui::Text(("mouse offset " + fun::to_string(interactable.mouse_offset)).c_str());
+            ImGui::Text(("layer " + std::to_string(interactable.layer)).c_str());
+        }
+
+    ImGui::End();
+}
+#endif
