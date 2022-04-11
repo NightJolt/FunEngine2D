@@ -33,7 +33,7 @@ void fun::interaction::update() {
 
             if (is_mouse_interacted) {
                 if (input::pressed(sf::Mouse::Left)) {
-                    if (interactable.left_hold) {
+                    if (!interactable.left_hold) {
                         interactable.left_pressed = true;
                         interactable.left_hold = true;
                     }
@@ -52,7 +52,7 @@ void fun::interaction::update() {
 
             if (is_mouse_interacted) {
                 if (input::pressed(sf::Mouse::Right)) {
-                    if (interactable.right_hold) {
+                    if (!interactable.right_hold) {
                         interactable.right_pressed = true;
                         interactable.right_hold = true;
                     }
