@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../render/window_manager.h"
 #include "../ecs/ecs.h"
+#include "../transform.h"
 #include "interactable.h"
 
 namespace fun::interaction {

@@ -36,6 +36,8 @@ void fun::interaction::update() {
                     if (!interactable.left_hold) {
                         interactable.left_pressed = true;
                         interactable.left_hold = true;
+
+                        interactable.mouse_left_offset = mouse_pos - fun::ecs::get_component <transform_t> (fun::ecs::get_entity(interactable)).position;
                     }
                 }
             }
@@ -55,6 +57,8 @@ void fun::interaction::update() {
                     if (!interactable.right_hold) {
                         interactable.right_pressed = true;
                         interactable.right_hold = true;
+
+                        interactable.mouse_right_offset = mouse_pos - fun::ecs::get_component <transform_t> (fun::ecs::get_entity(interactable)).position;
                     }
                 }
             }
@@ -155,7 +159,8 @@ void fun::interaction::display_debug_window() {
             ImGui::Text(("right hold " + std::to_string(interactable.right_hold)).c_str());
             ImGui::Text(("left hold " + std::to_string(interactable.left_hold)).c_str());
             ImGui::Text(("hover hold " + std::to_string(interactable.hover_hold)).c_str());
-            ImGui::Text(("mouse offset " + fun::to_string(interactable.mouse_offset)).c_str());
+            ImGui::Text(("mouse left offset " + fun::to_string(interactable.mouse_left_offset)).c_str());
+            ImGui::Text(("mouse right offset " + fun::to_string(interactable.mouse_right_offset)).c_str());
             ImGui::Text(("layer " + std::to_string(interactable.layer)).c_str());
         }
 

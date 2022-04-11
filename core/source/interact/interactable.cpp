@@ -13,7 +13,8 @@ hover_enter(false),
 hover_hold(false),
 hover_exit(false),
 
-mouse_offset(),
+mouse_left_offset(),
+mouse_right_offset(),
 layer(layer),
 interaction_fun(std::move(interaction_fun))
 {}
