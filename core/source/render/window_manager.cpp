@@ -61,12 +61,12 @@ void fun::winmgr::window_t::refresh_window() {
     final_view.setCenter(((vec2f_t)new_resolution * .5f).to_sf());
 }
 
-void fun::winmgr::window_t::draw_world(const sf::Drawable& drawable, fun::layer_t layer) {
-    world_queue.add(drawable, layer);
+void fun::winmgr::window_t::draw_world(const sf::Drawable& drawable, layer_t layer, const sf::RenderStates& render_states) {
+    world_queue.add(drawable, layer, render_states);
 }
 
-void fun::winmgr::window_t::draw_ui(const sf::Drawable& drawable, fun::layer_t layer) {
-    ui_queue.add(drawable, layer);
+void fun::winmgr::window_t::draw_ui(const sf::Drawable& drawable, layer_t layer, const sf::RenderStates& render_states) {
+    ui_queue.add(drawable, layer, render_states);
 }
 
 void fun::winmgr::window_t::display(const sf::Color& bg_color, const sf::Shader* shader) {
@@ -140,13 +140,13 @@ fun::vec2f_t fun::winmgr::window_t::get_mouse_world_position() {
     return screen_to_world(get_mouse_screen_position());
 }
 
-fun::vec2f_t fun::winmgr::window_t::screen_to_world(const fun::vec2i_t& p) {
+fun::vec2f_t fun::winmgr::window_t::screen_to_world(const fun::vec2i_t p) {
     world_buffer.setView(world_view);
 
     return world_buffer.mapPixelToCoords(p.to_sf());
 }
 
-fun::vec2i_t fun::winmgr::window_t::world_to_screen(const fun::vec2f_t& p) {
+fun::vec2i_t fun::winmgr::window_t::world_to_screen(const fun::vec2f_t p) {
     world_buffer.setView(world_view);
 
     return world_buffer.mapCoordsToPixel(p.to_sf());

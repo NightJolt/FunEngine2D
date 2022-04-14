@@ -45,8 +45,8 @@ namespace fun::winmgr {
 
         void refresh_window();
 
-        void draw_world(const sf::Drawable&, int);
-        void draw_ui(const sf::Drawable&, int);
+        void draw_world(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
+        void draw_ui(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
 
         void poll_events();
         void display(const sf::Color&, const sf::Shader* = nullptr);
@@ -54,8 +54,8 @@ namespace fun::winmgr {
         vec2i_t get_mouse_screen_position();
         vec2f_t get_mouse_world_position();
 
-        vec2f_t screen_to_world(const vec2i_t&);
-        vec2i_t world_to_screen(const vec2f_t&);
+        vec2f_t screen_to_world(const vec2i_t);
+        vec2i_t world_to_screen(const vec2f_t);
     };
 
     extern window_t* main_window;
