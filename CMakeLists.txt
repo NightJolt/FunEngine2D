@@ -26,9 +26,9 @@ if (FE2D_ENABLE_CUDA)
 	add_subdirectory(kernel)
 endif()
 
-target_link_libraries(${PROJECT_NAME} fe2d_core)
+# target_link_libraries(${PROJECT_NAME} fe2d_core)
 # target_link_libraries(${PROJECT_NAME} fe2d_experimental)
 
 if (FE2D_ENABLE_CUDA)
-	target_link_libraries(${PROJECT_NAME} fe2d_kernel)
+	# target_link_libraries(${PROJECT_NAME} fe2d_kernel)
 endif()
