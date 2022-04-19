@@ -71,6 +71,4 @@ void fun::server_t::close_connection_with_client(size_t i) {
     
     std::swap(clients[i], clients.back());
     clients.erase(clients.end() - 1);
-
-    println("Disconnected");
 }

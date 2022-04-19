@@ -167,22 +167,22 @@ inline void operator -=(fun::vec2_t<T>& a, const T& b) {
     a = a - b;
 }
 
-// template <typename T>
-// inline bool operator <(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-//     return a.x < b.x && a.y < b.y;
-// }
+template <typename T>
+inline bool operator <(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+    return a.x < b.x && a.y < b.y;
+}
 
-// template <typename T>
-// inline bool operator <=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-//     return a < b || a == b;
-// }
+template <typename T>
+inline bool operator <=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+    return a < b || a == b;
+}
 
-// template <typename T>
-// inline bool operator >(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-//     return b < a;
-// }
+template <typename T>
+inline bool operator >(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+    return b < a;
+}
 
-// template <typename T>
-// inline bool operator >=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-//     return b <= a;
-// }
+template <typename T>
+inline bool operator >=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+    return b <= a;
+}
