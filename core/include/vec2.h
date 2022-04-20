@@ -12,6 +12,8 @@ namespace fun {
 
         template <class U>
         vec2_t(const vec2_t<U>&);
+        
+        // bool operator==(const vec2_t& a) const { return x == a.x && y == a.y; }
 
 #if defined(USES_SFML)
         vec2_t(sf::Vector2<T>);
@@ -71,12 +73,12 @@ b2Vec2 fun::vec2_t<T>::to_b2() const {
 
 
 template <typename T>
-bool operator ==(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+inline bool operator ==(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
     return a.x == b.x && a.y == b.y;
 }
 
 template <typename T>
-bool operator !=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+inline bool operator !=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
     return a.x != b.x || a.y != b.y;
 }
 
@@ -167,22 +169,22 @@ inline void operator -=(fun::vec2_t<T>& a, const T& b) {
     a = a - b;
 }
 
-template <typename T>
-inline bool operator <(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-    return a.x < b.x && a.y < b.y;
-}
+// template <typename T>
+// inline bool operator <(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+//     return a.x < b.x && a.y < b.y;
+// }
 
-template <typename T>
-inline bool operator <=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-    return a < b || a == b;
-}
+// template <typename T>
+// inline bool operator <=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+//     return a < b || a == b;
+// }
 
-template <typename T>
-inline bool operator >(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-    return b < a;
-}
+// template <typename T>
+// inline bool operator >(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+//     return b < a;
+// }
 
-template <typename T>
-inline bool operator >=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-    return b <= a;
-}
+// template <typename T>
+// inline bool operator >=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+//     return b <= a;
+// }
