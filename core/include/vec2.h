@@ -12,8 +12,6 @@ namespace fun {
 
         template <class U>
         vec2_t(const vec2_t<U>&);
-        
-        // bool operator==(const vec2_t& a) const { return x == a.x && y == a.y; }
 
 #if defined(USES_SFML)
         vec2_t(sf::Vector2<T>);

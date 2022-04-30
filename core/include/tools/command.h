@@ -6,6 +6,7 @@ namespace fun {
     class command_t {
     public:
 
+        // command_t(int argc, char** argv);
         explicit command_t(const std::string&);
 
         const std::string& get_command();

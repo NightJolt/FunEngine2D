@@ -1,14 +1,14 @@
 #include "networking/client.h"
 
 fun::client_t::~client_t() {
-    tcp_socket.disconnect();
+    server.disconnect();
 }
 
 bool fun::client_t::connect(const std::string& ip, unsigned short port) {
-    tcp_socket.setBlocking(true); // ?
+    server.setBlocking(true); // ?
 
-    if (tcp_socket.connect(ip, port) == sf::Socket::Done) {
-        tcp_socket.setBlocking(false);
+    if (server.connect(ip, port) == sf::Socket::Done) {
+        server.setBlocking(false);
 
         return true;
     }
@@ -17,14 +17,14 @@ bool fun::client_t::connect(const std::string& ip, unsigned short port) {
 }
 
 void fun::client_t::disconnect() {
-    tcp_socket.disconnect();
+    server.disconnect();
 }
 
-void fun::client_t::receive_data() {
+void fun::client_t::receive() {
     sf::Packet incoming_packet;
 
-    if (tcp_socket.receive(incoming_packet) == sf::Socket::Done) {
-        packets.emplace(incoming_packet);
+    if (server.receive(incoming_packet) == sf::Socket::Done) {
+        packet_storage.enqueue(incoming_packet, &server);
     }
 }
 
@@ -33,20 +33,11 @@ void fun::client_t::send(const std::string& data) {
 
     outgoing_packet << data;
 
-    while (tcp_socket.send(outgoing_packet) == sf::Socket::Partial) {}
+    // while (tcp_socket.send(outgoing_packet) == sf::Socket::Partial) {}
+
+    server.send(outgoing_packet);
 }
 
-std::string fun::client_t::read_next() {
-    sf::Packet& packet = packets.front();
-
-    std::string data;
-    packet >> data;
-
-    packets.pop();
-
-    return data;
-}
-
-int fun::client_t::packets_left() {
-    return packets.size();
+fun::packet_storage_t& fun::client_t::get_packets() {
+    return packet_storage;
 }
