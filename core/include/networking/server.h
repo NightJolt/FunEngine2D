@@ -25,6 +25,8 @@ namespace fun {
 
         packet_storage_t& get_packets();
 
+        uint32_t get_client_count();
+
     private:
 
         void receive_data();

@@ -27,6 +27,16 @@ namespace fun {
     typedef vec2_t <int32_t> vec2i_t;
     typedef vec2_t <uint32_t> vec2u_t;
     typedef vec2_t <float> vec2f_t;
+
+    typedef vec2_t <int8_t> vec2i8_t;
+    typedef vec2_t <int16_t> vec2i16_t;
+    typedef vec2_t <int32_t> vec2i32_t;
+    typedef vec2_t <int64_t> vec2i64_t;
+
+    typedef vec2_t <uint8_t> vec2u8_t;
+    typedef vec2_t <uint16_t> vec2u16_t;
+    typedef vec2_t <uint32_t> vec2u32_t;
+    typedef vec2_t <uint64_t> vec2u64_t;
 }
 
 namespace fun {
@@ -34,6 +44,15 @@ namespace fun {
     std::string to_string(vec2_t<T> vec2) {
         return "vec2(" + std::to_string(vec2.x) + ", " + std::to_string(vec2.y) + ")";
     }
+}
+
+namespace std {
+    template <>
+    struct hash<fun::vec2i_t> {
+        size_t operator()(const fun::vec2i_t& v) const {
+            return (v.x + v.y) * (v.x + v.y + 1) >> 1 + v.x;
+        }
+    };
 }
 
 

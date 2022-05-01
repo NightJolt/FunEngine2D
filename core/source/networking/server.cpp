@@ -67,6 +67,10 @@ fun::packet_storage_t& fun::server_t::get_packets() {
     return packet_storage;
 }
 
+uint32_t fun::server_t::get_client_count() {
+    return clients.size();
+}
+
 
 
 void fun::server_t::receive_data() {

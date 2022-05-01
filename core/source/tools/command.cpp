@@ -89,30 +89,30 @@ m_args(std::vector <std::string> ())
     }
 }
 
-const std::string& fun::command_t::get_command() {
+const std::string& fun::command_t::get_command() const {
     return m_command;
 }
 
-const std::string& fun::command_t::get_arg(uint32_t index) {
+const std::string& fun::command_t::get_arg(uint32_t index) const {
     return m_args[index];
 }
 
-const std::vector <std::string>& fun::command_t::get_args() {
+const std::vector <std::string>& fun::command_t::get_args() const {
     return m_args;
 }
 
-bool fun::command_t::has_flag(const std::string& flag) {
+bool fun::command_t::has_flag(const std::string& flag) const {
     return m_flags.contains(flag);
 }
 
-bool fun::command_t::has_key(const std::string& key) {
+bool fun::command_t::has_key(const std::string& key) const {
     return m_key_vals.contains(key);
 }
 
-const std::string& fun::command_t::get_val(const std::string& key) {
-    return m_key_vals[key][0];
+const std::string& fun::command_t::get_val(const std::string& key) const {
+    return m_key_vals.at(key)[0];
 }
 
-const std::vector <std::string>& fun::command_t::get_vals(const std::string& key) {
-    return m_key_vals[key];
+const std::vector <std::string>& fun::command_t::get_vals(const std::string& key) const {
+    return m_key_vals.at(key);
 }

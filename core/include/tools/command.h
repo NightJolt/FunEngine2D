@@ -9,13 +9,13 @@ namespace fun {
         // command_t(int argc, char** argv);
         explicit command_t(const std::string&);
 
-        const std::string& get_command();
-        const std::string& get_arg(uint32_t);
-        const std::vector <std::string>& get_args();
-        bool has_flag(const std::string&);
-        bool has_key(const std::string&);
-        const std::string& get_val(const std::string&);
-        const std::vector <std::string>& get_vals(const std::string&);
+        const std::string& get_command() const;
+        const std::string& get_arg(uint32_t) const;
+        const std::vector <std::string>& get_args() const;
+        bool has_flag(const std::string&) const;
+        bool has_key(const std::string&) const;
+        const std::string& get_val(const std::string&) const;
+        const std::vector <std::string>& get_vals(const std::string&) const;
 
     private:
 
