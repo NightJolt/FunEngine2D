@@ -41,20 +41,15 @@ namespace fun {
 
 namespace fun {
     template <class T>
-    std::string to_string(vec2_t<T> vec2) {
-        return "vec2(" + std::to_string(vec2.x) + ", " + std::to_string(vec2.y) + ")";
+    std::string to_string(vec2_t <T> v) {
+        return "vec2(" + std::to_string(v.x) + ", " + std::to_string(v.y) + ")";
     }
-}
-
-namespace std {
-    template <>
-    struct hash<fun::vec2i_t> {
-        size_t operator()(const fun::vec2i_t& v) const {
-            return (v.x + v.y) * (v.x + v.y + 1) >> 1 + v.x;
-        }
+    
+    template <class T>
+    size_t hash(const fun::vec2_t <T>& v) {
+        return (v.x + v.y) * (v.x + v.y + 1) >> 1 + v.x;
     };
 }
-
 
 template <class T>
 fun::vec2_t<T>::vec2_t() : x(0), y(0) {}
