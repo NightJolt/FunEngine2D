@@ -26,7 +26,7 @@ bool fun::math::random_chance(float chance) {
 int32_t fun::math::mod(int32_t a, int32_t m) {
     const int32_t r = a % m;
 
-    return r >= 0 ? r : m - r;
+    return r >= 0 ? r : m + r;
 }
 
 float fun::math::map_value(float n, float a, float b, float c, float d) {
