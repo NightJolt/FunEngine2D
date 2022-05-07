@@ -3,10 +3,14 @@
 #include "../globals.h"
 
 namespace fun {
+
+    // cmd arg0 [ar g3] -flag0 -[fl ag1] key0:val0 [ke y1]:[va l1] ...
+
     class command_t {
     public:
 
         // command_t(int argc, char** argv);
+        command_t();
         explicit command_t(const std::string&);
 
         const std::string& get_command() const;
@@ -16,6 +20,11 @@ namespace fun {
         bool has_key(const std::string&) const;
         const std::string& get_val(const std::string&) const;
         const std::vector <std::string>& get_vals(const std::string&) const;
+
+        void set_command(const std::string&);
+        void add_arg(const std::string&);
+
+        std::string build() const; // ! NOT FINISHED
 
     private:
 

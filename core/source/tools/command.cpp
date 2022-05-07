@@ -116,3 +116,19 @@ const std::string& fun::command_t::get_val(const std::string& key) const {
 const std::vector <std::string>& fun::command_t::get_vals(const std::string& key) const {
     return m_key_vals.at(key);
 }
+
+void fun::command_t::set_command(const std::string& cmd) {
+    m_command = cmd;
+}
+
+void fun::command_t::add_arg(const std::string& arg) {
+    m_args.emplace_back(arg);
+}
+
+std::string fun::command_t::build() const {
+    std::string cmd(m_command);
+
+    for (auto& arg : m_args) {
+        cmd += " " + arg;
+    }
+}
