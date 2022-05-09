@@ -1,12 +1,6 @@
 #include "tools/command.h"
 
-fun::command_t::command_t(const std::string& cmd) :
-
-m_key_vals(std::unordered_map <std::string, std::vector <std::string>> ()),
-m_flags(std::unordered_set <std::string> ()),
-m_args(std::vector <std::string> ())
-
-{
+fun::command_t::command_t(const std::string& cmd) {
     bool is_command = true;
     bool is_key = false;
     bool is_val = false;
@@ -129,6 +123,8 @@ std::string fun::command_t::build() const {
     std::string cmd(m_command);
 
     for (auto& arg : m_args) {
-        cmd += " " + arg;
+        cmd += " " + (arg[0] == '-' ? '[' + arg + ']' : arg);
     }
+
+    return cmd;
 }

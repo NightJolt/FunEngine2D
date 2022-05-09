@@ -15,5 +15,7 @@ namespace fun {
         rgb_t(sf::Color);
         sf::Color to_sf() const;
 #endif
+
+        std::string to_str() const;
     };
 }

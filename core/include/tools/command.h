@@ -10,7 +10,7 @@ namespace fun {
     public:
 
         // command_t(int argc, char** argv);
-        command_t();
+        command_t() = default;
         explicit command_t(const std::string&);
 
         const std::string& get_command() const;

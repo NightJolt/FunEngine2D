@@ -10,3 +10,7 @@ sf::Color fun::rgb_t::to_sf() const {
     return sf::Color(r, g, b);
 }
 #endif
+
+std::string fun::rgb_t::to_str() const {
+    return "rgb(" + std::to_string(r) + ", " + std::to_string(g) + ", " + std::to_string(b) + ")";
+}
