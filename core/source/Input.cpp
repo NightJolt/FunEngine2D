@@ -22,12 +22,14 @@ static bool _gamepad_button_hold_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 #endif
 
 void fun::input::listen() {
+    bool is_focused = winmgr::main_window->is_focused;
+
 #if defined(ENABLE_MOUSE)
     for (int button = 0; button < MOUSE_BUTTON_COUNT; button++) {
         _mouse_button_pressed_[button] = false;
         _mouse_button_released_[button] = false;
 
-        if (sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button))) {
+        if (is_focused && sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button))) {
             if (!_mouse_button_hold_[button]) {
                 _mouse_button_pressed_[button] = true;
                 _mouse_button_hold_[button] = true;
@@ -49,7 +51,7 @@ void fun::input::listen() {
         _keyboard_key_pressed_[key] = false;
         _keyboard_key_released_[key] = false;
 
-        if (sf::Keyboard::isKeyPressed(static_cast <sf::Keyboard::Key> (key))) {
+        if (is_focused && sf::Keyboard::isKeyPressed(static_cast <sf::Keyboard::Key> (key))) {
             if (!_keyboard_key_hold_[key]) {
                 _keyboard_key_pressed_[key] = true;
                 _keyboard_key_hold_[key] = true;
@@ -70,7 +72,7 @@ void fun::input::listen() {
             _gamepad_button_released_[button][index] = false;
 
             if (is_gamepad_connected(index)) {
-                if (sf::Joystick::isButtonPressed(index, button)) {
+                if (is_focused && sf::Joystick::isButtonPressed(index, button)) {
                     if (_gamepad_button_hold_[button][index]) {
                         _gamepad_button_pressed_[button][index] = true;
                         _gamepad_button_hold_[button][index] = true;

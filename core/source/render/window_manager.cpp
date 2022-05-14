@@ -13,9 +13,6 @@ fun::winmgr::window_data_t::window_data_t(const std::string& name, const vec2u_t
 void fun::winmgr::init(const window_data_t& data) {
     main_window = new window_t(data);
 
-    main_window->render.setFramerateLimit(60);
-    main_window->render.setVerticalSyncEnabled(false);
-
 #if defined(USES_IMGUI)
     main_window->render.resetGLStates();
 
@@ -41,7 +38,7 @@ void fun::winmgr::close() {
 
 fun::winmgr::window_t::window_t(const window_data_t& data) :
     render(sf::VideoMode(data.size.x, data.size.y), data.name, data.style, data.settings),
-    is_focused(false),
+    is_focused(true),
     zoom(1)
 {
     refresh_window();
@@ -59,6 +56,14 @@ void fun::winmgr::window_t::refresh_window() {
 
     final_view.setSize(((vec2f_t)new_resolution).to_sf());
     final_view.setCenter(((vec2f_t)new_resolution * .5f).to_sf());
+}
+
+void fun::winmgr::window_t::target_framerate(uint32_t fps) {
+    main_window->render.setFramerateLimit(fps);
+}
+
+void fun::winmgr::window_t::set_vsync(bool value) {
+    main_window->render.setVerticalSyncEnabled(value);
 }
 
 void fun::winmgr::window_t::draw_world(const sf::Drawable& drawable, layer_t layer, const sf::RenderStates& render_states) {
@@ -104,14 +109,17 @@ void fun::winmgr::window_t::poll_events() {
                 render.close();
 
                 break;
+
             case sf::Event::GainedFocus:
                 is_focused = true;
 
                 break;
+
             case sf::Event::LostFocus:
                 is_focused = false;
 
                 break;
+
             case sf::Event::MouseWheelMoved:
                 curr_zoom_value = event.mouseWheel.delta > 0 ? .9f : 1.1f;
 
@@ -120,6 +128,7 @@ void fun::winmgr::window_t::poll_events() {
                 world_view.zoom(curr_zoom_value);
 
                 break;
+
             case sf::Event::Resized:
                 refresh_window();
 

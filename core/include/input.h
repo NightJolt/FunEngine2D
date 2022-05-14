@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "_math.h"
 #include "vec2.h"
+#include "render/window_manager.h"
 
 #define ENABLE_MOUSE
 #define ENABLE_KEYBOARD
