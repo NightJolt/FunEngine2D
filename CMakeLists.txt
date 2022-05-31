@@ -2,7 +2,7 @@ option(FE2D_LINUX "compile for linux" OFF)
 option(FE2D_WINDOWS "compile for windows" ON)
 option(FE2D_APPLE "compile for apple" OFF)
 
-option(FE2D_ENABLE_CUDA "enable cuda compilation" ON)
+option(FE2D_ENABLE_CUDA "enable cuda compilation" OFF)
 option(FE2D_ENABLE_CUDA_SEPARABLE_COMPILATION "enable cuda separable compilation" OFF)
 
 set(SFML_ROOT "${CMAKE_CURRENT_LIST_DIR}/libs/sfml")
