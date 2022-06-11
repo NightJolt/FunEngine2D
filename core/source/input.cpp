@@ -29,7 +29,14 @@ void fun::input::listen() {
         _mouse_button_pressed_[button] = false;
         _mouse_button_released_[button] = false;
 
-        if (is_focused && sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button))) {
+        bool is_button_pressed = sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button));
+        bool is_imgui_blocking = false;
+
+#if defined(USES_IMGUI)
+        is_imgui_blocking = ImGui::GetIO().WantCaptureMouse;
+#endif
+
+        if (is_focused && is_button_pressed && !is_imgui_blocking) {
             if (!_mouse_button_hold_[button]) {
                 _mouse_button_pressed_[button] = true;
                 _mouse_button_hold_[button] = true;

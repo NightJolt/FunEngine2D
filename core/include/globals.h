@@ -45,6 +45,7 @@
 #define printbr() std::cout << std::endl
 #endif
 
+#include <fstream>
 #include <cstdint>
 #include <memory>
 #include <cstring>
