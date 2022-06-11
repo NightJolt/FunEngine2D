@@ -55,6 +55,8 @@ void fun::server_t::forward(sf::Packet& packet, sf::TcpSocket* client) {
     // while (client->send(packet) == sf::Socket::Partial) {}
 
     client->send(packet);
+
+    // if (status == sf::Socket::Disconnected)
 }
 
 void fun::server_t::forward_all(sf::Packet& packet, sf::TcpSocket* except) {

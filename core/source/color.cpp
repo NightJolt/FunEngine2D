@@ -1,6 +1,7 @@
 #include "color.h"
 
 const fun::rgb_t fun::rgb_t::black = { 0, 0, 0 };
+const fun::rgb_t fun::rgb_t::white = { 255, 255, 255 };
 
 fun::rgb_t::rgb_t() : r(0), g(0), b(0) {}
 fun::rgb_t::rgb_t(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {}
