@@ -106,6 +106,8 @@ void fun::server_t::check_connection_requests() {
         potential_client->setBlocking(false);
         clients.emplace_back(potential_client);
 
+        debugger::push_msg("connected: " + potential_client->getRemoteAddress().toString() + " " + std::to_string(potential_client->getRemotePort()) + " " + std::to_string(potential_client->getLocalPort()));
+
         potential_client = new sf::TcpSocket;
 
         goto next_client;
@@ -117,4 +119,6 @@ void fun::server_t::close_connection_with_client(uint32_t i) {
     
     std::swap(clients[i], clients.back());
     clients.erase(clients.end() - 1);
+
+    debugger::push_msg("disconnected: " + clients[i]->getRemoteAddress().toString());
 }

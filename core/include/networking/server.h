@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../globals.h"
-
+#include "../tools/debugger.h"
 #include "packet_storage_t.h"
 
 namespace fun {

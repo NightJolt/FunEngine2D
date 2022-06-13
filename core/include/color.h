@@ -14,7 +14,10 @@ namespace fun {
         uint8_t g;
         uint8_t b;
 
-        bool operator ==(const rgb_t&);
+        bool operator ==(const rgb_t&) const;
+
+        static rgb_t from_float(float, float, float);
+        std::array <float, 3> to_float() const;
 
 #if defined(USES_SFML)
         rgb_t(sf::Color);
