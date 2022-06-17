@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../globals.h"
+#include "../pointer.h"
 #include "../tools/debugger.h"
 #include "packet_storage_t.h"
+#include "connection.h"
 
 namespace fun {
     class server_t {
@@ -35,8 +37,8 @@ namespace fun {
 
         sf::TcpListener listener;
 
-        sf::TcpSocket* potential_client;
-        std::vector <sf::TcpSocket*> clients;
+        uptr_t <sf::TcpSocket> potential_client;
+        std::vector <connection_t> clients;
 
         packet_storage_t packet_storage;
     };

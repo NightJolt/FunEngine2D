@@ -15,6 +15,17 @@ namespace fun {
 
         void reset(T*);
 
+        operator T*() const;
+        T* operator ->() const;
+
+        // copy
+        uptr_t(const uptr_t&) = delete;
+        uptr_t<T>& operator =(const uptr_t&) = delete;
+
+        // move
+        uptr_t(uptr_t&&) noexcept;
+        uptr_t<T>& operator =(uptr_t&&) noexcept;
+
     private:
 
         T* m_ptr;
@@ -25,29 +36,66 @@ namespace fun {
 
 
 
+template <class T>
+fun::uptr_t<T>::uptr_t() : m_ptr(nullptr) {}
 
 
-fun::uptr_t<class T>::uptr_t() : m_ptr(nullptr) {}
+template <class T>
+fun::uptr_t<T>::uptr_t(T* ptr) : m_ptr(ptr) {}
 
-fun::uptr_t<class T>::uptr_t(T* ptr) : m_ptr(ptr) {}
 
-fun::uptr_t<class T>::~uptr_t() {
+template <class T>
+fun::uptr_t<T>::~uptr_t() {
     delete m_ptr;
 }
 
-T* fun::uptr_t<class T>::see() {
+
+template <class T>
+T* fun::uptr_t<T>::see() {
     return m_ptr;
 }
 
-T* fun::uptr_t<class T>::take() {
+
+template <class T>
+T* fun::uptr_t<T>::take() {
     T* ptr = m_ptr;
     m_ptr = nullptr;
 
     return ptr;
 }
 
-void fun::uptr_t<class T>::reset(T* ptr) {
+
+template <class T>
+void fun::uptr_t<T>::reset(T* ptr) {
     delete m_ptr;
 
     m_ptr = ptr;
+}
+
+
+template <class T>
+fun::uptr_t<T>::operator T*() const {
+    return m_ptr;
+}
+
+
+template <class T>
+T* fun::uptr_t<T>::operator ->() const {
+    return m_ptr;
+}
+
+
+template <class T>
+fun::uptr_t<T>::uptr_t(uptr_t&& other) noexcept {
+    m_ptr = other.m_ptr;
+    other.m_ptr = nullptr;
+}
+
+
+template <class T>
+fun::uptr_t<T>& fun::uptr_t<T>::operator =(uptr_t&& other) noexcept {
+    m_ptr = other.m_ptr;
+    other.m_ptr = nullptr;
+    
+    return *this;
 }

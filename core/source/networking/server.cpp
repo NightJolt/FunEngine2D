@@ -9,12 +9,6 @@ fun::server_t::server_t() {
 }
 
 fun::server_t::~server_t() {
-    for (auto* client : clients) {
-        delete client;
-    }
-
-    delete potential_client;
-
     terminate();
 }
 
@@ -60,8 +54,8 @@ void fun::server_t::forward(sf::Packet& packet, sf::TcpSocket* client) {
 }
 
 void fun::server_t::forward_all(sf::Packet& packet, sf::TcpSocket* except) {
-    for (auto client : clients) {
-        if (except != client) forward(packet, client);
+    for (auto& client : clients) {
+        if (except != client.socket) forward(packet, client.socket);
     }
 }
 
@@ -79,11 +73,11 @@ void fun::server_t::receive_data() {
     for (int i = 0; i < clients.size(); i++) {
         sf::Packet packet;
 
-        auto status = clients[i]->receive(packet);
+        auto status = clients[i].socket->receive(packet);
 
         switch(status) {
             case sf::Socket::Done:
-                packet_storage.enqueue(packet, clients[i]);
+                packet_storage.enqueue(packet, clients[i].socket);
 
                 break;
                 
@@ -106,7 +100,9 @@ void fun::server_t::check_connection_requests() {
         potential_client->setBlocking(false);
         clients.emplace_back(potential_client);
 
-        debugger::push_msg("connected: " + potential_client->getRemoteAddress().toString() + " " + std::to_string(potential_client->getRemotePort()) + " " + std::to_string(potential_client->getLocalPort()));
+        auto& connection = clients.back();
+
+        debugger::push_msg("connected: " + std::to_string(connection.info.ip) + " " + std::to_string(connection.info.remote_port) + " " + std::to_string(connection.info.local_port));
 
         potential_client = new sf::TcpSocket;
 
@@ -115,10 +111,10 @@ void fun::server_t::check_connection_requests() {
 }
 
 void fun::server_t::close_connection_with_client(uint32_t i) {
-    delete clients[i];
-    
+    auto& connection = clients[i];
+
+    debugger::push_msg("disconnected: " + std::to_string(connection.info.ip) + " " + std::to_string(connection.info.remote_port) + " " + std::to_string(connection.info.local_port));
+
     std::swap(clients[i], clients.back());
     clients.erase(clients.end() - 1);
-
-    debugger::push_msg("disconnected: " + clients[i]->getRemoteAddress().toString());
 }
