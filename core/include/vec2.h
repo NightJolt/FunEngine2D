@@ -142,6 +142,16 @@ inline void operator /=(fun::vec2_t<T>& a, const T& b) {
 }
 
 template <typename T>
+inline fun::vec2_t<T> operator %(const fun::vec2_t<T>& a, const T& b) {
+    return fun::vec2_t <T> (a.x % b, a.y % b);
+}
+
+template <typename T>
+inline void operator %=(fun::vec2_t<T>& a, const T& b) {
+    a = a % b;
+}
+
+template <typename T>
 inline fun::vec2_t<T> operator +(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
     return fun::vec2_t <T> (a.x + b.x, a.y + b.y);
 }
