@@ -4,10 +4,10 @@ include_directories(include)
 include_directories(source)
 
 file (
-        GLOB_RECURSE FE2D_CORE
+    GLOB_RECURSE FE2D_CORE
 
-        include/*.h
-        source/*.cpp
+    include/*.h
+    source/*.cpp
 )
 
 add_library(${LIB_NAME} ${FE2D_CORE})
