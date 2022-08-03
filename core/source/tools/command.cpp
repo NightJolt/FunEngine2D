@@ -1,12 +1,6 @@
 #include "tools/command.h"
 
-fun::command_t::command_t(const std::string& cmd) :
-
-m_key_vals(std::unordered_map <std::string, std::vector <std::string>> ()),
-m_flags(std::unordered_set <std::string> ()),
-m_args(std::vector <std::string> ())
-
-{
+fun::command_t::command_t(const std::string& cmd) {
     bool is_command = true;
     bool is_key = false;
     bool is_val = false;
@@ -89,30 +83,48 @@ m_args(std::vector <std::string> ())
     }
 }
 
-const std::string& fun::command_t::get_command() {
+const std::string& fun::command_t::get_command() const {
     return m_command;
 }
 
-const std::string& fun::command_t::get_arg(uint32_t index) {
+const std::string& fun::command_t::get_arg(uint32_t index) const {
     return m_args[index];
 }
 
-const std::vector <std::string>& fun::command_t::get_args() {
+const std::vector <std::string>& fun::command_t::get_args() const {
     return m_args;
 }
 
-bool fun::command_t::has_flag(const std::string& flag) {
+bool fun::command_t::has_flag(const std::string& flag) const {
     return m_flags.contains(flag);
 }
 
-bool fun::command_t::has_key(const std::string& key) {
+bool fun::command_t::has_key(const std::string& key) const {
     return m_key_vals.contains(key);
 }
 
-const std::string& fun::command_t::get_val(const std::string& key) {
-    return m_key_vals[key][0];
+const std::string& fun::command_t::get_val(const std::string& key) const {
+    return m_key_vals.at(key)[0];
 }
 
-const std::vector <std::string>& fun::command_t::get_vals(const std::string& key) {
-    return m_key_vals[key];
+const std::vector <std::string>& fun::command_t::get_vals(const std::string& key) const {
+    return m_key_vals.at(key);
+}
+
+void fun::command_t::set_command(const std::string& cmd) {
+    m_command = cmd;
+}
+
+void fun::command_t::add_arg(const std::string& arg) {
+    m_args.emplace_back(arg);
+}
+
+std::string fun::command_t::build() const {
+    std::string cmd(m_command);
+
+    for (auto& arg : m_args) {
+        cmd += " " + (arg[0] == '-' ? '[' + arg + ']' : arg);
+    }
+
+    return cmd;
 }

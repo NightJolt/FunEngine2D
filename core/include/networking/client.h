@@ -2,26 +2,31 @@
 
 #include "../globals.h"
 
+#include "packet_storage_t.h"
+
 namespace fun {
     class client_t {
     public:
 
+        client_t();
         ~client_t();
 
         bool connect(const std::string&, unsigned short);
         void disconnect();
 
-        void receive_data();
-
         void send(const std::string&);
+        void receive();
 
-        std::string read_next();
-        int packets_left();
+        packet_storage_t& get_packets();
+
+        bool check_connection();
 
     private:
 
-        std::queue <sf::Packet> packets;
+        sf::TcpSocket server;
 
-        sf::TcpSocket tcp_socket;
+        packet_storage_t packet_storage;
+
+        bool is_connected;
     };
 }

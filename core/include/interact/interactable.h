@@ -20,7 +20,8 @@ namespace fun {
         bool hover_hold;
         bool hover_exit;
 
-        vec2f_t mouse_offset;
+        vec2f_t mouse_left_offset;
+        vec2f_t mouse_right_offset;
 
         layer_t layer;
 

@@ -1,9 +1,7 @@
 #pragma once
 
-namespace fun {
-    class CudaTesting {
-    public:
+#include <cstdint>
 
-        static int AddTwoNumbers(int, int);
-    };
+namespace fun::cudatest {
+    int add_two_numbers(int32_t, int32_t);
 }

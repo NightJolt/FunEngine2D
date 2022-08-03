@@ -1,10 +1,19 @@
 #include "cudatest.cuh"
 
-__global__ void cadd(int* a, int* b, int* c) {
+// #include <curand.h>
+// #include <curand_kernel.h>
+
+// #include <cuda_runtime.h>
+// #include <device_launch_parameters.h>
+#include <windows.h>
+// #include <WinGDI.h>
+#include <cuda_gl_interop.h>
+
+__global__ void cadd(int32_t* a, int32_t* b, int32_t* c) {
     *c = *a + *b;
 }
 
-int fun::CudaTesting::AddTwoNumbers(int host_a, int host_b) {
+int fun::cudatest::add_two_numbers(int32_t host_a, int32_t host_b) {
     int host_c;
 
     int* device_a;
@@ -21,6 +30,10 @@ int fun::CudaTesting::AddTwoNumbers(int host_a, int host_b) {
     cadd <<<1, 1>>> (device_a, device_b, device_c);
 
     cudaMemcpy(&host_c, device_c, sizeof(int), cudaMemcpyDeviceToHost);
+
+    cudaFree(device_a);
+    cudaFree(device_b);
+    cudaFree(device_c);
 
     return host_c;
 }

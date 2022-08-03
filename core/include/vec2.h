@@ -27,15 +27,29 @@ namespace fun {
     typedef vec2_t <int32_t> vec2i_t;
     typedef vec2_t <uint32_t> vec2u_t;
     typedef vec2_t <float> vec2f_t;
+
+    typedef vec2_t <int8_t> vec2i8_t;
+    typedef vec2_t <int16_t> vec2i16_t;
+    typedef vec2_t <int32_t> vec2i32_t;
+    typedef vec2_t <int64_t> vec2i64_t;
+
+    typedef vec2_t <uint8_t> vec2u8_t;
+    typedef vec2_t <uint16_t> vec2u16_t;
+    typedef vec2_t <uint32_t> vec2u32_t;
+    typedef vec2_t <uint64_t> vec2u64_t;
 }
 
 namespace fun {
     template <class T>
-    std::string to_string(vec2_t<T> vec2) {
-        return "vec2(" + std::to_string(vec2.x) + ", " + std::to_string(vec2.y) + ")";
+    std::string to_string(vec2_t <T> v) {
+        return "vec2(" + std::to_string(v.x) + ", " + std::to_string(v.y) + ")";
     }
+    
+    template <class T>
+    size_t hash(vec2_t <T> v) {
+        return (v.x + v.y) * (v.x + v.y + 1) >> 1 + v.x;
+    };
 }
-
 
 template <class T>
 fun::vec2_t<T>::vec2_t() : x(0), y(0) {}
@@ -71,19 +85,21 @@ b2Vec2 fun::vec2_t<T>::to_b2() const {
 
 
 template <typename T>
-bool operator ==(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+inline bool operator ==(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
     return a.x == b.x && a.y == b.y;
 }
 
 template <typename T>
-bool operator !=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
+inline bool operator !=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
     return a.x != b.x || a.y != b.y;
 }
 
+#if defined(DEBUG_BUILD)
 template <typename T>
 inline std::ostream& operator <<(std::ostream& out, const fun::vec2_t<T>& vec2) {
     return out << fun::to_string(vec2);
 }
+#endif
 
 template <typename T>
 inline fun::vec2_t<T> operator *(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
@@ -107,7 +123,7 @@ inline void operator *=(fun::vec2_t<T>& a, const T& b) {
 
 template <typename T>
 inline fun::vec2_t<T> operator /(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-    return vec2_t <T> (a.x / b.x, a.y / b.y);
+    return fun::vec2_t <T> (a.x / b.x, a.y / b.y);
 }
 
 template <typename T>
@@ -123,6 +139,16 @@ inline fun::vec2_t<T> operator /(const fun::vec2_t<T>& a, const T& b) {
 template <typename T>
 inline void operator /=(fun::vec2_t<T>& a, const T& b) {
     a = a / b;
+}
+
+template <typename T>
+inline fun::vec2_t<T> operator %(const fun::vec2_t<T>& a, const T& b) {
+    return fun::vec2_t <T> (a.x % b, a.y % b);
+}
+
+template <typename T>
+inline void operator %=(fun::vec2_t<T>& a, const T& b) {
+    a = a % b;
 }
 
 template <typename T>

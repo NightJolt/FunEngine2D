@@ -7,12 +7,13 @@ namespace fun::ecs {
     typedef uint32_t entity_id_t;
     typedef uint32_t entity_ver_t;
     typedef uint8_t component_id_t;
+    typedef uint32_t addr_t;
 
     typedef std::vector <entity_t> dense_t;
-    typedef std::vector <uint32_t> sparse_t;
+    typedef std::vector <addr_t> sparse_t;
 
-    constexpr entity_t nullentity = ~(uint64_t)0;
-    constexpr uint32_t nulladdr = ~(uint32_t)0;
+    constexpr entity_t nullentity = ~(entity_t)0;
+    constexpr addr_t nulladdr = ~(addr_t)0;
     
     extern std::vector <fun::ecs::entity_t> entities;
 
@@ -92,7 +93,7 @@ namespace fun::ecs {
     bool has_component(entity_t, component_id_t);
 
     template <class T, class... Args>
-    void add_component(entity_t, Args&&...);
+    T& add_component(entity_t, Args&&...);
 
     template <class T>
     void remove_component(entity_t);
@@ -182,7 +183,7 @@ auto fun::ecs::has_component(entity_t entity) -> bool {
 }
 
 template <class T, class... Args>
-auto fun::ecs::add_component(entity_t entity, Args&&... args) -> void {
+auto fun::ecs::add_component(entity_t entity, Args&&... args) -> T& {
     const component_id_t component_id = get_component_id <T> ();
 
     if (sizes.size() <= component_id) {
@@ -245,6 +246,8 @@ auto fun::ecs::add_component(entity_t entity, Args&&... args) -> void {
             } 
         }
     }
+
+    return component_arr[size];
 }
 
 template <class T>
@@ -257,8 +260,6 @@ auto fun::ecs::remove_component(entity_t entity) -> void {
     auto& sparse = sparses[component_id];
     auto entity_ind = sparse[entity_id];
 
-    if (entity_ind == size) goto skip_index_swap;
-
     auto& dense = denses[component_id];
     auto& component_arr = std::any_cast <std::vector <T>&> (components[component_id]);
 
@@ -267,16 +268,14 @@ auto fun::ecs::remove_component(entity_t entity) -> void {
     entity_t other = dense[size];
     entity_id_t other_id = get_entity_id(other);
     entity_ver_t other_v = get_entity_version(other);
-    auto other_ind = sparse[other_id];
+    addr_t other_ind = sparse[other_id];
 
-    {
+    if (entity_ind != size) {
         std::swap(dense[entity_ind], dense[other_ind]);
 
         sparse[entity_id] = nulladdr;
         sparse[other_id] = entity_ind;
     }
-
-    skip_index_swap:
 
     {
         if (ondestroy_callbacks.size() > component_id) {

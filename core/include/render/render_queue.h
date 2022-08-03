@@ -4,16 +4,17 @@
 
 namespace fun {
     struct render_item_t {
-        render_item_t(const sf::Drawable&, uint32_t);
+        render_item_t(const sf::Drawable&, layer_t, sf::RenderStates);
 
         const sf::Drawable* drawable;
-        int layer;
+        layer_t layer;
+        sf::RenderStates render_states;
     };
 
     class render_queue_t : public sf::Drawable {
     public:
 
-        void add(const sf::Drawable&, uint32_t);
+        void add(const sf::Drawable&, layer_t, const sf::RenderStates&);
         void clear();
 
     private:
