@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../../globals.h"
 
 namespace fun {
@@ -8,6 +10,8 @@ namespace fun {
 
         std::vector <sf::Vertex>& get_vertices();
         void set_primitive_type(sf::PrimitiveType);
+
+        void batch(primitive_t& primitive);
 
     private:
 

@@ -19,7 +19,8 @@ namespace fun {
     struct transform_t {
         vec2f_t position;
         float rotation;
+        vec2f_t scale;
 
-        explicit transform_t(vec2f_t = { 0, 0 }, float = 0);
+        explicit transform_t(vec2f_t = { 0, 0 }, float = 0, vec2f_t = { 1, 1 });
     };
 }

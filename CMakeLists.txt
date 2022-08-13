@@ -5,13 +5,24 @@ option(FE2D_APPLE "compile for apple" OFF)
 option(FE2D_ENABLE_CUDA "enable cuda compilation" OFF)
 option(FE2D_ENABLE_CUDA_SEPARABLE_COMPILATION "enable cuda separable compilation" OFF)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(FE2D_DEBUG TRUE)
+else()
+	set(FE2D_DEBUG FALSE)
+endif()
+
+
 set(SFML_ROOT "${CMAKE_CURRENT_LIST_DIR}/libs/sfml")
 set(CMAKE_MODULE_PATH "${SFML_ROOT}/lib/cmake")
 set(SFML_STATIC_LIBRARIES TRUE)
 find_package(SFML COMPONENTS system window graphics network audio REQUIRED)
 set(SFML_LIBS sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
 
-set(ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/lib/cmake/ImGui-SFML")
+if (FE2D_DEBUG)
+	set(ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/debug/lib/cmake/ImGui-SFML")
+else()
+	set(ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/release/lib/cmake/ImGui-SFML")
+endif()
 find_package(ImGui-SFML REQUIRED)
 set(IMGUI_SFML_LIBS ImGui-SFML::ImGui-SFML)
 

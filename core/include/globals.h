@@ -101,6 +101,9 @@ namespace fun {
     typedef uint8_t mask8_t;
 
     typedef int32_t layer_t;
+
+    typedef std::array <uint32_t, 4> uint32_t4;
+    typedef std::array <float, 4> float4;
 }
 
 namespace fun {
