@@ -23,3 +23,7 @@ sf::Texture* fun::texture_t::get_texture() const {
 fun::uint32_t4 fun::texture_t::get_subtexture(uint32_t index) const {
     return { (index % m_grid_size.x) * m_cell_size.x, (index / m_grid_size.x) * m_cell_size.y, m_cell_size.x, m_cell_size.y };
 }
+
+fun::uint32_t4 fun::texture_t::get_subtexture(vec2u_t pos) const {
+    return { pos.x * m_cell_size.x, pos.y * m_cell_size.y, m_cell_size.x, m_cell_size.y };
+}

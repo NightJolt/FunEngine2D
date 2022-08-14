@@ -28,6 +28,15 @@ void fun::sprite_t::select_subtexture(uint32_t index) {
     m_update_texture = true;
 }
 
+void fun::sprite_t::select_subtexture(vec2u_t pos) {
+    auto res = m_texture.get_subtexture(pos);
+
+    m_texture_pos = { res[0], res[1] };
+    m_texture_size = { res[2], res[3] };
+
+    m_update_texture = true;
+}
+
 void fun::sprite_t::select_subtexture(vec2u_t pos, vec2u_t size) {
     m_texture_pos = pos;
     m_texture_size = size;
@@ -89,6 +98,26 @@ void fun::sprite_t::set_color(rgba_t color) {
     m_update_color = true;
 }
 
+void fun::sprite_t::update() const {
+    if (m_update_body) {
+        update_body();
+
+        m_update_body = false;
+    }
+
+    if (m_update_texture) {
+        update_texture();
+
+        m_update_texture = false;
+    }
+
+    if (m_update_color) {
+        update_color();
+
+        m_update_color = false;
+    }
+}
+
 
 
 
@@ -136,23 +165,7 @@ void fun::sprite_t::update_color() const {
 
 
 void fun::sprite_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
-    if (m_update_body) {
-        update_body();
-
-        m_update_body = false;
-    }
-
-    if (m_update_texture) {
-        update_texture();
-
-        m_update_texture = false;
-    }
-
-    if (m_update_color) {
-        update_color();
-
-        m_update_color = false;
-    }
+    update();
 
     render_states.texture = m_texture.get_texture();
     render_states.shader = m_shader;

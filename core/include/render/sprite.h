@@ -18,7 +18,8 @@ namespace fun {
         void bind_shader(sf::Shader*);
 
         void select_subtexture(uint32_t);
-        void select_subtexture(vec2u_t, vec2u_t); // ! probably not working
+        void select_subtexture(vec2u_t);
+        void select_subtexture(vec2u_t, vec2u_t);
 
         void set_position(vec2f_t);
         void move(vec2f_t);
@@ -31,7 +32,9 @@ namespace fun {
         void scale(vec2f_t);
 
         void set_origin(vec2f_t);
-        void set_color(rgba_t); // ! not working
+        void set_color(rgba_t);
+
+        void update() const;
 
     private:
         void update_body() const;
