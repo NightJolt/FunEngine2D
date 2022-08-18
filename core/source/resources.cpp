@@ -43,7 +43,7 @@ const sf::Font& fun::resources::get_font(const std::string& key) {
 }
 
 void fun::resources::load_shader(const std::string& key, const std::string& file) {
-    assert(!shaders.contains(key));
+    if (shaders.contains(key)) delete shaders[key];
 
     shaders.emplace(key, new sf::Shader());
 

@@ -56,13 +56,13 @@ namespace fun::ecs {
     // std::vector <Entity>& get_entities();
 
     template <class T>
-    struct ComponentIterator {
+    struct component_iterator_t {
         T* begin_p;
         T* end_p;
         T* ptr;
 
-        ComponentIterator() : begin_p(nullptr), end_p(nullptr) {}
-        ComponentIterator(std::vector <T>& v, size_t n) : begin_p(n ? &v[0] : nullptr), end_p(n ? &v[n - 1] + 1 : nullptr), ptr(begin_p) {}
+        component_iterator_t() : begin_p(nullptr), end_p(nullptr) {}
+        component_iterator_t(std::vector <T>& v, size_t n) : begin_p(n ? &v[0] : nullptr), end_p(n ? &v[n - 1] + 1 : nullptr), ptr(begin_p) {}
 
         T* begin() { return begin_p; }
         const T* begin() const { return begin_p; }
@@ -80,7 +80,7 @@ namespace fun::ecs {
     bool component_exist();
 
     template <class T>
-    ComponentIterator <T> iterate_component();
+    component_iterator_t <T> iterate_component();
 
     template <class T>
     std::vector <T>& get_component_array();
@@ -142,13 +142,13 @@ auto fun::ecs::component_exist() -> bool {
 }
 
 template <class T>
-auto fun::ecs::iterate_component() -> ComponentIterator <T> {
+auto fun::ecs::iterate_component() -> component_iterator_t <T> {
     const component_id_t component_id = get_component_id <T> ();
 
     if (component_exist <T> ())
-        return ComponentIterator <T> (std::any_cast <std::vector <T>&> (components[component_id]), sizes[component_id]);
+        return component_iterator_t <T> (std::any_cast <std::vector <T>&> (components[component_id]), sizes[component_id]);
     else
-        return ComponentIterator <T> ();
+        return component_iterator_t <T> ();
 }
 
 template <class T>
