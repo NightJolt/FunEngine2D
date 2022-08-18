@@ -34,6 +34,8 @@ namespace fun {
         void set_origin(vec2f_t);
         void set_color(rgba_t);
 
+        void batch(sprite_t*, sprite_t*);
+
         void update() const;
 
     private:

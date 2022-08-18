@@ -98,6 +98,18 @@ void fun::sprite_t::set_color(rgba_t color) {
     m_update_color = true;
 }
 
+void fun::sprite_t::batch(sprite_t* begin, sprite_t* end) {
+    auto& vertices = m_primitive.get_vertices();
+    
+    vertices.reserve(vertices.size() + (end - begin) * 4);
+
+    for (sprite_t* sprite = begin; sprite != end; ++sprite) {
+        sprite->update();
+
+        vertices.insert(m_primitive.get_vertices().end(), sprite->m_primitive.get_vertices().begin(), sprite->m_primitive.get_vertices().end());
+    }
+}
+
 void fun::sprite_t::update() const {
     if (m_update_body) {
         update_body();
