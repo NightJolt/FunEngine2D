@@ -45,6 +45,7 @@
 #define printbr() std::cout << std::endl
 #endif
 
+// todo: filter out unused includes
 #include <fstream>
 #include <cstdint>
 #include <memory>
@@ -65,6 +66,7 @@
 #include <functional>
 #include <algorithm>
 #include <tuple>
+#include <filesystem>
 
 #include <any>
 #include <variant>
@@ -73,6 +75,7 @@
 #include <thread>
 #include <future>
 #include <mutex>
+#include <shared_mutex>
 #include <condition_variable>
 #include <semaphore>
 #pragma endregion
@@ -102,8 +105,12 @@ namespace fun {
 
     typedef int32_t layer_t;
 
+    typedef void async;
+
     typedef std::array <uint32_t, 4> uint32_t4;
     typedef std::array <float, 4> float4;
+
+    typedef std::string str_t; // to be replaced by own implementation
 }
 
 namespace fun {

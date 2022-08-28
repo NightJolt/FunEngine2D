@@ -6,10 +6,9 @@
 #include "packet_storage_t.h"
 #include "connection.h"
 
-namespace fun {
+namespace fun::network {
     class server_t {
     public:
-
         server_t();
         ~server_t();
 
@@ -25,12 +24,11 @@ namespace fun {
         void forward(sf::Packet&, sf::TcpSocket*);
         void forward_all(sf::Packet&, sf::TcpSocket* = nullptr);
 
-        packet_storage_t& get_packets();
+        threadsafe_packet_storage_t& get_packet_storage();
 
         uint32_t get_client_count();
 
     private:
-
         void receive_data();
         void check_connection_requests();
         void close_connection_with_client(uint32_t);
@@ -40,6 +38,6 @@ namespace fun {
         uptr_t <sf::TcpSocket> potential_client;
         std::vector <connection_t> clients;
 
-        packet_storage_t packet_storage;
+        threadsafe_packet_storage_t packet_storage;
     };
 }

@@ -4,7 +4,7 @@
 
 #include "packet_storage_t.h"
 
-namespace fun {
+namespace fun::network {
     class client_t {
     public:
 

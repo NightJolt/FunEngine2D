@@ -49,6 +49,34 @@ namespace fun {
     size_t hash(vec2_t <T> v) {
         return (v.x + v.y) * (v.x + v.y + 1) >> 1 + v.x;
     };
+
+    template <class Key>
+    struct vec2_hasher_t {
+        size_t operator()(vec2_t <Key> v) const {
+            return hash(v);
+        }
+    };
+
+    template <class Key>
+    struct vec2_comparer_t {
+        bool operator()(vec2_t <Key> a, vec2_t <Key> b) const {
+            return a.x == b.x && a.y == b.y;
+        }
+    };
+
+    // template <class Key>
+    // using vec2_hasher_lambda = decltype([](const vec2_t <Key>& v) -> size_t const { return hash(v); });
+
+    // template <class Key>
+    // using vec2_comparer_lambda = decltype([](const vec2_t <Key>&a, const vec2_t <Key>& b) -> bool const { return a == b; });
+
+    template <class Key, class Value>
+    using unordered_map_vec2_t = std::unordered_map <
+            vec2_t <Key>,
+            Value,
+            vec2_hasher_t <Key>,//vec2_hasher_lambda <Key>,
+            vec2_comparer_t <Key>//vec2_comparer_lambda <Key>
+        >;
 }
 
 template <class T>

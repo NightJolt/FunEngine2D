@@ -1,12 +1,12 @@
 #include "networking/client.h"
 
-fun::client_t::client_t() : is_connected(false) {}
+fun::network::client_t::client_t() : is_connected(false) {}
 
-fun::client_t::~client_t() {
+fun::network::client_t::~client_t() {
     disconnect();
 }
 
-bool fun::client_t::connect(const std::string& ip, unsigned short port) {
+bool fun::network::client_t::connect(const std::string& ip, unsigned short port) {
     if (check_connection()) disconnect();
 
     server.setBlocking(true); // ?
@@ -22,13 +22,13 @@ bool fun::client_t::connect(const std::string& ip, unsigned short port) {
     return false;
 }
 
-void fun::client_t::disconnect() {
+void fun::network::client_t::disconnect() {
     server.disconnect();
 
     is_connected = false;
 }
 
-void fun::client_t::receive() {
+void fun::network::client_t::receive() {
     if (!check_connection()) return;
 
     sf::Packet incoming_packet;
@@ -48,7 +48,7 @@ void fun::client_t::receive() {
     }
 }
 
-void fun::client_t::send(const std::string& data) {
+void fun::network::client_t::send(const std::string& data) {
     if (!check_connection()) return;
 
     sf::Packet outgoing_packet;
@@ -60,10 +60,10 @@ void fun::client_t::send(const std::string& data) {
     server.send(outgoing_packet);
 }
 
-fun::packet_storage_t& fun::client_t::get_packets() {
+fun::network::packet_storage_t& fun::network::client_t::get_packets() {
     return packet_storage;
 }
 
-bool fun::client_t::check_connection() {
+bool fun::network::client_t::check_connection() {
     return is_connected;
 }

@@ -4,7 +4,7 @@
 #include "../vec2.h"
 #include "../pointer.h"
 
-namespace fun {
+namespace fun::network {
     struct connection_info_t {
         connection_info_t();
         explicit connection_info_t(sf::TcpSocket*);

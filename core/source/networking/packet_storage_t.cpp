@@ -1,10 +1,12 @@
 #include "networking/packet_storage_t.h"
 
-void fun::packet_storage_t::enqueue(const sf::Packet& packet, sf::TcpSocket* sender) {
+
+
+void fun::network::packet_storage_t::enqueue(const sf::Packet& packet, sf::TcpSocket* sender) {
     m_packets.emplace(packet, sender);
 }
 
-fun::packet_storage_t::packet_t fun::packet_storage_t::read() {
+fun::network::packet_t fun::network::packet_storage_t::read() {
     auto& item = m_packets.front();
     packet_t packet;
 
@@ -16,6 +18,30 @@ fun::packet_storage_t::packet_t fun::packet_storage_t::read() {
     return packet;
 }
 
-bool fun::packet_storage_t::empty() {
+bool fun::network::packet_storage_t::empty() {
     return m_packets.empty();
+}
+
+
+
+void fun::network::threadsafe_packet_storage_t::enqueue(const sf::Packet& packet, sf::TcpSocket* sender) {
+    std::lock_guard <std::mutex> lock(m_storage_key);
+
+    m_packet_storage.enqueue(packet, sender);
+
+    m_storage_cond.notify_one();
+}
+
+fun::network::packet_t fun::network::threadsafe_packet_storage_t::read() {
+    std::unique_lock <std::mutex> lock(m_storage_key);
+    
+    m_storage_cond.wait(lock, [this] { return !m_packet_storage.empty(); });
+
+    return m_packet_storage.read();
+}
+
+bool fun::network::threadsafe_packet_storage_t::empty() {
+    std::lock_guard <std::mutex> lock(m_storage_key);
+
+    return m_packet_storage.empty();
 }
