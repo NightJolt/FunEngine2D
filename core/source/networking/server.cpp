@@ -102,8 +102,6 @@ void fun::network::server_t::check_connection_requests() {
 
         auto& connection = clients.back();
 
-        debugger::push_msg("connected: " + std::to_string(connection.info.ip) + " " + std::to_string(connection.info.remote_port) + " " + std::to_string(connection.info.local_port), "server");
-
         potential_client = new sf::TcpSocket;
 
         goto next_client;
@@ -112,8 +110,6 @@ void fun::network::server_t::check_connection_requests() {
 
 void fun::network::server_t::close_connection_with_client(uint32_t i) {
     auto& connection = clients[i];
-
-    debugger::push_msg("disconnected: " + std::to_string(connection.info.ip) + " " + std::to_string(connection.info.remote_port) + " " + std::to_string(connection.info.local_port), "server");
 
     std::swap(clients[i], clients.back());
     clients.erase(clients.end() - 1);

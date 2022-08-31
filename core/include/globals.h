@@ -105,10 +105,15 @@ namespace fun {
 
     typedef int32_t layer_t;
 
+    typedef float float32_t;
+    typedef double float64_t;
+
+    typedef char* ptr_t;
+
     typedef void async;
 
     typedef std::array <uint32_t, 4> uint32_t4;
-    typedef std::array <float, 4> float4;
+    typedef std::array <float32_t, 4> float32_t4;
 
     typedef std::string str_t; // to be replaced by own implementation
 }
