@@ -38,6 +38,7 @@ void fun::winmgr::close() {
 
 fun::winmgr::window_t::window_t(const window_data_t& data) :
     render(sf::VideoMode(data.size.x, data.size.y), data.name, data.style, data.settings),
+    world_view_size(data.size),
     is_focused(true),
     zoom(1)
 {
@@ -50,7 +51,7 @@ void fun::winmgr::window_t::refresh_window() {
     const vec2u_t& new_resolution = render.getSize();
 
     world_buffer.create(new_resolution.x, new_resolution.y, render.getSettings());
-    world_view.setSize(((vec2f_t)new_resolution).to_sf());
+    world_view.setSize(world_view_size.x, world_view_size.y);
     world_view.zoom(zoom);
     world_render.setTextureRect(sf::IntRect(vec2i_t(0, 0).to_sf(), ((vec2i_t)new_resolution).to_sf()));
 
@@ -64,6 +65,16 @@ void fun::winmgr::window_t::target_framerate(uint32_t fps) {
 
 void fun::winmgr::window_t::set_vsync(bool value) {
     main_window->render.setVerticalSyncEnabled(value);
+}
+
+void fun::winmgr::window_t::set_world_view(vec2f_t center, float height) {
+    zoom *= 1.f;
+    world_view.zoom(1.f);
+
+    world_view_size = { height * render.getSize().x / render.getSize().y, height };
+
+    world_view.setCenter(center.to_sf());
+    world_view.setSize(world_view_size.x, world_view_size.y);
 }
 
 void fun::winmgr::window_t::draw_world(const sf::Drawable& drawable, layer_t layer, const sf::RenderStates& render_states) {

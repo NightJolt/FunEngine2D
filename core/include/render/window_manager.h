@@ -25,6 +25,8 @@ namespace fun::winmgr {
 
         // render views
         sf::View world_view;
+        vec2f_t world_view_size;
+
         sf::View ui_view;
         sf::View final_view;
 
@@ -48,7 +50,7 @@ namespace fun::winmgr {
         void target_framerate(uint32_t);
         void set_vsync(bool);
 
-        void set_world_view(vec2f_t);
+        void set_world_view(vec2f_t, float);
         // void set_zoom(float);
         // void set_zoom_limits(float, float);
 

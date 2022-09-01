@@ -9,6 +9,9 @@ namespace fun {
     struct rgb_t {
         static const rgb_t black;
         static const rgb_t white;
+        static const rgb_t red;
+        static const rgb_t green;
+        static const rgb_t blue;
 
         rgb_t();
         rgb_t(uint8_t, uint8_t, uint8_t);

@@ -65,10 +65,10 @@ namespace fun {
     };
 
     // template <class Key>
-    // using vec2_hasher_lambda = decltype([](const vec2_t <Key>& v) -> size_t const { return hash(v); });
+    // using vec2_hasher_t = decltype([](const vec2_t <Key>& v) -> size_t const { return hash(v); });
 
     // template <class Key>
-    // using vec2_comparer_lambda = decltype([](const vec2_t <Key>&a, const vec2_t <Key>& b) -> bool const { return a == b; });
+    // using vec2_comparer_t = decltype([](const vec2_t <Key>&a, const vec2_t <Key>& b) -> bool const { return a == b; });
 
     template <class Key, class Value>
     using unordered_map_vec2_t = std::unordered_map <

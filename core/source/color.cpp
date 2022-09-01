@@ -3,6 +3,9 @@
 #pragma region rgb_t
 const fun::rgb_t fun::rgb_t::black = { 0, 0, 0 };
 const fun::rgb_t fun::rgb_t::white = { 255, 255, 255 };
+const fun::rgb_t fun::rgb_t::red = { 255, 0, 0 };
+const fun::rgb_t fun::rgb_t::green = { 0, 255, 0 };
+const fun::rgb_t fun::rgb_t::blue = { 0, 0, 255 };
 
 fun::rgb_t::rgb_t() : r(0), g(0), b(0) {}
 fun::rgb_t::rgb_t(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {}
