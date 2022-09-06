@@ -23,10 +23,14 @@ namespace fun {
 
         void set_command(const std::string&);
         void add_arg(const std::string&);
+        void add_flag(const std::string&);
+        void add_key_val(const std::string&, const std::string&);
 
         std::string build() const; // ! NOT FINISHED
 
     private:
+
+        std::string format(const std::string&) const;
 
         std::unordered_map <std::string, std::vector <std::string>> m_key_vals;
         std::unordered_set <std::string> m_flags;

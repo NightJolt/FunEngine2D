@@ -115,15 +115,57 @@ void fun::command_t::set_command(const std::string& cmd) {
     m_command = cmd;
 }
 
+std::string fun::command_t::format(const std::string& arg) const {
+    std::string arg_cpy;
+    arg_cpy.reserve(arg.size() * 1.2f);
+
+    bool apply_guard = false;
+
+    for (int i = 0; i < arg.size(); i++) {
+        if (arg[i] == ' ' || arg[i] == '-' || arg[i] == '+') apply_guard = true;
+        if (arg[i] == '[' || arg[i] == ']' || arg[i] == '$') arg_cpy += '$';
+
+        arg_cpy += arg[i];
+    }
+
+    if (apply_guard) {
+        arg_cpy =  '[' + arg_cpy + ']';
+    }
+
+    return arg_cpy;
+}
+
 void fun::command_t::add_arg(const std::string& arg) {
     m_args.emplace_back(arg);
+}
+
+void fun::command_t::add_flag(const std::string& flag) {
+    m_flags.emplace(flag);
+}
+
+void fun::command_t::add_key_val(const std::string& key, const std::string& val) {
+    m_key_vals[key].emplace_back(val);
 }
 
 std::string fun::command_t::build() const {
     std::string cmd(m_command);
 
     for (auto& arg : m_args) {
-        cmd += " " + (arg[0] == '-' ? '[' + arg + ']' : arg);
+        cmd += " " + format(arg);
+    }
+
+    for (auto& flag : m_flags) {
+        cmd += " -" + format(flag);
+    }
+
+    for (auto& [key, vals] : m_key_vals) {
+        cmd += " +" + format(key) + ":";
+
+        for (int i = 0; i < vals.size(); i++) {
+            cmd += format(vals[i]);
+
+            if (i != vals.size() - 1) cmd += ",";
+        }
     }
 
     return cmd;
