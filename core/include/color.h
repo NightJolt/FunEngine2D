@@ -2,6 +2,11 @@
 
 #include "globals.h"
 
+// todos
+// - add more colors
+// - add more color formats
+// - add palettes
+
 namespace fun {
     struct rgb_t;
     struct rgba_t;
