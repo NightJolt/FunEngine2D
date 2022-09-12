@@ -98,6 +98,32 @@ namespace fun::math {
     }
 
     template <class T>
+    vec2_t<T> rot_90(const vec2_t<T>& a) {
+        return vec2_t <T> (-a.y, a.x);
+    }
+
+    template <class T>
+    vec2_t<T> rot_180(const vec2_t<T>& a) {
+        return vec2_t <T> (-a.x, -a.y);
+    }
+
+    template <class T>
+    vec2_t<T> rot_270(const vec2_t<T>& a) {
+        return vec2_t <T> (a.y, -a.x);
+    }
+
+    template <class T>
+    vec2_t<T> bisector(const vec2_t<T>& a, const vec2_t<T>& b) {
+        return normalize(a + b);
+        // return fun::math::normalize(fun::math::normalize(a) + fun::math::normalize(b));
+    }
+
+    template <class T>
+    T dot(const vec2_t<T>& a, const vec2_t<T>& b) {
+        return a.x * b.x + a.y * b.y;
+    }
+
+    template <class T>
     vec2_t<T> abs(const vec2_t<T>& a) {
         return vec2_t <T> (std::abs(a.x), std::abs(a.y));
     }

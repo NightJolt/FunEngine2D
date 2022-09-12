@@ -9,24 +9,64 @@ void fun::render::shape::curve_t::set_width(float width) {
     m_update_body = true;
 }
 
-void fun::render::shape::curve_t::set_outline_width(float width) {
-    m_outline_width = width;
-    m_update_body = true;
-}
-
-void fun::render::shape::curve_t::set_color(sf::Color color) {
+void fun::render::shape::curve_t::set_color(rgba_t color) {
     m_color = color;
-    m_update_color = true;
-}
-
-void fun::render::shape::curve_t::set_outline_color(sf::Color color) {
-    m_outline_color = color;
     m_update_color = true;
 }
 
 void fun::render::shape::curve_t::set_points(const std::vector <vec2f_t>& points) {
     m_points = std::move(points);
     m_update_body = true;
+}
+
+void fun::render::shape::curve_t::update_body() const {
+    std::vector <sf::Vertex> vertices;
+
+    vertices.resize(m_points.size() * 2);
+
+    const float half_width = m_width * .5f;
+    const auto color = m_color.to_sf();
+
+    for (int i = 0; i < m_points.size(); i++) {
+        fun::vec2f_t right_vec;
+
+        if (i == 0) {
+            right_vec = fun::math::rot_270(fun::math::normalize(m_points[1] - m_points[0])) * half_width;
+        } else if (i == m_points.size() - 1) {
+            right_vec = fun::math::rot_270(fun::math::normalize(m_points[i] - m_points[i - 1])) * half_width;
+        } else {
+            const auto back = fun::math::normalize(m_points[i - 1] - m_points[i]);
+            const auto front = fun::math::normalize(m_points[i + 1] - m_points[i]);
+
+            right_vec = fun::math::bisector(back, front) * half_width;
+
+            if (fun::math::magnitude(back + front) < 0.0001f) {
+                right_vec = fun::math::rot_270(fun::math::normalize(m_points[i] - m_points[i - 1])) * half_width;
+            } else {
+                right_vec = fun::math::bisector(back, front) * -1.f * half_width;
+
+                if (fun::math::dot(fun::math::rot_270(back), front) < 0.f) {
+                    right_vec = fun::math::rot_180(right_vec);
+                }
+            }
+        }
+
+        vertices[i * 2].position = (m_points[i] + right_vec).to_sf();
+        vertices[i * 2 + 1].position = (m_points[i] - right_vec).to_sf();
+
+        vertices[i * 2].color = color;
+        vertices[i * 2 + 1].color = color;
+    }
+    
+    m_primitive.set_vertices(vertices);
+}
+
+void fun::render::shape::curve_t::update_color() const {
+    const auto color = m_color.to_sf();
+
+    for (auto& vertex : m_primitive.get_vertices()) {
+        vertex.color = color;
+    }
 }
 
 void fun::render::shape::curve_t::update() const {
@@ -40,56 +80,6 @@ void fun::render::shape::curve_t::update() const {
         update_color();
 
         m_update_color = false;
-    }
-}
-
-void fun::render::shape::curve_t::update_body() const {
-    std::vector <sf::Vertex> vertices;
-    std::vector <sf::Vertex> outline_vertices;
-
-    fun::vec2f_t start = m_points[0];
-    fun::vec2f_t end, middle;
-
-    const float half_width = m_width * .5f;
-
-    for (int i = 1; i < m_points.size(); i++) {
-        end = m_points[i];
-
-        fun::vec2f_t vec_right = fun::math::swap(fun::math::normalize(end - start));
-        fun::vec2f_t vec_left = vec_right * -1.f;
-
-        vertices.emplace_back(start + vec_right * m_width, m_color);
-        vertices.emplace_back(end + vec_right * m_width, m_color);
-        vertices.emplace_back(start + vec_left * m_width, m_color);
-        vertices.emplace_back(end + vec_left * m_width, m_color);
-
-        if (m_outline_width > 0) {
-            vertices.emplace_back(start + vec_right * m_outline_width, m_outline_color);
-            vertices.emplace_back(end + vec_right * m_outline_width, m_outline_color);
-            vertices.emplace_back(start + vec_left * m_outline_width, m_outline_color);
-            vertices.emplace_back(end + vec_left * m_outline_width, m_outline_color);
-        }
-
-        start = end;
-    }
-    
-    outline_vertices.emplace_back(vertices);
-    m_primitive.set_vertices(outline_vertices);
-}
-
-void fun::render::shape::curve_t::update_color() const {
-    int ind = 0;
-
-    auto& vertices = m_primitive.get_vertices();
-
-    if (m_outline_width > 0) {
-        for (; ind < vertices.size() >> 1; ind++) {
-            vertices[ind].color = m_outline_color.to_sf();
-        }
-    }
-
-    for (; ind < vertices.size(); ind++) {
-        vertices[ind].color = m_color.to_sf();
     }
 }
 
