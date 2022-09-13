@@ -113,6 +113,14 @@ namespace fun::math {
     }
 
     template <class T>
+    vec2_t<T> rotate(const vec2_t<T>& a, float angle) {
+        const auto c = cos(angle);
+        const auto s = sin(angle);
+
+        return vec2_t <T> (a.x * c - a.y * s, a.x * s + a.y * c);
+    }
+
+    template <class T>
     vec2_t<T> bisector(const vec2_t<T>& a, const vec2_t<T>& b) {
         return normalize(a + b);
         // return fun::math::normalize(fun::math::normalize(a) + fun::math::normalize(b));

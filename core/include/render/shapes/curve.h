@@ -15,6 +15,8 @@ namespace fun::render::shape {
 
         void set_points(const std::vector <vec2f_t>&);
 
+        void set_closed(bool);
+
     private:
         void update() const;
 
@@ -25,13 +27,13 @@ namespace fun::render::shape {
         
         std::vector <vec2f_t> m_points;
 
-        // add looping option
+        bool is_closed;
 
         float m_width;
         rgba_t m_color;
 
-        mutable bool m_update_body = false;
-        mutable bool m_update_color = false;
+        mutable bool m_update_body;
+        mutable bool m_update_color;
 
         mutable primitive_t m_primitive;
     };

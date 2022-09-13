@@ -1,6 +1,6 @@
 #include "render/shapes/curve.h"
 
-fun::render::shape::curve_t::curve_t() {
+fun::render::shape::curve_t::curve_t() : m_width(1), m_color(rgba_t::white), is_closed(false), m_update_body(false), m_update_color(false) {
     m_primitive.set_primitive_type(sf::PrimitiveType::TrianglesStrip);
 }
 
@@ -19,6 +19,11 @@ void fun::render::shape::curve_t::set_points(const std::vector <vec2f_t>& points
     m_update_body = true;
 }
 
+void fun::render::shape::curve_t::set_closed(bool closed) {
+    is_closed = closed;
+    m_update_body = true;
+}
+
 void fun::render::shape::curve_t::update_body() const {
     std::vector <sf::Vertex> vertices;
 
@@ -30,9 +35,9 @@ void fun::render::shape::curve_t::update_body() const {
     for (int i = 0; i < m_points.size(); i++) {
         fun::vec2f_t right_vec;
 
-        if (i == 0) {
+        if (!is_closed && i == 0) {
             right_vec = fun::math::rot_270(fun::math::normalize(m_points[1] - m_points[0])) * half_width;
-        } else if (i == m_points.size() - 1) {
+        } else if (!is_closed && i == m_points.size() - 1) {
             right_vec = fun::math::rot_270(fun::math::normalize(m_points[i] - m_points[i - 1])) * half_width;
         } else {
             const auto back = fun::math::normalize(m_points[i - 1] - m_points[i]);
