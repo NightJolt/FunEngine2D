@@ -27,7 +27,7 @@ namespace fun::render::shape {
         
         std::vector <vec2f_t> m_points;
 
-        bool is_closed;
+        bool m_is_closed;
 
         float m_width;
         rgba_t m_color;
