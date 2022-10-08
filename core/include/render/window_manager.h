@@ -25,7 +25,7 @@ namespace fun::winmgr {
 
         // render views
         sf::View world_view;
-        vec2f_t world_view_size;
+        float view_height;
 
         sf::View ui_view;
         sf::View final_view;
