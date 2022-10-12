@@ -134,7 +134,7 @@ void fun::winmgr::window_t::poll_events() {
                 curr_zoom_value = event.mouseWheel.delta > 0 ? .9f : 1.1f;
                 zoom *= curr_zoom_value;
 
-                auto mouse_pos = ((fun::vec2f_t)get_mouse_screen_position() / (fun::vec2f_t)(fun::vec2u_t)render.getSize() - .5f) * 2.f;
+                auto mouse_pos = (fun::vec2f_t)get_mouse_screen_position() / (fun::vec2f_t)(fun::vec2u_t)render.getSize() - .5f;
                 auto world = world_view.getSize();
 
                 world_view.zoom(curr_zoom_value);
