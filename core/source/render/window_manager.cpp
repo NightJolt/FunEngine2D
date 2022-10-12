@@ -130,14 +130,19 @@ void fun::winmgr::window_t::poll_events() {
 
                 break;
 
-            case sf::Event::MouseWheelMoved:
+            case sf::Event::MouseWheelMoved: {
                 curr_zoom_value = event.mouseWheel.delta > 0 ? .9f : 1.1f;
-
                 zoom *= curr_zoom_value;
+
+                auto mouse_pos = ((fun::vec2f_t)get_mouse_screen_position() / (fun::vec2f_t)(fun::vec2u_t)render.getSize() - .5f) * 2.f;
+                auto world = world_view.getSize();
 
                 world_view.zoom(curr_zoom_value);
 
+                world_view.move((mouse_pos * (fun::vec2f_t)(world - world_view.getSize())).to_sf());
+
                 break;
+            }
 
             case sf::Event::Resized:
                 refresh_window();
