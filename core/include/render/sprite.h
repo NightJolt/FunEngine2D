@@ -4,12 +4,10 @@
 #include "../vec2.h"
 #include "../transform.h"
 #include "../color.h"
-#include "../_math.h"
 #include "shapes/primitive.h"
-#include "../tools/debugger.h"
 #include "texture.h"
 
-namespace fun {
+namespace fun::render {
     class sprite_t : public sf::Drawable {
     public:
         sprite_t();

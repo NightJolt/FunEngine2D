@@ -1,4 +1,5 @@
 #include "input.h"
+#include "_math.h"
 
 #if defined(ENABLE_MOUSE)
 static bool _mouse_button_pressed_[MOUSE_BUTTON_COUNT];
@@ -21,9 +22,7 @@ static bool _gamepad_button_released_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 static bool _gamepad_button_hold_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 #endif
 
-void fun::input::listen() {
-    bool is_focused = winmgr::main_window->is_focused;
-
+void fun::input::listen(bool is_focused) {
 #if defined(ENABLE_MOUSE)
     for (int button = 0; button < MOUSE_BUTTON_COUNT; button++) {
         _mouse_button_pressed_[button] = false;

@@ -17,5 +17,4 @@ namespace fun::resources {
 
     // todo: audio
     // todo: lua scripts
-    ;
 }

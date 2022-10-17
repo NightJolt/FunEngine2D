@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../../globals.h"
-#include "../../_math.h"
+#include "../../vec2.h"
 
-namespace fun {
+namespace fun::render {
     class curved_line_t final : public sf::Drawable {
     public:
 

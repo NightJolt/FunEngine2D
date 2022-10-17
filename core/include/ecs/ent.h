@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../globals.h"
-#include "ecs.h"
-#include "../transform.h"
+#include "ecs/ecs.h"
 
 namespace fun::ent {
     fun::ecs::entity_t create_empty(); // no components

@@ -1,4 +1,5 @@
 #include "networking/server.h"
+#include "tools/debugger.h"
 
 
 

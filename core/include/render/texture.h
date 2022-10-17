@@ -3,7 +3,7 @@
 #include "../globals.h"
 #include "../vec2.h"
 
-namespace fun {
+namespace fun::render {
     class texture_t {
         public:
             explicit texture_t(sf::Texture* = nullptr, vec2u_t = { 1, 1 });

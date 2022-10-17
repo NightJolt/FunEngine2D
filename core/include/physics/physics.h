@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../globals.h"
-#include "../_time.h"
 #include "../vec2.h"
 
 namespace fun::physics {

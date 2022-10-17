@@ -1,13 +1,11 @@
 #pragma once
 
 #include "../../globals.h"
-#include "../../_math.h"
 #include "vec2.h"
 
-namespace fun {
+namespace fun::render {
     class rounded_rect_t final : public sf::Drawable {
     public:
-
         rounded_rect_t();
         ~rounded_rect_t() noexcept final = default;
 
@@ -20,7 +18,6 @@ namespace fun {
         void set_fill_color(sf::Color);
 
     private:
-
         void build() const;
 
         void draw(sf::RenderTarget&, sf::RenderStates) const final;

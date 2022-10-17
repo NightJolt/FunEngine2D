@@ -161,3 +161,44 @@ namespace fun {
 //         return result;
 //     }
 // }
+
+namespace fun {
+    struct transform_t;
+
+    struct rgb_t;
+    struct rgba_t;
+
+    struct command_t;
+
+    namespace render {
+        struct texture_t;
+        struct sprite_t;
+        struct sprite_animator_t;
+        struct render_item_t;
+        struct render_queue_t;
+
+        struct window_t;
+        struct window_data_t;
+
+        struct curve_t;
+        struct curved_line_t;
+        struct primitive_t;
+        struct rounded_rect_t;
+    }
+
+    namespace network {
+        struct packet_t;
+        struct packet_storage_t;
+        struct threadsafe_packet_storage_t;
+
+        struct connection_info_t;
+        struct connection_t;
+
+        struct server_t;
+        struct client_t;
+    }
+
+    namespace interaction {
+        struct interactable;
+    }
+}

@@ -1,4 +1,5 @@
 #include "ecs/ent.h"
+#include "transform.h"
 
 fun::ecs::entity_t fun::ent::create_empty() {
     return ecs::new_entity();

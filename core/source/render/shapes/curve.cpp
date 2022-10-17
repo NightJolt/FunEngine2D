@@ -1,30 +1,31 @@
 #include "render/shapes/curve.h"
+#include "_math.h"
 
-fun::render::shape::curve_t::curve_t() : m_width(1), m_color(rgba_t::white), m_is_closed(false), m_update_body(false), m_update_color(false) {
+fun::render::curve_t::curve_t() : m_width(1), m_color(rgba_t::white), m_is_closed(false), m_update_body(false), m_update_color(false) {
     m_primitive.set_primitive_type(sf::PrimitiveType::TrianglesStrip);
 }
 
-void fun::render::shape::curve_t::set_width(float width) {
+void fun::render::curve_t::set_width(float width) {
     m_width = width;
     m_update_body = true;
 }
 
-void fun::render::shape::curve_t::set_color(rgba_t color) {
+void fun::render::curve_t::set_color(rgba_t color) {
     m_color = color;
     m_update_color = true;
 }
 
-void fun::render::shape::curve_t::set_points(const std::vector <vec2f_t>& points) {
+void fun::render::curve_t::set_points(const std::vector <vec2f_t>& points) {
     m_points = std::move(points);
     m_update_body = true;
 }
 
-void fun::render::shape::curve_t::set_closed(bool closed) {
+void fun::render::curve_t::set_closed(bool closed) {
     m_is_closed = closed;
     m_update_body = true;
 }
 
-void fun::render::shape::curve_t::update_body() const {
+void fun::render::curve_t::update_body() const {
     std::vector <sf::Vertex> vertices;
 
     const uint32_t points_count = m_points.size();
@@ -81,7 +82,7 @@ void fun::render::shape::curve_t::update_body() const {
     m_primitive.set_vertices(vertices);
 }
 
-void fun::render::shape::curve_t::update_color() const {
+void fun::render::curve_t::update_color() const {
     const auto color = m_color.to_sf();
 
     for (auto& vertex : m_primitive.get_vertices()) {
@@ -89,7 +90,7 @@ void fun::render::shape::curve_t::update_color() const {
     }
 }
 
-void fun::render::shape::curve_t::update() const {
+void fun::render::curve_t::update() const {
     if (m_update_body) {
         update_body();
 
@@ -103,7 +104,7 @@ void fun::render::shape::curve_t::update() const {
     }
 }
 
-void fun::render::shape::curve_t::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void fun::render::curve_t::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     update();
 
     target.draw(m_primitive, states);

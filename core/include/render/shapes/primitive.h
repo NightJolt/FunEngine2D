@@ -2,7 +2,7 @@
 
 #include "../../globals.h"
 
-namespace fun {
+namespace fun::render {
     class primitive_t : public sf::Drawable {
     public:
         primitive_t() = default;

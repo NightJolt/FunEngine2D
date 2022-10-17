@@ -1,10 +1,11 @@
 #include "render/shapes/rounded_rect.h"
+#include "_math.h"
 
-fun::rounded_rect_t::rounded_rect_t() {
+fun::render::rounded_rect_t::rounded_rect_t() {
     build();
 }
 
-void fun::rounded_rect_t::set_raidus(float r) {
+void fun::render::rounded_rect_t::set_raidus(float r) {
     if (radius == r) return;
 
     radius = r;
@@ -12,7 +13,7 @@ void fun::rounded_rect_t::set_raidus(float r) {
     should_update = true;
 }
 
-void fun::rounded_rect_t::set_position(vec2f_t p) {
+void fun::render::rounded_rect_t::set_position(vec2f_t p) {
     if (position == p) return;
 
     auto delta = p - position;
@@ -24,11 +25,11 @@ void fun::rounded_rect_t::set_position(vec2f_t p) {
     position = p;
 }
 
-fun::vec2f_t fun::rounded_rect_t::get_position() const {
+fun::vec2f_t fun::render::rounded_rect_t::get_position() const {
     return position;
 }
 
-void fun::rounded_rect_t::set_size(vec2f_t s) {
+void fun::render::rounded_rect_t::set_size(vec2f_t s) {
     if (size == s) return;
 
     size = s;
@@ -36,11 +37,11 @@ void fun::rounded_rect_t::set_size(vec2f_t s) {
     should_update = true;
 }
 
-fun::vec2f_t fun::rounded_rect_t::get_size() const {
+fun::vec2f_t fun::render::rounded_rect_t::get_size() const {
     return size;
 }
 
-void fun::rounded_rect_t::set_smoothness(int s) {
+void fun::render::rounded_rect_t::set_smoothness(int s) {
     if (smoothness == s) return;
 
     smoothness = s;
@@ -48,7 +49,7 @@ void fun::rounded_rect_t::set_smoothness(int s) {
     should_update = true;
 }
 
-void fun::rounded_rect_t::set_fill_color(sf::Color c) {
+void fun::render::rounded_rect_t::set_fill_color(sf::Color c) {
     if (color == c) return;
 
     color = c;
@@ -56,7 +57,7 @@ void fun::rounded_rect_t::set_fill_color(sf::Color c) {
     should_update = true;
 }
 
-void fun::rounded_rect_t::build() const {
+void fun::render::rounded_rect_t::build() const {
     points.resize(10 + 4 * smoothness);
 
     points[0].position = { 0, 0 };
@@ -115,7 +116,7 @@ void fun::rounded_rect_t::build() const {
     }
 }
 
-void fun::rounded_rect_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
+void fun::render::rounded_rect_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
     if (should_update) {
         build();
 

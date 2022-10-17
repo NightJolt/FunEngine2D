@@ -1,4 +1,6 @@
 #include "interact/interactable.h"
+#include "_math.h"
+#include "input.h"
 
 fun::interactable_t::interactable_t(const std::function <bool(vec2f_t)>& interaction_fun, layer_t layer) :
 right_pressed(false),

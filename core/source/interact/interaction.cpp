@@ -1,10 +1,15 @@
 #include "interact/interaction.h"
+#include "render/window/window.h"
+#include "input.h"
+#include "interact/interactable.h"
+#include "transform.h"
+#include "render/window/window_manager.h"
 
 static fun::ecs::entity_t entity_active = fun::ecs::nullentity;
 static fun::ecs::entity_t entity_last = fun::ecs::nullentity;
 
 void fun::interaction::update() {
-    vec2f_t mouse_pos = winmgr::main_window->get_mouse_world_position();
+    vec2f_t mouse_pos = render::winmgr::get_main_window().get_mouse_world_position();
 
     entity_active = ecs::validate_entity(entity_active);
     entity_last = ecs::validate_entity(entity_last);

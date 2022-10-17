@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../globals.h"
-#include "../_math.h"
-#include "../input.h"
+#include "../vec2.h"
 
 namespace fun {
     struct interactable_t {

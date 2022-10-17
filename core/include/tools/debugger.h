@@ -1,10 +1,7 @@
 #pragma once
 
 #include "../globals.h"
-#include "command.h"
-#include "../resources.h"
-#include "../render/window_manager.h"
-#include "../interact/interaction.h"
+#include "../vec2.h"
 
 namespace fun::debugger {
     void display();
@@ -17,6 +14,4 @@ namespace fun::debugger {
     void push_cmd(const command_t&, const std::string& = "main");
 
     void print_synced(std::string);
-
-    // void display_unit_lines(uint32_t, sf::Color, const std::string&);
 }

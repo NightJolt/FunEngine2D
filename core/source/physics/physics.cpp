@@ -1,4 +1,5 @@
 #include "physics/physics.h"
+#include "_time.h"
 
 static float simulation_scale = 1;
 static b2World world = b2World(b2Vec2(0, 0));

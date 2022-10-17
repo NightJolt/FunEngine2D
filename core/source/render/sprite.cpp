@@ -1,25 +1,27 @@
 #include "render/sprite.h"
+#include "_math.h"
+#include "tools/debugger.h"
 
-fun::sprite_t::sprite_t() : m_shader(nullptr), m_update_body(false), m_update_texture(false), m_update_color(false) {
+fun::render::sprite_t::sprite_t() : m_shader(nullptr), m_update_body(false), m_update_texture(false), m_update_color(false) {
     m_primitive.set_primitive_type(sf::PrimitiveType::Quads);
     m_primitive.get_vertices().resize(4);
 }
 
 
 
-void fun::sprite_t::bind_texture(const texture_t& texture) {
+void fun::render::sprite_t::bind_texture(const texture_t& texture) {
     m_texture = texture;
 
     m_update_texture = true;
 }
 
-void fun::sprite_t::bind_shader(sf::Shader* shader) {
+void fun::render::sprite_t::bind_shader(sf::Shader* shader) {
     m_shader = shader;
 }
 
 
 
-void fun::sprite_t::select_subtexture(uint32_t index) {
+void fun::render::sprite_t::select_subtexture(uint32_t index) {
     auto res = m_texture.get_subtexture(index);
 
     m_texture_pos = { res[0], res[1] };
@@ -28,7 +30,7 @@ void fun::sprite_t::select_subtexture(uint32_t index) {
     m_update_texture = true;
 }
 
-void fun::sprite_t::select_subtexture(vec2u_t pos) {
+void fun::render::sprite_t::select_subtexture(vec2u_t pos) {
     auto res = m_texture.get_subtexture(pos);
 
     m_texture_pos = { res[0], res[1] };
@@ -37,68 +39,68 @@ void fun::sprite_t::select_subtexture(vec2u_t pos) {
     m_update_texture = true;
 }
 
-void fun::sprite_t::select_subtexture(vec2u_t pos, vec2u_t size) {
+void fun::render::sprite_t::select_subtexture(vec2u_t pos, vec2u_t size) {
     m_texture_pos = pos;
     m_texture_size = size;
 
     m_update_texture = true;
 }
 
-void fun::sprite_t::set_position(vec2f_t position) {
+void fun::render::sprite_t::set_position(vec2f_t position) {
     m_transform.position = position;
     
     m_update_body = true;
 }
 
-void fun::sprite_t::move(vec2f_t position) {
+void fun::render::sprite_t::move(vec2f_t position) {
     m_transform.position += position;
     
     m_update_body = true;
 }
 
-void fun::sprite_t::set_rotation(float degrees) {
+void fun::render::sprite_t::set_rotation(float degrees) {
     m_transform.rotation = math::radians(degrees);
 
     m_update_body = true;
 }
 
-void fun::sprite_t::rotate(float degrees) {
+void fun::render::sprite_t::rotate(float degrees) {
     m_transform.rotation += math::radians(degrees);
     
     m_update_body = true;
 }
 
-void fun::sprite_t::set_scale(vec2f_t value) {
+void fun::render::sprite_t::set_scale(vec2f_t value) {
     m_transform.scale = value;
     
     m_update_body = true;
 }
 
-void fun::sprite_t::scale(float value) {
+void fun::render::sprite_t::scale(float value) {
     m_transform.scale *= value;
     
     m_update_body = true;
 }
 
-void fun::sprite_t::scale(vec2f_t value) {
+void fun::render::sprite_t::scale(vec2f_t value) {
     m_transform.scale *= value;
     
     m_update_body = true;
 }
 
-void fun::sprite_t::set_origin(vec2f_t origin) {
+void fun::render::sprite_t::set_origin(vec2f_t origin) {
     m_origin = origin;
 
     m_update_body = true;
 }
 
-void fun::sprite_t::set_color(rgba_t color) {
+void fun::render::sprite_t::set_color(rgba_t color) {
     m_color = color;
 
     m_update_color = true;
 }
 
-void fun::sprite_t::batch(sprite_t* begin, sprite_t* end) {
+void fun::render::sprite_t::batch(sprite_t* begin, sprite_t* end) {
     auto& vertices = m_primitive.get_vertices();
     
     vertices.reserve(vertices.size() + (end - begin) * 4);
@@ -110,7 +112,7 @@ void fun::sprite_t::batch(sprite_t* begin, sprite_t* end) {
     }
 }
 
-void fun::sprite_t::update() const {
+void fun::render::sprite_t::update() const {
     if (m_update_body) {
         update_body();
 
@@ -133,7 +135,7 @@ void fun::sprite_t::update() const {
 
 
 
-void fun::sprite_t::update_body() const {
+void fun::render::sprite_t::update_body() const {
     auto& vertices = m_primitive.get_vertices();
 
     vec2f_t position = m_transform.position - m_transform.scale * m_origin;
@@ -156,7 +158,7 @@ void fun::sprite_t::update_body() const {
     vertices[3].position = (o + nur).to_sf();
 }
 
-void fun::sprite_t::update_texture() const {
+void fun::render::sprite_t::update_texture() const {
     auto& vertices = m_primitive.get_vertices();
     
     vertices[0].texCoords = sf::Vector2f(m_texture_pos.x, m_texture_pos.y);
@@ -165,7 +167,7 @@ void fun::sprite_t::update_texture() const {
     vertices[3].texCoords = sf::Vector2f(m_texture_pos.x, m_texture_pos.y + m_texture_size.y);
 }
 
-void fun::sprite_t::update_color() const {
+void fun::render::sprite_t::update_color() const {
     auto& vertices = m_primitive.get_vertices();
     auto color = m_color.to_sf();
     
@@ -176,7 +178,7 @@ void fun::sprite_t::update_color() const {
 }
 
 
-void fun::sprite_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
+void fun::render::sprite_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
     update();
 
     render_states.texture = m_texture.get_texture();

@@ -2,7 +2,6 @@
 
 #include "../globals.h"
 #include "../pointer.h"
-#include "../tools/debugger.h"
 #include "packet_storage_t.h"
 #include "connection.h"
 

@@ -1,6 +1,8 @@
 #include "tools/debugger.h"
+#include "_time.h"
+#include "tools/command.h"
+#include "interact/interaction.h"
 
-static bool unit_coord_enabled;
 static bool debug_log_enabled;
 static bool debug_interaction_enabled;
 
@@ -12,31 +14,12 @@ void fun::debugger::display() {
         ImGui::NewLine();
     
         ImGui::Checkbox("debug log display", &debug_log_enabled);
-        ImGui::Checkbox("unit coord display", &unit_coord_enabled);
         ImGui::Checkbox("interaction menu display", &debug_interaction_enabled);
 
     ImGui::End();
 
     if (debug_log_enabled) display_debug_log();
-    // if (unit_coord_enabled)
     if (debug_interaction_enabled) interaction::display_debug_window();
-}
-
-sf::Text unit_coord_text;
-
-void fun::debugger::display_unit_coord(const vec2f_t& pos, float character_size, layer_t layer, sf::Color color, const std::string& font_name) {
-    if (!unit_coord_enabled) return;
-
-    const float zoom = fun::winmgr::main_window->zoom;
-
-    unit_coord_text.setFont(fun::resources::get_font(font_name));
-    unit_coord_text.setColor(color);
-    unit_coord_text.setCharacterSize(character_size);
-    unit_coord_text.setScale({ zoom, zoom });
-    unit_coord_text.setPosition((pos + vec2f_t(0, 20.f * zoom)).to_sf());
-    // unit_coord_text.setString(sf::to_string(static_cast <sf::Vector2i> (pos)));
-
-    fun::winmgr::main_window->draw_world(unit_coord_text, layer);
 }
 
 static std::vector <std::string> channels = std::vector <std::string> ();

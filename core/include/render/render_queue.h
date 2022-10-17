@@ -2,7 +2,7 @@
 
 #include "../globals.h"
 
-namespace fun {
+namespace fun::render {
     struct render_item_t {
         render_item_t(const sf::Drawable&, layer_t, sf::RenderStates);
 

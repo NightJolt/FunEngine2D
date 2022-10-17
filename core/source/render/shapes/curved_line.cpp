@@ -1,10 +1,11 @@
 #include "render/shapes/curved_line.h"
+#include "_math.h"
 
-fun::curved_line_t::curved_line_t() {
+fun::render::curved_line_t::curved_line_t() {
     build();
 }
 
-void fun::curved_line_t::set_points(vec2f_t f, vec2f_t t) {
+void fun::render::curved_line_t::set_points(vec2f_t f, vec2f_t t) {
     if (from == f && to == t) return;
 
     from = f;
@@ -13,7 +14,7 @@ void fun::curved_line_t::set_points(vec2f_t f, vec2f_t t) {
     should_update = true;
 }
 
-void fun::curved_line_t::set_radius(float r) {
+void fun::render::curved_line_t::set_radius(float r) {
     if (radius != r) return;
 
     radius = r;
@@ -21,7 +22,7 @@ void fun::curved_line_t::set_radius(float r) {
     should_update = true;
 }
 
-void fun::curved_line_t::set_smoothness(int s) {
+void fun::render::curved_line_t::set_smoothness(int s) {
     if (smoothness != s) return;
 
     smoothness = s;
@@ -29,7 +30,7 @@ void fun::curved_line_t::set_smoothness(int s) {
     should_update = true;
 }
 
-void fun::curved_line_t::curve_at(float c) {
+void fun::render::curved_line_t::curve_at(float c) {
     if (curving_point != c) return;
 
     curving_point = c;
@@ -37,7 +38,7 @@ void fun::curved_line_t::curve_at(float c) {
     should_update = true;
 }
 
-void fun::curved_line_t::set_color(sf::Color c) {
+void fun::render::curved_line_t::set_color(sf::Color c) {
     if (color == c) return;
 
     color = c;
@@ -47,7 +48,7 @@ void fun::curved_line_t::set_color(sf::Color c) {
     }
 }
 
-void fun::curved_line_t::build() const {
+void fun::render::curved_line_t::build() const {
     if (std::abs(to.x - from.x) < 2 * radius || std::abs(to.y - from.y) < 2 * radius) {
         points.resize(2);
 
@@ -99,7 +100,7 @@ void fun::curved_line_t::build() const {
     }
 }
 
-void fun::curved_line_t::draw(sf::RenderTarget& render_target, sf::RenderStates rs) const {
+void fun::render::curved_line_t::draw(sf::RenderTarget& render_target, sf::RenderStates rs) const {
     if (should_update) {
         build();
 

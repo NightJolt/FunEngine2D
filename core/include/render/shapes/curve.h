@@ -1,11 +1,11 @@
 #pragma once
 
 #include "../../globals.h"
-#include "../../_math.h"
 #include "../../color.h"
+#include "../../vec2.h"
 #include "primitive.h"
 
-namespace fun::render::shape {
+namespace fun::render {
     class curve_t final : public sf::Drawable {
     public:
         curve_t();

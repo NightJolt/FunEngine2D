@@ -2,11 +2,8 @@
 
 #include "../../globals.h"
 #include "../../transform.h"
-#include "../../_math.h"
-#include "../../_time.h"
-#include "../../tools/debugger.h"
 
-namespace fun {
+namespace fun::render {
     class particler_t : public sf::Drawable {
         // public:
 

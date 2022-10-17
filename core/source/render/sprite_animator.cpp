@@ -1,24 +1,25 @@
 #include "render/sprite_animator.h"
+#include "render/sprite.h"
 
-fun::sprite_animator_t::sprite_animator_t(sprite_t& sprite) : m_sprite(sprite) {
+fun::render::sprite_animator_t::sprite_animator_t(sprite_t& sprite) : m_sprite(sprite) {
     reset();
 }
 
-void fun::sprite_animator_t::set_sequence(const std::vector <uint32_t>& sequence) {
+void fun::render::sprite_animator_t::set_sequence(const std::vector <uint32_t>& sequence) {
     m_sequence = std::move(sequence);
 
     reset();
 }
 
-void fun::sprite_animator_t::set_interval(float interval) {
+void fun::render::sprite_animator_t::set_interval(float interval) {
     m_interval = interval;
 }
 
-void fun::sprite_animator_t::animate(bool animate) {
+void fun::render::sprite_animator_t::animate(bool animate) {
     m_animate = animate;
 }
 
-void fun::sprite_animator_t::update(float delta) {
+void fun::render::sprite_animator_t::update(float delta) {
     if (m_animate) {
         m_cooldown -= delta;
 
@@ -40,7 +41,7 @@ void fun::sprite_animator_t::update(float delta) {
     }
 }
 
-void fun::sprite_animator_t::reset() {
+void fun::render::sprite_animator_t::reset() {
     m_index = 0;
     m_cooldown = m_interval;
     m_prev_subtexture = 0;

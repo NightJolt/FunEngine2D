@@ -1,4 +1,6 @@
 #include "render/shapes/particler.h"
+#include "_math.h"
+#include "_time.h"
 
 // fun::particler_t::particler_t(primitive_type_t pt, uint32_t mc, uint8_t tc) : primitive_type(pt), max_count(mc), thread_count(tc) {
 // #if defined(DEBUG_BUILD)

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../globals.h"
-#include "sprite.h"
 
-namespace fun {
+namespace fun::render {
     class sprite_animator_t {
     public:
         sprite_animator_t(sprite_t&);
