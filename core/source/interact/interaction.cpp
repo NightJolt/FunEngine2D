@@ -148,7 +148,7 @@ bool fun::interaction::is_anything_interacted() {
     return ecs::validate_entity(entity_active) != ecs::nullentity;
 }
 
-#if defined(DEBUG_BUILD)
+#if defined(FE2D_DEBUG)
 void fun::interaction::display_debug_window() {
     ImGui::Begin("Interaction Info");
 

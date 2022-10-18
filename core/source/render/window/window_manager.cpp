@@ -9,7 +9,7 @@ namespace {
 void fun::render::winmgr::init(const window_data_t& data) {
     ::main_window = new window_t(data);
 
-#if defined(USES_IMGUI)
+#if defined(FE2D_IMGUI)
     auto& renderer = ::main_window->get_renderer();
 
     renderer.resetGLStates();
@@ -20,13 +20,13 @@ void fun::render::winmgr::init(const window_data_t& data) {
 void fun::render::winmgr::update() {
     ::main_window->poll_events();
 
-#if defined(USES_IMGUI)
+#if defined(FE2D_IMGUI)
     ImGui::SFML::Update(::main_window->get_renderer(), fun::time::delta_time_object());
 #endif
 }
 
 void fun::render::winmgr::close() {
-#if defined(USES_IMGUI)
+#if defined(FE2D_IMGUI)
     ImGui::SFML::Shutdown();
 #endif
 

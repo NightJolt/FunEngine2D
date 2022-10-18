@@ -10,7 +10,7 @@ namespace fun::interaction {
     ecs::entity_t entity_at_pos(vec2f_t);
     bool is_anything_interacted();
 
-#if defined(DEBUG_BUILD)
+#if defined(FE2D_DEBUG)
     void display_debug_window();
 #endif
 }

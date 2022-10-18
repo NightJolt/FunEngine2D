@@ -1,42 +1,24 @@
 #pragma once
 
-#pragma region BUILD_FLAGS
-#define DEBUG_BUILD
-#pragma endregion
-
-#pragma region TARGET_PLATFORM
-#define WIN
-// #define LINUX
-// #define APPLE
-#pragma endregion
-
-#pragma region LIBS
-#define USES_SFML
-#define USES_IMGUI
-// #define USES_CUDA
-// #define USES_LUA
-#define USES_BOX2D
-#pragma endregion
-
 #pragma region LIBS_IMPORTS
-#if defined(USES_SFML)
+#if defined(FE2D_SFML)
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Network.hpp>
 #endif
 
-#if defined(USES_IMGUI)
+#if defined(FE2D_IMGUI)
 #include <imgui.h>
 #include <imgui-SFML.h>
 #endif
 
-#if defined(USES_BOX2D)
+#if defined(FE2D_BOX2D)
 #include <box2d/box2d.h>
 #endif
 #pragma endregion
 
 #pragma region STD_LIBS_IMPORT
-#if defined(DEBUG_BUILD)
+#if defined(FE2D_DEBUG)
 #include <iostream>
 
 #define print(body) std::cout << body

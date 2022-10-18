@@ -79,7 +79,7 @@ void fun::render::window_t::display(const sf::Color& bg_color, const sf::Shader*
     renderer.setView(final_view);
     renderer.draw(world_render, shader);
 
-#if defined(USES_IMGUI)
+#if defined(FE2D_IMGUI)
     ImGui::SFML::Render(renderer);
 #endif
 
@@ -94,7 +94,7 @@ void fun::render::window_t::poll_events() {
     float curr_zoom_value;
 
     while (renderer.pollEvent(event)) {
-#if defined(USES_IMGUI)
+#if defined(FE2D_IMGUI)
         ImGui::SFML::ProcessEvent(event);
 #endif
         switch (event.type) {

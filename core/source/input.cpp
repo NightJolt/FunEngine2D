@@ -31,7 +31,7 @@ void fun::input::listen(bool is_focused) {
         bool is_button_pressed = sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button));
         bool is_imgui_blocking = false;
 
-#if defined(USES_IMGUI)
+#if defined(FE2D_IMGUI)
         is_imgui_blocking = ImGui::GetIO().WantCaptureMouse;
 #endif
 

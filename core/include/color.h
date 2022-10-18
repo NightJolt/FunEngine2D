@@ -31,7 +31,7 @@ namespace fun {
         static rgb_t from_float(float, float, float);
         std::array <float, 3> to_float() const;
 
-#if defined(USES_SFML)
+#if defined(FE2D_SFML)
         rgb_t(sf::Color);
         sf::Color to_sf() const;
 #endif
@@ -58,7 +58,7 @@ namespace fun {
         static rgba_t from_float(float, float, float, float);
         std::array <float, 4> to_float() const;
 
-#if defined(USES_SFML)
+#if defined(FE2D_SFML)
         rgba_t(sf::Color);
         sf::Color to_sf() const;
 #endif

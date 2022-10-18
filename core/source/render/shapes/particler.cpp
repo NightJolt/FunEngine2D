@@ -3,7 +3,7 @@
 #include "_time.h"
 
 // fun::particler_t::particler_t(primitive_type_t pt, uint32_t mc, uint8_t tc) : primitive_type(pt), max_count(mc), thread_count(tc) {
-// #if defined(DEBUG_BUILD)
+// #if defined(FE2D_DEBUG)
 //     assert(thread_count > 0 && thread_count <= MAX_SUPPORTED_THREAD_COUNT);
 // #endif
 

@@ -13,12 +13,12 @@ namespace fun {
         template <class U>
         vec2_t(const vec2_t<U>&);
 
-#if defined(USES_SFML)
+#if defined(FE2D_SFML)
         vec2_t(sf::Vector2<T>);
         sf::Vector2<T> to_sf() const;
 #endif
 
-#if defined(USES_BOX2D)
+#if defined(FE2D_BOX2D)
         vec2_t(b2Vec2);
         b2Vec2 to_b2() const;
 #endif
@@ -90,7 +90,7 @@ template <class U>
 fun::vec2_t<T>::vec2_t(const vec2_t<U>& vec2) : x((T)vec2.x), y((T)vec2.y) {}
 
 
-#if defined(USES_SFML)
+#if defined(FE2D_SFML)
 template <class T>
 fun::vec2_t<T>::vec2_t(sf::Vector2<T> sf_vec2) : x(sf_vec2.x), y(sf_vec2.y) {}
 
@@ -101,7 +101,7 @@ sf::Vector2<T> fun::vec2_t<T>::to_sf() const {
 #endif
 
 
-#if defined(USES_BOX2D)
+#if defined(FE2D_BOX2D)
 template <class T>
 fun::vec2_t<T>::vec2_t(b2Vec2 b2_vec2) : x(b2_vec2.x), y(b2_vec2.y) {}
 
@@ -122,7 +122,7 @@ inline bool operator !=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
     return a.x != b.x || a.y != b.y;
 }
 
-#if defined(DEBUG_BUILD)
+#if defined(FE2D_DEBUG)
 template <typename T>
 inline std::ostream& operator <<(std::ostream& out, const fun::vec2_t<T>& vec2) {
     return out << fun::to_string(vec2);

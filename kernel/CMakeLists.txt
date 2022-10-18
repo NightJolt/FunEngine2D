@@ -22,3 +22,5 @@ if (FE2D_ENABLE_CUDA_SEPARABLE_COMPILATION)
 endif()
 
 target_link_libraries(${LIB_NAME} ${CUDA_LIBRARIES})
+
+target_compile_definitions(${LIB_NAME} PUBLIC ${CPP_DEFINITIONS})
