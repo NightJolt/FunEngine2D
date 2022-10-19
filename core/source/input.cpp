@@ -113,7 +113,24 @@ bool fun::input::hold(sf::Mouse::Button button) {
 fun::vec2f_t fun::input::mouse_2d() {
     return _mouse_delta_;
 }
+#else
+bool fun::input::pressed(sf::Mouse::Button button) {
+    return false;
+}
+
+bool fun::input::released(sf::Mouse::Button button) {
+    return false;
+}
+
+bool fun::input::hold(sf::Mouse::Button button) {
+    return false;
+}
+
+fun::vec2f_t fun::input::mouse_2d() {
+    return { 0, 0 };
+}
 #endif
+
 
 
 
@@ -140,6 +157,30 @@ int fun::input::vertical(sf::Keyboard::Key a, sf::Keyboard::Key b) {
 
 fun::vec2f_t fun::input::keyboard_2d(sf::Keyboard::Key a, sf::Keyboard::Key b, sf::Keyboard::Key c, sf::Keyboard::Key d) {
     return math::normalize(vec2f_t(horizontal(a, b), vertical(c, d)));
+}
+#else
+bool fun::input::pressed(sf::Keyboard::Key key) {
+    return false;
+}
+
+bool fun::input::released(sf::Keyboard::Key key) {
+    return false;
+}
+
+bool fun::input::hold(sf::Keyboard::Key key) {
+    return false;
+}
+
+int fun::input::horizontal(sf::Keyboard::Key a, sf::Keyboard::Key b) {
+    return 0;
+}
+
+int fun::input::vertical(sf::Keyboard::Key a, sf::Keyboard::Key b) {
+    return 0;
+}
+
+fun::vec2f_t fun::input::keyboard_2d(sf::Keyboard::Key a, sf::Keyboard::Key b, sf::Keyboard::Key c, sf::Keyboard::Key d) {
+    return { 0, 0 };
 }
 #endif
 
@@ -179,5 +220,29 @@ float fun::input::value(gamepad_axis_t axis, int index) {
 
 fun::vec2f_t fun::input::gamepad_2d(gamepad_axis_t a, gamepad_axis_t b) {
     return math::normalize(vec2f_t(value(a), value(b)));
+}
+#else
+bool fun::input::is_gamepad_connected(int index) {
+    return false;
+}
+
+bool fun::input::pressed(gamepad_button_t button, int index) {
+    return false;
+}
+
+bool fun::input::released(gamepad_button_t button, int index) {
+    return false;
+}
+
+bool fun::input::hold(gamepad_button_t button, int index) {
+    return false;
+}
+
+float fun::input::value(gamepad_axis_t axis, int index) {
+    return 0;
+}
+
+fun::vec2f_t fun::input::gamepad_2d(gamepad_axis_t a, gamepad_axis_t b) {
+    return { 0, 0 };
 }
 #endif

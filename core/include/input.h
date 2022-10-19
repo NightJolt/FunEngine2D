@@ -11,15 +11,12 @@
 
 namespace fun::input {
     void listen(bool);
-
-#if defined(FE2D_MOUSE)
+    
     bool pressed(sf::Mouse::Button);
     bool released(sf::Mouse::Button);
     bool hold(sf::Mouse::Button);
     fun::vec2f_t mouse_2d();
-#endif
-
-#if defined(FE2D_KEYBOARD)
+    
     bool pressed(sf::Keyboard::Key);
     bool released(sf::Keyboard::Key);
     bool hold(sf::Keyboard::Key);
@@ -31,9 +28,7 @@ namespace fun::input {
             sf::Keyboard::Key = sf::Keyboard::Key::S,
             sf::Keyboard::Key = sf::Keyboard::Key::W
     );
-#endif
-
-#if defined(FE2D_GAMEPAD)
+    
     enum gamepad_button_t {
         x,
         o,
@@ -69,5 +64,4 @@ namespace fun::input {
             gamepad_axis_t = gamepad_axis_t::l3x,
             gamepad_axis_t = gamepad_axis_t::l3y
     );
-#endif
 }
