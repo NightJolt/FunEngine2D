@@ -3,10 +3,6 @@
 #include "globals.h"
 #include "vec2.h"
 
-#define ENABLE_MOUSE
-#define ENABLE_KEYBOARD
-#define ENABLE_GAMEPAD
-
 #define KEYBOARD_KEY_COUNT sf::Keyboard::Key::KeyCount
 #define MOUSE_BUTTON_COUNT sf::Mouse::Button::ButtonCount
 #define GAMEPAD_BUTTON_COUNT fun::input::gamepad_button_count
@@ -16,14 +12,14 @@
 namespace fun::input {
     void listen(bool);
 
-#if defined(ENABLE_MOUSE)
+#if defined(FE2D_MOUSE)
     bool pressed(sf::Mouse::Button);
     bool released(sf::Mouse::Button);
     bool hold(sf::Mouse::Button);
     fun::vec2f_t mouse_2d();
 #endif
 
-#if defined(ENABLE_KEYBOARD)
+#if defined(FE2D_KEYBOARD)
     bool pressed(sf::Keyboard::Key);
     bool released(sf::Keyboard::Key);
     bool hold(sf::Keyboard::Key);
@@ -37,7 +33,7 @@ namespace fun::input {
     );
 #endif
 
-#if defined(ENABLE_GAMEPAD)
+#if defined(FE2D_GAMEPAD)
     enum gamepad_button_t {
         x,
         o,

@@ -35,6 +35,23 @@ float fun::render::window_t::get_zoom() const {
     return m_zoom;
 }
 
+void fun::render::window_t::zoom(float zoom_value) {
+    m_zoom *= zoom_value;
+
+    world_view.zoom(zoom_value);
+}
+
+void fun::render::window_t::zoom_into(vec2f_t screen_pos, float zoom_value) {
+    m_zoom *= zoom_value;
+
+    auto screen_01 = screen_pos / (fun::vec2f_t)(fun::vec2u_t)renderer.getSize() - .5f;
+    auto world = world_view.getSize();
+
+    world_view.zoom(zoom_value);
+
+    world_view.move((screen_01 * (fun::vec2f_t)(world - world_view.getSize())).to_sf());
+}
+
 sf::RenderWindow& fun::render::window_t::get_renderer() {
     return renderer;
 }
@@ -88,7 +105,11 @@ void fun::render::window_t::display(const sf::Color& bg_color, const sf::Shader*
     world_queue.clear();
 }
 
-void fun::render::window_t::poll_events() {
+void fun::render::window_t::register_event_handler(sf::Event::EventType event_type, std::function<void(window_t&, const sf::Event&)> handler_function) {
+    m_event_handlers[event_type] = handler_function;
+}
+
+void fun::render::window_t::update() {
     sf::Event event;
 
     float curr_zoom_value;
@@ -113,20 +134,6 @@ void fun::render::window_t::poll_events() {
 
                 break;
 
-            case sf::Event::MouseWheelMoved: {
-                curr_zoom_value = event.mouseWheel.delta > 0 ? .9f : 1.1f;
-                m_zoom *= curr_zoom_value;
-
-                auto mouse_pos = (fun::vec2f_t)get_mouse_screen_position() / (fun::vec2f_t)(fun::vec2u_t)renderer.getSize() - .5f;
-                auto world = world_view.getSize();
-
-                world_view.zoom(curr_zoom_value);
-
-                world_view.move((mouse_pos * (fun::vec2f_t)(world - world_view.getSize())).to_sf());
-
-                break;
-            }
-
             case sf::Event::Resized:
                 refresh_window();
 
@@ -135,6 +142,11 @@ void fun::render::window_t::poll_events() {
                 // fps.Rescale(scale_val);
 
                 break;
+        }
+
+        
+        if (m_event_handlers[event.type].has_value()) {
+            m_event_handlers[event.type].value()(*this, event);
         }
     }
 }

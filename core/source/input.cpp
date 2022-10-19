@@ -1,7 +1,7 @@
 #include "input.h"
 #include "_math.h"
 
-#if defined(ENABLE_MOUSE)
+#if defined(FE2D_MOUSE)
 static bool _mouse_button_pressed_[MOUSE_BUTTON_COUNT];
 static bool _mouse_button_released_[MOUSE_BUTTON_COUNT];
 static bool _mouse_button_hold_[MOUSE_BUTTON_COUNT];
@@ -10,20 +10,20 @@ static fun::vec2f_t _mouse_position_ = fun::vec2f_t();
 static fun::vec2f_t _mouse_delta_ = fun::vec2f_t();
 #endif
 
-#if defined(ENABLE_KEYBOARD)
+#if defined(FE2D_KEYBOARD)
 static bool _keyboard_key_pressed_[KEYBOARD_KEY_COUNT];
 static bool _keyboard_key_released_[KEYBOARD_KEY_COUNT];
 static bool _keyboard_key_hold_[KEYBOARD_KEY_COUNT];
 #endif
 
-#if defined(ENABLE_GAMEPAD)
+#if defined(FE2D_GAMEPAD)
 static bool _gamepad_button_pressed_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 static bool _gamepad_button_released_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 static bool _gamepad_button_hold_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 #endif
 
 void fun::input::listen(bool is_focused) {
-#if defined(ENABLE_MOUSE)
+#if defined(FE2D_MOUSE)
     for (int button = 0; button < MOUSE_BUTTON_COUNT; button++) {
         _mouse_button_pressed_[button] = false;
         _mouse_button_released_[button] = false;
@@ -52,7 +52,7 @@ void fun::input::listen(bool is_focused) {
     _mouse_position_ += _mouse_delta_;
 #endif
 
-#if defined(ENABLE_KEYBOARD)
+#if defined(FE2D_KEYBOARD)
     for (int key = 0; key < KEYBOARD_KEY_COUNT; key++) {
         _keyboard_key_pressed_[key] = false;
         _keyboard_key_released_[key] = false;
@@ -71,7 +71,7 @@ void fun::input::listen(bool is_focused) {
     }
 #endif
 
-#if defined(ENABLE_GAMEPAD)
+#if defined(FE2D_GAMEPAD)
     for (int button = 0; button < GAMEPAD_BUTTON_COUNT; button++) {
         for (int index = 0; index < MAX_GAMEPAD_COUNT; index++) {
             _gamepad_button_pressed_[button][index] = false;
@@ -97,7 +97,7 @@ void fun::input::listen(bool is_focused) {
 
 
 
-#if defined(ENABLE_MOUSE)
+#if defined(FE2D_MOUSE)
 bool fun::input::pressed(sf::Mouse::Button button) {
     return _mouse_button_pressed_[button];
 }
@@ -117,7 +117,7 @@ fun::vec2f_t fun::input::mouse_2d() {
 
 
 
-#if defined(ENABLE_KEYBOARD)
+#if defined(FE2D_KEYBOARD)
 bool fun::input::pressed(sf::Keyboard::Key key) {
     return _keyboard_key_pressed_[key];
 }
@@ -145,7 +145,7 @@ fun::vec2f_t fun::input::keyboard_2d(sf::Keyboard::Key a, sf::Keyboard::Key b, s
 
 
 
-#if defined(ENABLE_GAMEPAD)
+#if defined(FE2D_GAMEPAD)
 bool fun::input::is_gamepad_connected(int index) {
     return sf::Joystick::isConnected(index);
 }

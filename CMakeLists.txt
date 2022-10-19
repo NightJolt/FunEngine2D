@@ -10,6 +10,26 @@ elseif(FE2D_APPLE)
 	list(APPEND CPP_DEFINITIONS FE2D_APPLE)
 endif()
 
+
+option(FE2D_MOUSE "enable mouse input" ON)
+option(FE2D_KEYBOARD "enable keyboard input" ON)
+option(FE2D_GAMEPAD "enable gamepad input" OFF)
+
+list(APPEND CPP_DEFINITIONS FE2D_MOUSE)
+list(APPEND CPP_DEFINITIONS FE2D_KEYBOARD)
+list(APPEND CPP_DEFINITIONS FE2D_GAMEPAD)
+
+if (FE2D_MOUSE)
+	list(APPEND CPP_DEFINITIONS FE2D_MOUSE)
+endif()
+if(FE2D_KEYBOARD)
+	list(APPEND CPP_DEFINITIONS FE2D_KEYBOARD)
+endif()
+if(FE2D_GAMEPAD)
+	list(APPEND CPP_DEFINITIONS FE2D_GAMEPAD)
+endif()
+
+
 option(FE2D_ENABLE_CUDA "enable cuda compilation" OFF)
 option(FE2D_ENABLE_CUDA_SEPARABLE_COMPILATION "enable cuda separable compilation" OFF)
 

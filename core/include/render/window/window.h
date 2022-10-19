@@ -14,6 +14,8 @@ namespace fun::render {
         bool is_open() const;
         bool is_focused() const;
         float get_zoom() const;
+        void zoom(float);
+        void zoom_into(vec2f_t, float);
         sf::RenderWindow& get_renderer();
 
         void target_framerate(uint32_t);
@@ -26,7 +28,9 @@ namespace fun::render {
         void draw_world(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
         void draw_ui(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
 
-        void poll_events();
+        void register_event_handler(sf::Event::EventType, std::function<void(window_t&, const sf::Event&)>);
+
+        void update();
         void display(const sf::Color&, const sf::Shader* = nullptr);
 
         vec2i_t get_mouse_screen_position();
@@ -61,5 +65,7 @@ namespace fun::render {
         sf::Sprite world_render;
         sf::Sprite ui_render;
         sf::Sprite final_render;
+
+        std::optional <std::function<void(window_t&, const sf::Event&)>> m_event_handlers[sf::Event::EventType::Count];
     };
 }

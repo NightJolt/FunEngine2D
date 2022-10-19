@@ -18,7 +18,7 @@ void fun::render::winmgr::init(const window_data_t& data) {
 }
 
 void fun::render::winmgr::update() {
-    ::main_window->poll_events();
+    ::main_window->update();
 
 #if defined(FE2D_IMGUI)
     ImGui::SFML::Update(::main_window->get_renderer(), fun::time::delta_time_object());
