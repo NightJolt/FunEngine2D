@@ -4,7 +4,7 @@
 
 fun::render::sprite_t::sprite_t() : m_shader(nullptr), m_update_body(false), m_update_texture(false), m_update_color(false) {
     m_primitive.set_primitive_type(sf::PrimitiveType::Quads);
-    m_primitive.get_vertices().resize(4);
+    m_primitive.resize(4);
 }
 
 
@@ -101,14 +101,10 @@ void fun::render::sprite_t::set_color(rgba_t color) {
 }
 
 void fun::render::sprite_t::batch(sprite_t* begin, sprite_t* end) {
-    auto& vertices = m_primitive.get_vertices();
-    
-    vertices.reserve(vertices.size() + (end - begin) * 4);
-
     for (sprite_t* sprite = begin; sprite != end; ++sprite) {
         sprite->update();
 
-        vertices.insert(m_primitive.get_vertices().end(), sprite->m_primitive.get_vertices().begin(), sprite->m_primitive.get_vertices().end());
+        m_primitive.batch(sprite->m_primitive);
     }
 }
 
@@ -136,8 +132,6 @@ void fun::render::sprite_t::update() const {
 
 
 void fun::render::sprite_t::update_body() const {
-    auto& vertices = m_primitive.get_vertices();
-
     vec2f_t position = m_transform.position - m_transform.scale * m_origin;
 
     vec2f_t ul = position;
@@ -152,29 +146,26 @@ void fun::render::sprite_t::update_body() const {
     vec2f_t nul = { (o.x - ul.x) * cv - (o.y - ul.y) * sv, (o.x - ul.x) * sv + (o.y - ul.y) * cv };
     vec2f_t nur = { (o.x - ur.x) * cv - (o.y - ur.y) * sv, (o.x - ur.x) * sv + (o.y - ur.y) * cv };
     
-    vertices[0].position = (o - nul).to_sf();
-    vertices[1].position = (o - nur).to_sf();
-    vertices[2].position = (o + nul).to_sf();
-    vertices[3].position = (o + nur).to_sf();
+    m_primitive.get_vertex(0).position = (o - nul).to_sf();
+    m_primitive.get_vertex(1).position = (o - nur).to_sf();
+    m_primitive.get_vertex(2).position = (o + nul).to_sf();
+    m_primitive.get_vertex(3).position = (o + nur).to_sf();
 }
 
 void fun::render::sprite_t::update_texture() const {
-    auto& vertices = m_primitive.get_vertices();
-    
-    vertices[0].texCoords = sf::Vector2f(m_texture_pos.x, m_texture_pos.y);
-    vertices[1].texCoords = sf::Vector2f(m_texture_pos.x + m_texture_size.x, m_texture_pos.y);
-    vertices[2].texCoords = sf::Vector2f(m_texture_pos.x + m_texture_size.x, m_texture_pos.y + m_texture_size.y);
-    vertices[3].texCoords = sf::Vector2f(m_texture_pos.x, m_texture_pos.y + m_texture_size.y);
+    m_primitive.get_vertex(0).texCoords = sf::Vector2f(m_texture_pos.x, m_texture_pos.y);
+    m_primitive.get_vertex(1).texCoords = sf::Vector2f(m_texture_pos.x + m_texture_size.x, m_texture_pos.y);
+    m_primitive.get_vertex(2).texCoords = sf::Vector2f(m_texture_pos.x + m_texture_size.x, m_texture_pos.y + m_texture_size.y);
+    m_primitive.get_vertex(3).texCoords = sf::Vector2f(m_texture_pos.x, m_texture_pos.y + m_texture_size.y);
 }
 
 void fun::render::sprite_t::update_color() const {
-    auto& vertices = m_primitive.get_vertices();
     auto color = m_color.to_sf();
     
-    vertices[0].color = color;
-    vertices[1].color = color;
-    vertices[2].color = color;
-    vertices[3].color = color;
+    m_primitive.get_vertex(0).color = color;
+    m_primitive.get_vertex(1).color = color;
+    m_primitive.get_vertex(2).color = color;
+    m_primitive.get_vertex(3).color = color;
 }
 
 

@@ -2,7 +2,7 @@
 
 #include "../globals.h"
 #include "../pointer.h"
-#include "packet_storage_t.h"
+#include "packet_storage.h"
 #include "connection.h"
 
 namespace fun::network {

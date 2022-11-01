@@ -85,7 +85,7 @@ void fun::render::curve_t::update_body() const {
 void fun::render::curve_t::update_color() const {
     const auto color = m_color.to_sf();
 
-    for (auto& vertex : m_primitive.get_vertices()) {
+    for (auto& vertex : m_primitive.get_iterator()) {
         vertex.color = color;
     }
 }

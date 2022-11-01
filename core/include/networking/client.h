@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../globals.h"
-#include "packet_storage_t.h"
+#include "packet_storage.h"
 
 namespace fun::network {
     class client_t {

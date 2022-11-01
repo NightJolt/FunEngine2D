@@ -154,8 +154,11 @@ namespace fun {
 
     namespace render {
         struct texture_t;
+        struct shader_t;
+        
         struct sprite_t;
         struct sprite_animator_t;
+
         struct render_item_t;
         struct render_queue_t;
 
@@ -166,6 +169,9 @@ namespace fun {
         struct curved_line_t;
         struct primitive_t;
         struct rounded_rect_t;
+
+        struct tilemap_t;
+        struct tilechunk_t;
     }
 
     namespace network {
@@ -182,5 +188,13 @@ namespace fun {
 
     namespace interaction {
         struct interactable;
+    }
+}
+
+namespace fun {
+    namespace render {
+#if defined(FE2D_SFML)
+        typedef sf::Vertex vertex_t;
+#endif
     }
 }

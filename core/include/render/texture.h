@@ -5,20 +5,20 @@
 
 namespace fun::render {
     class texture_t {
-        public:
-            explicit texture_t(sf::Texture* = nullptr, vec2u_t = { 1, 1 });
+    public:
+        explicit texture_t(sf::Texture* = nullptr, vec2u_t = { 1, 1 });
 
-            void set_texture(sf::Texture*);
-            void set_grid_size(vec2u_t);
+        void set_texture(sf::Texture*);
+        void set_grid_size(vec2u_t);
 
-            sf::Texture* get_texture() const;
-            uint32_t4 get_subtexture(uint32_t) const;
-            uint32_t4 get_subtexture(vec2u_t) const;
+        sf::Texture* get_texture() const;
+        uint32_t4 get_subtexture(uint32_t) const;
+        uint32_t4 get_subtexture(vec2u_t) const;
 
-        private:
-            sf::Texture* m_texture;
-            vec2u_t m_grid_size;
+    private:
+        sf::Texture* m_texture;
 
-            vec2u_t m_cell_size;
+        vec2u_t m_grid_size;
+        vec2u_t m_cell_size;
     };
 }
