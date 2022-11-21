@@ -27,6 +27,7 @@ namespace fun {
     typedef vec2_t <int32_t> vec2i_t;
     typedef vec2_t <uint32_t> vec2u_t;
     typedef vec2_t <float> vec2f_t;
+    typedef vec2_t <double> vec2d_t;
 
     typedef vec2_t <int8_t> vec2i8_t;
     typedef vec2_t <int16_t> vec2i16_t;
