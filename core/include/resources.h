@@ -1,10 +1,11 @@
 #pragma once
 
 #include "globals.h"
+#include "render/texture.h"
 
 namespace fun::resources {
     void load_texture(const std::string&, const std::string&);
-    const sf::Texture& get_texture(const std::string&);
+    const fun::render::texture_t get_texture(const std::string&);
 
     // void LoadImage(const std::string&, const std::string&);
     // const sf::Image& GetImage(const std::string&);

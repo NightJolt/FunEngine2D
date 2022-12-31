@@ -3,6 +3,7 @@
 #include "../../globals.h"
 #include "../../vec2.h"
 #include "../render_queue.h"
+#include "../../color.h"
 
 namespace fun::render {
     class window_t {
@@ -31,7 +32,7 @@ namespace fun::render {
         void register_event_handler(sf::Event::EventType, std::function<void(window_t&, const sf::Event&)>);
 
         void update();
-        void display(const sf::Color&, const sf::Shader* = nullptr);
+        void display(const rgb_t&, const sf::Shader* = nullptr);
 
         vec2i_t get_mouse_screen_position();
         vec2f_t get_mouse_world_position();

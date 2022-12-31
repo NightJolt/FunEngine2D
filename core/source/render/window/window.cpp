@@ -84,8 +84,8 @@ void fun::render::window_t::draw_ui(const sf::Drawable& drawable, layer_t layer,
     ui_queue.add(drawable, layer, render_states);
 }
 
-void fun::render::window_t::display(const sf::Color& bg_color, const sf::Shader* shader) {
-    world_buffer.clear(bg_color);
+void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* shader) {
+    world_buffer.clear(bg_color.to_sf());
 
     world_buffer.setView(world_view);
     world_buffer.draw(world_queue);
