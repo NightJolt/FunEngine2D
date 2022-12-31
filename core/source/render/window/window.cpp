@@ -170,3 +170,11 @@ fun::vec2i_t fun::render::window_t::world_to_screen(const fun::vec2f_t p) {
 
     return world_buffer.mapCoordsToPixel(p.to_sf());
 }
+
+void fun::render::window_t::set_cursor_visible(bool visible) {
+    renderer.setMouseCursorVisible(visible);
+}
+
+void fun::render::window_t::set_cursor_grabbed(bool grabbed) {
+    renderer.setMouseCursorGrabbed(grabbed);
+}

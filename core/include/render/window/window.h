@@ -40,6 +40,9 @@ namespace fun::render {
         vec2f_t screen_to_world(const vec2i_t);
         vec2i_t world_to_screen(const vec2f_t);
 
+        void set_cursor_visible(bool);
+        void set_cursor_grabbed(bool);
+
     private:
         bool m_is_focused;
         float m_zoom;
