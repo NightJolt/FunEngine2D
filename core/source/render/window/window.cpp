@@ -76,6 +76,10 @@ void fun::render::window_t::set_world_view(vec2f_t center, float height) {
     world_view.setSize(height * size.x / size.y, height);
 }
 
+void fun::render::window_t::move_world_view(vec2f_t offset) {
+    world_view.move((offset * fun::vec2f_t { 1.f, -1.f }).to_sf());
+}
+
 void fun::render::window_t::draw_world(const sf::Drawable& drawable, layer_t layer, const sf::RenderStates& render_states) {
     world_queue.add(drawable, layer, render_states);
 }

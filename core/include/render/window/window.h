@@ -23,8 +23,7 @@ namespace fun::render {
         void set_vsync(bool);
 
         void set_world_view(vec2f_t, float);
-        // void set_zoom(float);
-        // void set_zoom_limits(float, float);
+        void move_world_view(vec2f_t);
 
         void draw_world(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
         void draw_ui(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
