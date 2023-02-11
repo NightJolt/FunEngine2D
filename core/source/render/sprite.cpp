@@ -2,7 +2,7 @@
 #include "_math.h"
 #include "tools/debugger.h"
 
-fun::render::sprite_t::sprite_t() : m_shader(nullptr), m_update_body(false), m_update_texture(false), m_update_color(false) {
+fun::render::sprite_t::sprite_t() : m_shader(nullptr), m_update_body(true), m_update_texture(false), m_update_color(false) {
     m_primitive.set_primitive_type(sf::PrimitiveType::Quads);
     m_primitive.resize(4);
 }
@@ -11,7 +11,10 @@ fun::render::sprite_t::sprite_t() : m_shader(nullptr), m_update_body(false), m_u
 
 void fun::render::sprite_t::bind_texture(const texture_t& texture) {
     m_texture = texture;
+    m_primitive.bind_texture(texture);
 
+    select_subtexture(0);
+    
     m_update_texture = true;
 }
 

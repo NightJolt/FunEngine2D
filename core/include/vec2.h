@@ -8,6 +8,7 @@ namespace fun {
         T x, y;
 
         vec2_t();
+        vec2_t(T);
         vec2_t(T, T);
 
         template <class U>
@@ -82,6 +83,9 @@ namespace fun {
 
 template <class T>
 fun::vec2_t<T>::vec2_t() : x(0), y(0) {}
+
+template <class T>
+fun::vec2_t<T>::vec2_t(T x) : x(x), y(x) {}
 
 template <class T>
 fun::vec2_t<T>::vec2_t(T x, T y) : x(x), y(y) {}
