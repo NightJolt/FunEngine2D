@@ -22,6 +22,8 @@ namespace fun {
         rgb_t(uint8_t, uint8_t, uint8_t);
         rgb_t(const rgba_t&);
 
+        rgb_t invert() const;
+
         uint8_t r;
         uint8_t g;
         uint8_t b;
@@ -47,6 +49,8 @@ namespace fun {
         rgba_t(uint8_t, uint8_t, uint8_t, uint8_t);
         rgba_t(const rgb_t&);
         rgba_t(const rgb_t&, uint8_t);
+
+        rgba_t invert() const;
 
         uint8_t r;
         uint8_t g;

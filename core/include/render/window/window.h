@@ -3,6 +3,7 @@
 #include "../../globals.h"
 #include "../../vec2.h"
 #include "../render_queue.h"
+#include "../../color.h"
 
 namespace fun::render {
     class window_t {
@@ -22,8 +23,7 @@ namespace fun::render {
         void set_vsync(bool);
 
         void set_world_view(vec2f_t, float);
-        // void set_zoom(float);
-        // void set_zoom_limits(float, float);
+        void move_world_view(vec2f_t);
 
         void draw_world(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
         void draw_ui(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
@@ -31,13 +31,16 @@ namespace fun::render {
         void register_event_handler(sf::Event::EventType, std::function<void(window_t&, const sf::Event&)>);
 
         void update();
-        void display(const sf::Color&, const sf::Shader* = nullptr);
+        void display(const rgb_t&, const sf::Shader* = nullptr);
 
         vec2i_t get_mouse_screen_position();
         vec2f_t get_mouse_world_position();
 
         vec2f_t screen_to_world(const vec2i_t);
         vec2i_t world_to_screen(const vec2f_t);
+
+        void set_cursor_visible(bool);
+        void set_cursor_grabbed(bool);
 
     private:
         bool m_is_focused;

@@ -9,7 +9,7 @@ const std::string resources_directory =
 #if defined(RELEASE_BUILD)
 "/resources/"
 #else
-"../resources/"
+"../../resources/"
 #endif
 ;
 
@@ -26,8 +26,8 @@ void fun::resources::load_texture(const std::string& key, const std::string& fil
     assert(it->second.loadFromFile(textures_directory + file));
 }
 
-const sf::Texture& fun::resources::get_texture(const std::string& key) {
-    return textures.at(key);
+const fun::render::texture_t fun::resources::get_texture(const std::string& key) {
+    return render::texture_t(&textures.at(key), { 1, 1 });
 }
 
 void fun::resources::load_font(const std::string& key, const std::string& file) {

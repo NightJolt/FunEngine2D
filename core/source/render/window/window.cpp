@@ -76,6 +76,10 @@ void fun::render::window_t::set_world_view(vec2f_t center, float height) {
     world_view.setSize(height * size.x / size.y, height);
 }
 
+void fun::render::window_t::move_world_view(vec2f_t offset) {
+    world_view.move((offset * fun::vec2f_t { 1.f, -1.f }).to_sf());
+}
+
 void fun::render::window_t::draw_world(const sf::Drawable& drawable, layer_t layer, const sf::RenderStates& render_states) {
     world_queue.add(drawable, layer, render_states);
 }
@@ -84,8 +88,8 @@ void fun::render::window_t::draw_ui(const sf::Drawable& drawable, layer_t layer,
     ui_queue.add(drawable, layer, render_states);
 }
 
-void fun::render::window_t::display(const sf::Color& bg_color, const sf::Shader* shader) {
-    world_buffer.clear(bg_color);
+void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* shader) {
+    world_buffer.clear(bg_color.to_sf());
 
     world_buffer.setView(world_view);
     world_buffer.draw(world_queue);
@@ -169,4 +173,12 @@ fun::vec2i_t fun::render::window_t::world_to_screen(const fun::vec2f_t p) {
     world_buffer.setView(world_view);
 
     return world_buffer.mapCoordsToPixel(p.to_sf());
+}
+
+void fun::render::window_t::set_cursor_visible(bool visible) {
+    renderer.setMouseCursorVisible(visible);
+}
+
+void fun::render::window_t::set_cursor_grabbed(bool grabbed) {
+    renderer.setMouseCursorGrabbed(grabbed);
 }
