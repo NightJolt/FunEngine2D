@@ -92,7 +92,7 @@ static std::mutex log_mutex;
 void fun::debugger::print_synced(std::string str) {
     log_mutex.lock();
 
-    println(str);
+    PRINTLN(str);
 
     log_mutex.unlock();
 }

@@ -23,7 +23,7 @@ void fun::resources::load_texture(const std::string& key, const std::string& fil
 
     auto it = textures.find(key);
 
-    assert(it->second.loadFromFile(textures_directory + file));
+    ASSERT_VERBAL(it->second.loadFromFile(textures_directory + file), "FAILED TO LOAD TEXTURE: " + file);
 }
 
 const fun::render::texture_t fun::resources::get_texture(const std::string& key) {
@@ -35,7 +35,7 @@ void fun::resources::load_font(const std::string& key, const std::string& file) 
 
     auto it = fonts.find(key);
 
-    assert(it->second.loadFromFile(fonts_directory + file));
+    ASSERT_VERBAL(it->second.loadFromFile(fonts_directory + file), "FAILED TO LOAD FONT: " + file);
 }
 
 const sf::Font& fun::resources::get_font(const std::string& key) {

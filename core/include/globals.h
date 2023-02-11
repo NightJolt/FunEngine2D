@@ -20,11 +20,6 @@
 #pragma region STD_LIBS_IMPORT
 #if defined(FE2D_DEBUG)
 #include <iostream>
-
-#define print(body) std::cout << body
-#define printsp(body) print(body) << " "
-#define println(body) print(body) << std::endl
-#define printbr() std::cout << std::endl
 #endif
 
 // todo: filter out unused includes
@@ -77,6 +72,30 @@
 #pragma region MACROS
 #define BITS(expr) (sizeof(expr) << 3)
 #define STR(str) (#str)
+
+#if defined(FE2D_DEBUG)
+    #define DEBUG_CODE(code)\
+        do {\
+            code;\
+        } while (false);
+#else
+    #define DEBUG_CODE(code) do { } while (false);
+#endif
+
+#define ASSERT_VERBAL(condition, message)\
+    DEBUG_CODE(\
+        if (!(condition)) {\
+            std::cerr << "Assertion failed: \033[1;31m" << message << "\033[0m (" << __FILE__ << "(" << __LINE__ << "))" << std::endl;\
+            std::terminate();\
+        }\
+    )
+
+#define ASSERT(condition) ASSERT_VERBAL(condition, #condition)
+
+#define PRINT(body) DEBUG_CODE(std::cout << (body))
+#define PRINTSP(body) DEBUG_CODE(std::cout << (body) << " ")
+#define PRINTLN(body) DEBUG_CODE(std::cout << (body) << std::endl)
+#define PRINTBR() DEBUG_CODE(std::cout << std::endl)
 #pragma endregion
 
 namespace fun {
