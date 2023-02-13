@@ -53,9 +53,8 @@ namespace fun::render {
         render_queue_t ui_queue;
 
         // render views
+        float world_view_height;
         sf::View world_view;
-        float view_height;
-
         sf::View ui_view;
         sf::View final_view;
 

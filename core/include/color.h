@@ -44,6 +44,7 @@ namespace fun {
     struct rgba_t {
         static const rgba_t black;
         static const rgba_t white;
+        static const rgba_t transparent;
 
         rgba_t();
         rgba_t(uint8_t, uint8_t, uint8_t, uint8_t);

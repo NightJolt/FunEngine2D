@@ -43,6 +43,7 @@ std::string fun::rgb_t::to_str() const {
 #pragma region rgba_t
 const fun::rgba_t fun::rgba_t::black = { 0, 0, 0, 255 };
 const fun::rgba_t fun::rgba_t::white = { 255, 255, 255, 255 };
+const fun::rgba_t fun::rgba_t::transparent = { 0, 0, 0, 0 };
 
 fun::rgba_t::rgba_t() : r(0), g(0), b(0), a(255) {}
 fun::rgba_t::rgba_t(uint8_t r, uint8_t g, uint8_t b, uint8_t a) : r(r), g(g), b(b), a(a) {}

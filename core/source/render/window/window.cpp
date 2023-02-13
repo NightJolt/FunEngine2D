@@ -15,7 +15,7 @@ void fun::render::window_t::refresh_window() {
     const vec2u_t& new_resolution = renderer.getSize();
 
     world_buffer.create(new_resolution.x, new_resolution.y, renderer.getSettings());
-    world_view.setSize(view_height * renderer.getSize().x / renderer.getSize().y, view_height);
+    world_view.setSize(world_view_height * renderer.getSize().x / renderer.getSize().y, world_view_height);
     world_view.zoom(m_zoom);
     world_render.setTextureRect(sf::IntRect(vec2i_t(0, 0).to_sf(), ((vec2i_t)new_resolution).to_sf()));
 
@@ -68,7 +68,7 @@ void fun::render::window_t::set_world_view(vec2f_t center, float height) {
     m_zoom *= 1.f;
     world_view.zoom(1.f);
 
-    view_height = height;
+    world_view_height = height;
 
     world_view.setCenter(center.to_sf());
 
@@ -90,15 +90,22 @@ void fun::render::window_t::draw_ui(const sf::Drawable& drawable, layer_t layer,
 
 void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* shader) {
     world_buffer.clear(bg_color.to_sf());
-
     world_buffer.setView(world_view);
     world_buffer.draw(world_queue);
     world_buffer.display();
-
     world_render.setTexture(world_buffer.getTexture());
+
+    ui_buffer.clear(fun::rgba_t::transparent.to_sf());
+    ui_buffer.setView(ui_view);
+    ui_buffer.draw(ui_queue);
+    ui_buffer.display();
+    ui_render.setTexture(ui_buffer.getTexture());
+
+    final_buffer.clear(fun::rgba_t::transparent.to_sf());
 
     renderer.setView(final_view);
     renderer.draw(world_render, shader);
+    renderer.draw(ui_render);
 
 #if defined(FE2D_IMGUI)
     ImGui::SFML::Render(renderer);
