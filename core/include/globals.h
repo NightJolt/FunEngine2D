@@ -113,7 +113,9 @@ namespace fun {
 
     typedef void async;
 
+    typedef std::array <uint32_t, 3> uint32_t3;
     typedef std::array <uint32_t, 4> uint32_t4;
+    typedef std::array <float32_t, 3> float32_t3;
     typedef std::array <float32_t, 4> float32_t4;
 
     typedef std::string str_t; // to be replaced by own implementation

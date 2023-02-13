@@ -5,11 +5,11 @@ static std::unordered_map <std::string, sf::Font> fonts;
 // static std::unordered_map <std::string, sf::Image> images;
 static std::unordered_map <std::string, sf::Shader*> shaders;
 
-const std::string resources_directory =
+const fun::str_t resources_directory =
 #if defined(RELEASE_BUILD)
-"/resources/"
+("/resources/")
 #else
-"../../resources/"
+(fun::str_t(ROOT_DIRECTORY) + "/resources/")
 #endif
 ;
 
