@@ -21,23 +21,13 @@ namespace fun::gui {
         vec2f_t abs_pos;
         vec2f_t rel_pos;
 
-        rect_t rect;
+        rect_t space;
     };
 }
 
 namespace fun::gui {
     auto get_inner_space(ecs::entity_t box) -> rect_t {
-        auto& box_info = ecs::get_component <box_info_t> (box);
-
-        rect_t space;
-
-        return space;
-    }
-
-    auto get_size(ecs::entity_t box) -> vec2f_t {
-        auto& box_info = ecs::get_component <box_info_t> (box);
-
-        return box_info.abs_size;
+        return ecs::get_component <box_info_t> (box).space;
     }
 }
 
@@ -95,9 +85,9 @@ void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
         auto box = it.get();
         auto& sprite = ecs::get_component <render::sprite_t> (box);
 
-        sprite.set_scale(get_size(box));
+        // sprite.set_scale(get_inner_space(box));
         // sprite.set_position(get_position(box));
 
         window.draw_world(sprite, 0);
     }
-}
+} 

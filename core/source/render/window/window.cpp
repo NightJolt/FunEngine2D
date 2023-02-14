@@ -15,12 +15,14 @@ void fun::render::window_t::refresh_window() {
     const vec2u_t& new_resolution = renderer.getSize();
 
     world_buffer.create(new_resolution.x, new_resolution.y, renderer.getSettings());
-    world_view.setSize(world_view_height * renderer.getSize().x / renderer.getSize().y, world_view_height);
+    world_view.setSize(world_view_height * new_resolution.x / new_resolution.y, world_view_height);
     world_view.zoom(m_zoom);
     world_render.setTextureRect(sf::IntRect(vec2i_t(0, 0).to_sf(), ((vec2i_t)new_resolution).to_sf()));
 
-    final_view.setSize(((vec2f_t)new_resolution).to_sf());
-    final_view.setCenter(((vec2f_t)new_resolution * .5f).to_sf());
+    ui_buffer.create(new_resolution.x, new_resolution.y, renderer.getSettings());
+    ui_view.setSize(((vec2f_t)new_resolution).to_sf());
+    ui_view.setCenter(((vec2f_t)new_resolution * .5f).to_sf());
+    ui_render.setTextureRect(sf::IntRect(vec2i_t(0, 0).to_sf(), ((vec2i_t)new_resolution).to_sf()));
 }
 
 bool fun::render::window_t::is_open() const {
@@ -54,6 +56,10 @@ void fun::render::window_t::zoom_into(vec2f_t screen_pos, float zoom_value) {
 
 sf::RenderWindow& fun::render::window_t::get_renderer() {
     return renderer;
+}
+
+fun::vec2u_t fun::render::window_t::get_resoluton() {
+    return renderer.getSize();
 }
 
 void fun::render::window_t::target_framerate(uint32_t fps) {
@@ -101,9 +107,7 @@ void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* sha
     ui_buffer.display();
     ui_render.setTexture(ui_buffer.getTexture());
 
-    final_buffer.clear(fun::rgba_t::transparent.to_sf());
-
-    renderer.setView(final_view);
+    renderer.setView(ui_view);
     renderer.draw(world_render, shader);
     renderer.draw(ui_render);
 

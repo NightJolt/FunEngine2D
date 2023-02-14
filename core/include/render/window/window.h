@@ -18,6 +18,7 @@ namespace fun::render {
         void zoom(float);
         void zoom_into(vec2f_t, float);
         sf::RenderWindow& get_renderer();
+        vec2u_t get_resoluton();
 
         void target_framerate(uint32_t);
         void set_vsync(bool);
@@ -56,17 +57,14 @@ namespace fun::render {
         float world_view_height;
         sf::View world_view;
         sf::View ui_view;
-        sf::View final_view;
 
         // render textures
         sf::RenderTexture world_buffer;
         sf::RenderTexture ui_buffer;
-        sf::RenderTexture final_buffer;
 
         // render sprites
         sf::Sprite world_render;
         sf::Sprite ui_render;
-        sf::Sprite final_render;
 
         std::optional <std::function<void(window_t&, const sf::Event&)>> m_event_handlers[sf::Event::EventType::Count];
     };
