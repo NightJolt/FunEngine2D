@@ -23,6 +23,8 @@ namespace fun::gui {
 
         rect_t space;
     };
+
+    CREATE_TYPE_FROM_NONPRIMITIVE(image_t, render::sprite_t)
 }
 
 namespace fun::gui {
@@ -65,13 +67,13 @@ auto fun::gui::free_canvas(ecs::entity_t canvas) -> void {
 auto fun::gui::create_image() -> ecs::entity_t {
     ecs::entity_t box = create_box();
 
-    auto& sprite = ecs::add_component <render::sprite_t> (box);
+    auto& sprite = ecs::add_component <image_t> (box);
 
     return box;
 }
 
 auto fun::gui::free_image(ecs::entity_t image) -> void {
-    ecs::remove_component <render::sprite_t> (image);
+    ecs::remove_component <image_t> (image);
 
     free_box(image);
 }
@@ -80,10 +82,10 @@ void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
     auto& box_info = ecs::get_component <box_info_t> (canvas);
     
     for (auto it = ent::children_iterator_t(canvas, true); it.valid(); it.next()) {
-        if (!ecs::has_component <render::sprite_t> (it.get())) continue;
+        if (!ecs::has_component <image_t> (it.get())) continue;
 
         auto box = it.get();
-        auto& sprite = ecs::get_component <render::sprite_t> (box);
+        auto& sprite = ecs::get_component <image_t> (box);
 
         // sprite.set_scale(get_inner_space(box));
         // sprite.set_position(get_position(box));

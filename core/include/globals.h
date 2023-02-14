@@ -96,6 +96,17 @@
 #define PRINTSP(body) DEBUG_CODE(std::cout << (body) << " ")
 #define PRINTLN(body) DEBUG_CODE(std::cout << (body) << std::endl)
 #define PRINTBR() DEBUG_CODE(std::cout << std::endl)
+
+#define CREATE_TYPE_FROM_NONPRIMITIVE(new_type, old_type)\
+    struct new_type : public old_type {\
+    public:\
+        new_type() = default;\
+        ~new_type() = default;\
+        new_type(const old_type& other) : old_type(other) {}\
+        new_type(old_type&& other) : old_type(std::move(other)) {}\
+        new_type& operator=(const old_type& other) { old_type::operator=(other); return *this; }\
+        new_type& operator=(old_type&& other) { old_type::operator=(std::move(other)); return *this; }\
+    };
 #pragma endregion
 
 namespace fun {
