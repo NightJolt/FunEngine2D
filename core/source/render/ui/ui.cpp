@@ -15,22 +15,9 @@ namespace fun::gui {
     };
 
     struct box_info_t {
-        vec2f_t abs_size;
-        vec2f_t rel_size;
-
-        vec2f_t abs_pos;
-        vec2f_t rel_pos;
-
+        transform_t transform;
         rect_t space;
     };
-
-    CREATE_TYPE_FROM_NONPRIMITIVE(image_t, render::sprite_t)
-}
-
-namespace fun::gui {
-    auto get_inner_space(ecs::entity_t box) -> rect_t {
-        return ecs::get_component <box_info_t> (box).space;
-    }
 }
 
 auto fun::gui::create_box() -> ecs::entity_t {
@@ -41,19 +28,18 @@ auto fun::gui::create_box() -> ecs::entity_t {
     return box;
 }
 
+auto fun::gui::set_transform(ecs::entity_t box, transform_t transform) -> void {
+    ecs::get_component <box_info_t> (box).transform = transform;
+}
+
 auto fun::gui::free_box(ecs::entity_t box) -> void {
     ecs::remove_component <box_info_t> (box);
 
     ent::destroy(box);
 }
 
-auto fun::gui::create_canvas(vec2f_t size) -> ecs::entity_t {
+auto fun::gui::create_canvas() -> ecs::entity_t {
     ecs::entity_t box = create_box();
-
-    auto& box_info = ecs::get_component <box_info_t> (box);
-
-    box_info.abs_size = size;
-    box_info.rel_size = 0;
     
     return box;
 }
@@ -68,6 +54,7 @@ auto fun::gui::create_image() -> ecs::entity_t {
     ecs::entity_t box = create_box();
 
     auto& sprite = ecs::add_component <image_t> (box);
+    sprite.set_origin({ 0.5f, 0.5f });
 
     return box;
 }
@@ -80,16 +67,38 @@ auto fun::gui::free_image(ecs::entity_t image) -> void {
 
 void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
     auto& box_info = ecs::get_component <box_info_t> (canvas);
+
+    box_info.space = rect_t(0, 0, window.get_resoluton().x, window.get_resoluton().y);
     
     for (auto it = ent::children_iterator_t(canvas, true); it.valid(); it.next()) {
-        if (!ecs::has_component <image_t> (it.get())) continue;
+        auto parent = ecs::get_component <ent::hierarchy_t> (it.get()).parent;
+        auto& pbox = ecs::get_component <box_info_t> (parent);
+        auto& box = ecs::get_component <box_info_t> (it.get());
 
-        auto box = it.get();
-        auto& sprite = ecs::get_component <image_t> (box);
+        auto pspace = pbox.space;
+        auto& space = box.space;
 
-        // sprite.set_scale(get_inner_space(box));
-        // sprite.set_position(get_position(box));
+        auto hsize = (pspace.right - pspace.left) * box.transform.rel_size.x + box.transform.abs_size.x;
+        auto vsize = (pspace.bottom - pspace.top) * box.transform.rel_size.y + box.transform.abs_size.y;
+        
+        auto hpos = (pspace.right - pspace.left) * box.transform.rel_pos.x + box.transform.abs_pos.x;
+        auto vpos = (pspace.bottom - pspace.top) * box.transform.rel_pos.y + box.transform.abs_pos.y;
 
-        window.draw_world(sprite, 0);
+        space.left = pspace.left + hpos - hsize * .5f;
+        space.right = pspace.left + hpos + hsize * .5f;
+        space.top = pspace.top + vpos - vsize * .5f;
+        space.bottom = pspace.top + vpos + vsize * .5f;
+    }
+
+    for (auto& sprite : ecs::iterate_component <image_t> ()) {
+        auto& box = ecs::get_component <box_info_t> (ecs::get_entity(sprite));
+
+        float hsize = box.space.right - box.space.left;
+        float vsize = box.space.bottom - box.space.top;
+
+        sprite.set_position(fun::vec2f_t { box.space.left, box.space.top } + fun::vec2f_t { hsize * .5f, vsize * .5f });
+        sprite.set_scale({ hsize, vsize });
+
+        window.draw_ui(sprite, 0);
     }
 } 
