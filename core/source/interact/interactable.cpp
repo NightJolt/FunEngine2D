@@ -2,7 +2,7 @@
 #include "_math.h"
 #include "input.h"
 
-fun::interactable_t::interactable_t(const std::function <bool(vec2f_t)>& interaction_fun, layer_t layer) :
+fun::interactable_t::interactable_t(const std::function <interact_result_t(vec2f_t, vec2f_t)>& interaction_fun, layer_t layer) :
 right_pressed(false),
 right_hold(false),
 right_released(false),
@@ -20,3 +20,7 @@ mouse_right_offset(),
 layer(layer),
 interaction_fun(std::move(interaction_fun))
 {}
+
+void fun::interactable_t::set_layer(layer_t l) {
+    layer = l;
+}

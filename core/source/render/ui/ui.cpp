@@ -1,5 +1,7 @@
 #include "render/ui/ui.h"
 #include "ecs/ent.h"
+#include "render/window/window.h"
+#include "interact/interactable.h"
 
 namespace fun::gui {
     struct rect_t {
@@ -17,6 +19,8 @@ namespace fun::gui {
     struct box_info_t {
         transform_t transform;
         rect_t space;
+        bool dirty;
+        layer_t layer;
     };
 }
 
@@ -29,7 +33,20 @@ auto fun::gui::create_box() -> ecs::entity_t {
 }
 
 auto fun::gui::set_transform(ecs::entity_t box, transform_t transform) -> void {
-    ecs::get_component <box_info_t> (box).transform = transform;
+    auto& box_info = ecs::get_component <box_info_t> (box);
+
+    box_info.transform = transform;
+    box_info.dirty = true;
+}
+
+auto fun::gui::set_layer(ecs::entity_t box, layer_t layer) -> void {
+    auto& box_info = ecs::get_component <box_info_t> (box);
+
+    box_info.layer = layer;
+
+    if (ecs::has_component <interactable_t> (box)) {
+        ecs::get_component <interactable_t> (box).set_layer(layer);
+    }
 }
 
 auto fun::gui::free_box(ecs::entity_t box) -> void {
@@ -65,6 +82,42 @@ auto fun::gui::free_image(ecs::entity_t image) -> void {
     free_box(image);
 }
 
+auto fun::gui::create_button() -> ecs::entity_t {
+    ecs::entity_t box = create_box();
+
+    auto& sprite = ecs::add_component <image_t> (box);
+    sprite.set_origin({ 0.5f, 0.5f });
+
+    auto& interactable = ecs::add_component <interactable_t> (box,
+        [box](vec2f_t mouse_world_pos, vec2f_t mouse_screen_pos) -> interact_result_t {
+            auto space = ecs::get_component <box_info_t> (box).space;
+
+            return {
+                mouse_screen_pos.x >= space.left &&
+                mouse_screen_pos.x <= space.right &&
+                mouse_screen_pos.y >= space.top &&
+                mouse_screen_pos.y <= space.bottom,
+                mouse_screen_pos - vec2f_t(space.left + (space.right - space.left) * .5f, space.top + (space.bottom - space.top) * .5f)
+            };
+        }
+    );
+
+    return box;
+}
+
+auto fun::gui::free_button(ecs::entity_t button) -> void {
+    ecs::remove_component <image_t> (button);
+    ecs::remove_component <interactable_t> (button);
+
+    free_box(button);
+}
+
+void fun::gui::invalidate(ecs::entity_t box) {
+    auto& box_info = ecs::get_component <box_info_t> (box);
+
+    box_info.dirty = true;
+}
+
 void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
     auto& box_info = ecs::get_component <box_info_t> (canvas);
 
@@ -74,6 +127,8 @@ void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
         auto parent = ecs::get_component <ent::hierarchy_t> (it.get()).parent;
         auto& pbox = ecs::get_component <box_info_t> (parent);
         auto& box = ecs::get_component <box_info_t> (it.get());
+
+        if (!(box.dirty |= pbox.dirty)) continue;
 
         auto pspace = pbox.space;
         auto& space = box.space;
@@ -93,12 +148,27 @@ void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
     for (auto& sprite : ecs::iterate_component <image_t> ()) {
         auto& box = ecs::get_component <box_info_t> (ecs::get_entity(sprite));
 
-        float hsize = box.space.right - box.space.left;
-        float vsize = box.space.bottom - box.space.top;
+        if (box.dirty) {
+            float hsize = box.space.right - box.space.left;
+            float vsize = box.space.bottom - box.space.top;
 
-        sprite.set_position(fun::vec2f_t { box.space.left, box.space.top } + fun::vec2f_t { hsize * .5f, vsize * .5f });
-        sprite.set_scale({ hsize, vsize });
+            sprite.set_position(fun::vec2f_t { box.space.left, box.space.top } + fun::vec2f_t { hsize * .5f, vsize * .5f });
+            sprite.set_scale({ hsize, vsize });
+        }
 
-        window.draw_ui(sprite, 0);
+        window.draw_ui(sprite, box.layer);
     }
-} 
+
+    bool should_invalidate_ui = box_info.dirty;
+    box_info.dirty = false;
+    
+    for (auto it = ent::children_iterator_t(canvas, true); it.valid(); it.next()) {
+        auto& box = ecs::get_component <box_info_t> (it.get());
+        
+        should_invalidate_ui |= box.dirty;
+
+        box.dirty = false;
+    }
+
+    if (should_invalidate_ui) window.invalidate_ui();
+}

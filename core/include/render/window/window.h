@@ -29,6 +29,8 @@ namespace fun::render {
         void draw_world(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
         void draw_ui(const sf::Drawable&, layer_t, const sf::RenderStates& = sf::RenderStates::Default);
 
+        void invalidate_ui();
+
         void register_event_handler(sf::Event::EventType, std::function<void(window_t&, const sf::Event&)>);
 
         void update();
@@ -65,6 +67,8 @@ namespace fun::render {
         // render sprites
         sf::Sprite world_render;
         sf::Sprite ui_render;
+
+        bool ui_invalidated;
 
         std::optional <std::function<void(window_t&, const sf::Event&)>> m_event_handlers[sf::Event::EventType::Count];
     };

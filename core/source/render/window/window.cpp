@@ -4,7 +4,8 @@
 fun::render::window_t::window_t(const window_data_t& data) :
     renderer(sf::VideoMode(data.size.x, data.size.y), data.name, data.style, data.settings),
     m_is_focused(true),
-    m_zoom(1)
+    m_zoom(1),
+    ui_invalidated(false)
 {
     refresh_window();
 
@@ -94,6 +95,10 @@ void fun::render::window_t::draw_ui(const sf::Drawable& drawable, layer_t layer,
     ui_queue.add(drawable, layer, render_states);
 }
 
+void fun::render::window_t::invalidate_ui() {
+    ui_invalidated = true;
+}
+
 void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* shader) {
     world_buffer.clear(bg_color.to_sf());
     world_buffer.setView(world_view);
@@ -101,11 +106,15 @@ void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* sha
     world_buffer.display();
     world_render.setTexture(world_buffer.getTexture());
 
-    ui_buffer.clear(fun::rgba_t::transparent.to_sf());
-    ui_buffer.setView(ui_view);
-    ui_buffer.draw(ui_queue);
-    ui_buffer.display();
-    ui_render.setTexture(ui_buffer.getTexture());
+    if (ui_invalidated) {
+        ui_buffer.clear(fun::rgba_t::transparent.to_sf());
+        ui_buffer.setView(ui_view);
+        ui_buffer.draw(ui_queue);
+        ui_buffer.display();
+        ui_render.setTexture(ui_buffer.getTexture());
+
+        ui_invalidated = false;
+    }
 
     renderer.setView(ui_view);
     renderer.draw(world_render, shader);
@@ -118,6 +127,7 @@ void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* sha
     renderer.display();
 
     world_queue.clear();
+    ui_queue.clear();
 }
 
 void fun::render::window_t::register_event_handler(sf::Event::EventType event_type, std::function<void(window_t&, const sf::Event&)> handler_function) {
@@ -151,10 +161,6 @@ void fun::render::window_t::update() {
 
             case sf::Event::Resized:
                 refresh_window();
-
-                // ? FOR UI
-                // sf::Vector2f scale_val = Math::Sqrt(ratio * Math::Swap(ratio));
-                // fps.Rescale(scale_val);
 
                 break;
         }

@@ -2,7 +2,6 @@
 #include "../../ecs/ecs.h"
 #include "../../vec2.h"
 #include "../sprite.h"
-#include "../window/window.h"
 
 namespace fun::gui {
     struct transform_t {
@@ -17,6 +16,7 @@ namespace fun::gui {
 
     ecs::entity_t create_box();
     void set_transform(ecs::entity_t, transform_t);
+    void set_layer(ecs::entity_t, layer_t);
     void free_box(ecs::entity_t);
 
     ecs::entity_t create_canvas();
@@ -25,5 +25,9 @@ namespace fun::gui {
     ecs::entity_t create_image();
     void free_image(ecs::entity_t);
 
+    ecs::entity_t create_button();
+    void free_button(ecs::entity_t);
+
+    void invalidate(ecs::entity_t);
     void render(ecs::entity_t, render::window_t&);
 }

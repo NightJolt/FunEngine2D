@@ -9,7 +9,8 @@ static fun::ecs::entity_t entity_active = fun::ecs::nullentity;
 static fun::ecs::entity_t entity_last = fun::ecs::nullentity;
 
 void fun::interaction::update() {
-    vec2f_t mouse_pos = render::winmgr::get_main_window().get_mouse_world_position();
+    vec2f_t mouse_world_pos = render::winmgr::get_main_window().get_mouse_world_position();
+    vec2f_t mouse_screen_pos = render::winmgr::get_main_window().get_mouse_screen_position();
 
     entity_active = ecs::validate_entity(entity_active);
     entity_last = ecs::validate_entity(entity_last);
@@ -27,7 +28,10 @@ void fun::interaction::update() {
     if (entity_active != ecs::nullentity) {
         auto& interactable = ecs::get_component <interactable_t> (entity_active);
 
-        bool is_mouse_interacted = interactable.interaction_fun(mouse_pos);
+        // mouse_pos - fun::ecs::get_component <transform_t> (fun::ecs::get_entity(interactable)).position
+        auto interact_result = interactable.interaction_fun(mouse_world_pos, mouse_screen_pos);
+
+        bool is_mouse_interacted = interact_result.interacted;
         bool is_left_interacted = interactable.left_pressed || interactable.left_hold;// || interactable.left_released;
         bool is_right_interacted = interactable.right_pressed || interactable.right_hold;// || interactable.right_released;
         bool is_interacted = is_mouse_interacted || is_left_interacted || is_right_interacted;
@@ -42,7 +46,7 @@ void fun::interaction::update() {
                         interactable.left_pressed = true;
                         interactable.left_hold = true;
 
-                        interactable.mouse_left_offset = mouse_pos - fun::ecs::get_component <transform_t> (fun::ecs::get_entity(interactable)).position;
+                        interactable.mouse_left_offset = interact_result.offset;
                     }
                 }
             }
@@ -63,7 +67,7 @@ void fun::interaction::update() {
                         interactable.right_pressed = true;
                         interactable.right_hold = true;
 
-                        interactable.mouse_right_offset = mouse_pos - fun::ecs::get_component <transform_t> (fun::ecs::get_entity(interactable)).position;
+                        interactable.mouse_right_offset = interact_result.offset;
                     }
                 }
             }
@@ -105,7 +109,7 @@ void fun::interaction::update() {
         auto& interactable = ecs::get_component <interactable_t> (entity_active);
         
         if (!interactable.left_hold && !interactable.right_hold) {
-            ecs::entity_t new_entity = entity_at_pos(mouse_pos.to_sf());
+            ecs::entity_t new_entity = entity_at_pos(mouse_world_pos, mouse_screen_pos);
 
             if (new_entity == ecs::nullentity) new_entity = entity_active;
 
@@ -118,7 +122,7 @@ void fun::interaction::update() {
             }
         }
     } else {
-        entity_active = entity_at_pos(mouse_pos.to_sf());
+        entity_active = entity_at_pos(mouse_world_pos, mouse_screen_pos);
 
         if (entity_active != ecs::nullentity) {
             ecs::get_component <interactable_t> (entity_active).hover_enter = true;
@@ -126,12 +130,12 @@ void fun::interaction::update() {
     }
 }
 
-fun::ecs::entity_t fun::interaction::entity_at_pos(vec2f_t pos) {
+fun::ecs::entity_t fun::interaction::entity_at_pos(vec2f_t mouse_world_pos, vec2f_t mouse_screen_pos) {
     ecs::entity_t target = ecs::nullentity;
     layer_t target_layer = 0;
 
     for (auto& interactable : ecs::iterate_component <interactable_t> ()) {
-        if (interactable.interaction_fun(pos)) {
+        if (interactable.interaction_fun(mouse_world_pos, mouse_screen_pos).interacted) {
             layer_t current_layer = interactable.layer;
 
             if (target == ecs::nullentity || target_layer < current_layer) {

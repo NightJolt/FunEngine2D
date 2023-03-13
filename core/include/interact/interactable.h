@@ -4,8 +4,15 @@
 #include "../vec2.h"
 
 namespace fun {
+    struct interact_result_t {
+        bool interacted;
+        vec2f_t offset;
+    };
+
     struct interactable_t {
-        explicit interactable_t(const std::function <bool(vec2f_t)>&, layer_t = 0);
+        explicit interactable_t(const std::function <interact_result_t(vec2f_t, vec2f_t)>&, layer_t = 0);
+
+        void set_layer(layer_t);
 
         bool right_pressed;
         bool right_hold;
@@ -24,6 +31,6 @@ namespace fun {
 
         layer_t layer;
 
-        std::function <bool(vec2f_t)> interaction_fun;
+        std::function <interact_result_t(vec2f_t, vec2f_t)> interaction_fun;
     };
 }
