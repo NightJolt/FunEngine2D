@@ -18,9 +18,20 @@ void fun::interaction::update() {
     if (entity_last != ecs::nullentity) {
         auto& interactable = ecs::get_component <interactable_t> (entity_last);
 
-        interactable.right_released = false;
-        interactable.left_released = false;
-        interactable.hover_exit = false;
+        if (interactable.right_released) {
+            interactable.right_released = false;
+            interactable.action_fun(entity_last, interact_event_t::right_released);
+        }
+        
+        if (interactable.left_released) {
+            interactable.left_released = false;
+            interactable.action_fun(entity_last, interact_event_t::left_released);
+        }
+
+        if (interactable.hover_exit) {
+            interactable.hover_exit = false;
+            interactable.action_fun(entity_last, interact_event_t::hover_exit);
+        }
 
         entity_last = ecs::nullentity;
     }
@@ -115,7 +126,10 @@ void fun::interaction::update() {
 
             if (new_entity != entity_active) {
                 interactable.hover_exit = true;
-                ecs::get_component <interactable_t> (new_entity).hover_enter = true;
+                interactable.action_fun(entity_active, interact_event_t::hover_exit);
+
+                auto& other_interactable = ecs::get_component <interactable_t> (new_entity);
+                other_interactable.hover_enter = true;
 
                 entity_last = entity_active;
                 entity_active = new_entity;
@@ -125,8 +139,29 @@ void fun::interaction::update() {
         entity_active = entity_at_pos(mouse_world_pos, mouse_screen_pos);
 
         if (entity_active != ecs::nullentity) {
-            ecs::get_component <interactable_t> (entity_active).hover_enter = true;
+            auto& interactable = ecs::get_component <interactable_t> (entity_active);
+
+            // ? also hold?
+            interactable.hover_enter = true;
+
+            // ? maybe also detect if mouse is pressed
         }
+    }
+
+    if (entity_active != ecs::nullentity) {
+        auto& interactable = ecs::get_component <interactable_t> (entity_active);
+
+        if (interactable.hover_enter) interactable.action_fun(entity_active, interact_event_t::hover_enter);
+        if (interactable.hover_hold) interactable.action_fun(entity_active, interact_event_t::hover_hold);
+        if (interactable.hover_exit) interactable.action_fun(entity_active, interact_event_t::hover_exit);
+
+        if (interactable.left_pressed) interactable.action_fun(entity_active, interact_event_t::left_pressed);
+        if (interactable.left_hold) interactable.action_fun(entity_active, interact_event_t::left_hold);
+        if (interactable.left_released) interactable.action_fun(entity_active, interact_event_t::left_released);
+
+        if (interactable.right_pressed) interactable.action_fun(entity_active, interact_event_t::right_pressed);
+        if (interactable.right_hold) interactable.action_fun(entity_active, interact_event_t::right_hold);
+        if (interactable.right_released) interactable.action_fun(entity_active, interact_event_t::right_released);
     }
 }
 

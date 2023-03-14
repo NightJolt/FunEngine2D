@@ -1,7 +1,6 @@
 #include "render/ui/ui.h"
 #include "ecs/ent.h"
 #include "render/window/window.h"
-#include "interact/interactable.h"
 
 namespace fun::gui {
     struct rect_t {
@@ -30,23 +29,6 @@ auto fun::gui::create_box() -> ecs::entity_t {
     ecs::add_component <box_info_t> (box);
 
     return box;
-}
-
-auto fun::gui::set_transform(ecs::entity_t box, transform_t transform) -> void {
-    auto& box_info = ecs::get_component <box_info_t> (box);
-
-    box_info.transform = transform;
-    box_info.dirty = true;
-}
-
-auto fun::gui::set_layer(ecs::entity_t box, layer_t layer) -> void {
-    auto& box_info = ecs::get_component <box_info_t> (box);
-
-    box_info.layer = layer;
-
-    if (ecs::has_component <interactable_t> (box)) {
-        ecs::get_component <interactable_t> (box).set_layer(layer);
-    }
 }
 
 auto fun::gui::free_box(ecs::entity_t box) -> void {
@@ -82,7 +64,7 @@ auto fun::gui::free_image(ecs::entity_t image) -> void {
     free_box(image);
 }
 
-auto fun::gui::create_button() -> ecs::entity_t {
+auto fun::gui::create_button(const action_fun_t& action_fun) -> ecs::entity_t {
     ecs::entity_t box = create_box();
 
     auto& sprite = ecs::add_component <image_t> (box);
@@ -99,7 +81,8 @@ auto fun::gui::create_button() -> ecs::entity_t {
                 mouse_screen_pos.y <= space.bottom,
                 mouse_screen_pos - vec2f_t(space.left + (space.right - space.left) * .5f, space.top + (space.bottom - space.top) * .5f)
             };
-        }
+        },
+        action_fun
     );
 
     return box;
@@ -112,10 +95,31 @@ auto fun::gui::free_button(ecs::entity_t button) -> void {
     free_box(button);
 }
 
-void fun::gui::invalidate(ecs::entity_t box) {
+auto fun::gui::set_transform(ecs::entity_t box, transform_t transform) -> void {
+    auto& box_info = ecs::get_component <box_info_t> (box);
+
+    box_info.transform = transform;
+    box_info.dirty = true;
+}
+
+auto fun::gui::set_layer(ecs::entity_t box, layer_t layer) -> void {
+    auto& box_info = ecs::get_component <box_info_t> (box);
+
+    box_info.layer = layer;
+
+    if (ecs::has_component <interactable_t> (box)) {
+        ecs::get_component <interactable_t> (box).set_layer(layer);
+    }
+}
+
+void fun::gui::set_dirty(ecs::entity_t box) {
     auto& box_info = ecs::get_component <box_info_t> (box);
 
     box_info.dirty = true;
+}
+
+void fun::gui::force_repaint(render::window_t& window) {
+    window.invalidate_ui();
 }
 
 void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {

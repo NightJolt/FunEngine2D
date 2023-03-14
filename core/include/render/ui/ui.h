@@ -2,6 +2,7 @@
 #include "../../ecs/ecs.h"
 #include "../../vec2.h"
 #include "../sprite.h"
+#include "../../interact/interactable.h"
 
 namespace fun::gui {
     struct transform_t {
@@ -15,8 +16,6 @@ namespace fun::gui {
     CREATE_TYPE_FROM_NONPRIMITIVE(image_t, render::sprite_t)
 
     ecs::entity_t create_box();
-    void set_transform(ecs::entity_t, transform_t);
-    void set_layer(ecs::entity_t, layer_t);
     void free_box(ecs::entity_t);
 
     ecs::entity_t create_canvas();
@@ -25,9 +24,13 @@ namespace fun::gui {
     ecs::entity_t create_image();
     void free_image(ecs::entity_t);
 
-    ecs::entity_t create_button();
+    ecs::entity_t create_button(const action_fun_t&);
     void free_button(ecs::entity_t);
 
-    void invalidate(ecs::entity_t);
+    void set_transform(ecs::entity_t, transform_t);
+    void set_layer(ecs::entity_t, layer_t);
+
+    void set_dirty(ecs::entity_t);
+    void force_repaint(render::window_t&);
     void render(ecs::entity_t, render::window_t&);
 }

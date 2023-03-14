@@ -2,6 +2,7 @@
 
 #include "../globals.h"
 #include "../vec2.h"
+#include "../ecs/ecs.h"
 
 namespace fun {
     struct interact_result_t {
@@ -9,8 +10,25 @@ namespace fun {
         vec2f_t offset;
     };
 
+    enum interact_event_t {
+        right_pressed,
+        right_hold,
+        right_released,
+
+        left_pressed,
+        left_hold,
+        left_released,
+
+        hover_enter,
+        hover_hold,
+        hover_exit,
+    };
+
+    typedef std::function <interact_result_t(vec2f_t, vec2f_t)> interact_fun_t;
+    typedef std::function <void(ecs::entity_t, interact_event_t)> action_fun_t;
+
     struct interactable_t {
-        explicit interactable_t(const std::function <interact_result_t(vec2f_t, vec2f_t)>&, layer_t = 0);
+        explicit interactable_t(const interact_fun_t&, const action_fun_t&, layer_t = 0);
 
         void set_layer(layer_t);
 
@@ -31,6 +49,7 @@ namespace fun {
 
         layer_t layer;
 
-        std::function <interact_result_t(vec2f_t, vec2f_t)> interaction_fun;
+        interact_fun_t interaction_fun;
+        action_fun_t action_fun;
     };
 }
