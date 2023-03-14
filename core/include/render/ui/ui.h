@@ -5,12 +5,21 @@
 #include "../../interact/interactable.h"
 
 namespace fun::gui {
+    enum axis_mode_t {
+        x,
+        y,
+        minv,
+        maxv
+    };
+
     struct transform_t {
         vec2f_t abs_pos;
         vec2f_t rel_pos;
 
         vec2f_t abs_size;
         vec2f_t rel_size;
+
+        std::array <axis_mode_t, 2> scaling_axis = { axis_mode_t::x, axis_mode_t::y };
     };
 
     CREATE_TYPE_FROM_NONPRIMITIVE(image_t, render::sprite_t)

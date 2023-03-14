@@ -137,11 +137,21 @@ void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
         auto pspace = pbox.space;
         auto& space = box.space;
 
-        auto hsize = (pspace.right - pspace.left) * box.transform.rel_size.x + box.transform.abs_size.x;
-        auto vsize = (pspace.bottom - pspace.top) * box.transform.rel_size.y + box.transform.abs_size.y;
+        float32_t axis_size_x = pspace.right - pspace.left;
+        float32_t axis_size_y = pspace.bottom - pspace.top;
+
+        float32_t axis_sizes[] = {
+            axis_size_x,
+            axis_size_y,
+            std::min(axis_size_x, axis_size_y),
+            std::max(axis_size_x, axis_size_y)
+        };
+
+        auto hsize = axis_sizes[box.transform.scaling_axis[0]] * box.transform.rel_size.x + box.transform.abs_size.x;
+        auto vsize = axis_sizes[box.transform.scaling_axis[1]] * box.transform.rel_size.y + box.transform.abs_size.y;
         
-        auto hpos = (pspace.right - pspace.left) * box.transform.rel_pos.x + box.transform.abs_pos.x;
-        auto vpos = (pspace.bottom - pspace.top) * box.transform.rel_pos.y + box.transform.abs_pos.y;
+        auto hpos = axis_sizes[box.transform.scaling_axis[0]] * box.transform.rel_pos.x + box.transform.abs_pos.x;
+        auto vpos = axis_sizes[box.transform.scaling_axis[1]] * box.transform.rel_pos.y + box.transform.abs_pos.y;
 
         space.left = pspace.left + hpos - hsize * .5f;
         space.right = pspace.left + hpos + hsize * .5f;
