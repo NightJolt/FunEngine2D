@@ -64,6 +64,20 @@ auto fun::gui::free_image(ecs::entity_t image) -> void {
     free_box(image);
 }
 
+auto fun::gui::create_text() -> ecs::entity_t {
+    ecs::entity_t box = create_box();
+    
+    ecs::add_component <text_t> (box);
+
+    return box;
+}
+
+auto fun::gui::free_text(ecs::entity_t text) -> void {
+    ecs::remove_component <text_t> (text);
+
+    free_box(text);
+}
+
 auto fun::gui::create_button(const action_fun_t& action_fun) -> ecs::entity_t {
     ecs::entity_t box = create_box();
 
@@ -166,11 +180,34 @@ void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
             float hsize = box.space.right - box.space.left;
             float vsize = box.space.bottom - box.space.top;
 
-            sprite.set_position(fun::vec2f_t { box.space.left, box.space.top } + fun::vec2f_t { hsize * .5f, vsize * .5f });
+            sprite.set_position(vec2f_t { box.space.left, box.space.top } + vec2f_t { hsize * .5f, vsize * .5f });
             sprite.set_scale({ hsize, vsize });
         }
 
         window.draw_ui(sprite, box.layer);
+    }
+
+    for (auto& text : ecs::iterate_component <text_t> ()) {
+        auto& box = ecs::get_component <box_info_t> (ecs::get_entity(text));
+
+        if (box.dirty) {
+            float hsize = box.space.right - box.space.left;
+            float vsize = box.space.bottom - box.space.top;
+
+            text.setPosition((vec2f_t { box.space.left, box.space.top } + vec2f_t { hsize * .5f, vsize * .5f }).to_sf());
+
+            float x_ratio = hsize / text.getLocalBounds().width;
+            float y_ratio = vsize / text.getLocalBounds().height;
+            float ratio = std::min(x_ratio, y_ratio);
+
+            text.setScale(ratio, ratio);
+            text.move(
+                text.getPosition().x - text.getGlobalBounds().left - text.getGlobalBounds().width * .5f,
+                text.getPosition().y - text.getGlobalBounds().top - text.getGlobalBounds().height * .5f
+            );
+        }
+
+        window.draw_ui(text, box.layer);
     }
 
     bool should_invalidate_ui = box_info.dirty;

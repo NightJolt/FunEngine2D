@@ -24,12 +24,15 @@ namespace fun::render {
         void select_subtexture(vec2u_t);
         void select_subtexture(vec2u_t, vec2u_t);
 
+        vec2f_t get_position() const;
         void set_position(vec2f_t);
         void move(vec2f_t);
 
+        float32_t get_rotation() const;
         void set_rotation(float32_t);
         void rotate(float32_t);
 
+        vec2f_t get_scale() const;
         void set_scale(vec2f_t);
         void scale(float32_t);
         void scale(vec2f_t);

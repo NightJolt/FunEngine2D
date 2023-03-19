@@ -22,7 +22,8 @@ namespace fun::gui {
         std::array <axis_mode_t, 2> scaling_axis = { axis_mode_t::x, axis_mode_t::y };
     };
 
-    CREATE_TYPE_FROM_NONPRIMITIVE(image_t, render::sprite_t)
+    CREATE_TYPE_FROM_NONPRIMITIVE(image_t, render::sprite_t);
+    CREATE_TYPE_FROM_NONPRIMITIVE(text_t, sf::Text);
 
     ecs::entity_t create_box();
     void free_box(ecs::entity_t);
@@ -32,6 +33,9 @@ namespace fun::gui {
 
     ecs::entity_t create_image();
     void free_image(ecs::entity_t);
+
+    ecs::entity_t create_text();
+    void free_text(ecs::entity_t);
 
     ecs::entity_t create_button(const action_fun_t&);
     void free_button(ecs::entity_t);

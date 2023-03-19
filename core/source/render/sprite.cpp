@@ -42,6 +42,10 @@ void fun::render::sprite_t::select_subtexture(vec2u_t pos, vec2u_t size) {
     m_update_texture = true;
 }
 
+fun::vec2f_t fun::render::sprite_t::get_position() const {
+    return m_transform.position;
+}
+
 void fun::render::sprite_t::set_position(vec2f_t position) {
     m_transform.position = position;
     
@@ -54,6 +58,10 @@ void fun::render::sprite_t::move(vec2f_t position) {
     m_update_body = true;
 }
 
+fun::float32_t fun::render::sprite_t::get_rotation() const {
+    return math::degrees(m_transform.rotation);
+}
+
 void fun::render::sprite_t::set_rotation(float32_t degrees) {
     m_transform.rotation = math::radians(degrees);
 
@@ -64,6 +72,10 @@ void fun::render::sprite_t::rotate(float32_t degrees) {
     m_transform.rotation += math::radians(degrees);
     
     m_update_body = true;
+}
+
+fun::vec2f_t fun::render::sprite_t::get_scale() const {
+    return m_transform.scale;
 }
 
 void fun::render::sprite_t::set_scale(vec2f_t value) {

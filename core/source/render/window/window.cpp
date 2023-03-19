@@ -1,5 +1,6 @@
 #include "render/window/window.h"
 #include "render/window/window_data.h"
+#include "tools/debugger.cpp"
 
 fun::render::window_t::window_t(const window_data_t& data) :
     renderer(sf::VideoMode(data.size.x, data.size.y), data.name, data.style, data.settings),
@@ -112,6 +113,8 @@ void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* sha
         ui_buffer.draw(ui_queue);
         ui_buffer.display();
         ui_render.setTexture(ui_buffer.getTexture());
+
+        DEBUG_CODE(debugger::push_msg("redrawing ui", "gui"));
 
         ui_invalidated = false;
     }
