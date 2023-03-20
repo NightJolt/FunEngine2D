@@ -164,8 +164,8 @@ void fun::gui::render(ecs::entity_t canvas, render::window_t& window) {
         auto hsize = axis_sizes[box.transform.scaling_axis[0]] * box.transform.rel_size.x + box.transform.abs_size.x;
         auto vsize = axis_sizes[box.transform.scaling_axis[1]] * box.transform.rel_size.y + box.transform.abs_size.y;
         
-        auto hpos = axis_sizes[box.transform.scaling_axis[0]] * box.transform.rel_pos.x + box.transform.abs_pos.x;
-        auto vpos = axis_sizes[box.transform.scaling_axis[1]] * box.transform.rel_pos.y + box.transform.abs_pos.y;
+        auto hpos = (axis_sizes[box.transform.scaling_axis[0]] - hsize) * box.transform.rel_pos.x + box.transform.abs_pos.x + hsize * .5f;
+        auto vpos = (axis_sizes[box.transform.scaling_axis[1]] - vsize) * box.transform.rel_pos.y + box.transform.abs_pos.y + vsize * .5f;
 
         space.left = pspace.left + hpos - hsize * .5f;
         space.right = pspace.left + hpos + hsize * .5f;
