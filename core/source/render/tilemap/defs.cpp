@@ -2,11 +2,11 @@
 
 #include "_math.h"
 
-fun::render::tile_pos_t fun::render::index_to_tile(int32_t i, chunk_size_t chunk_size) {
+fun::render::tile_pos_t fun::render::index_to_tile(chunk_volume_t i, chunk_size_t chunk_size) {
     return tile_pos_t { (tile_int_t)(i / chunk_size), (tile_int_t)(i % chunk_size) };
 }
 
-int32_t fun::render::tile_to_index(tile_pos_t tile, chunk_size_t chunk_size) {
+fun::render::chunk_volume_t fun::render::tile_to_index(tile_pos_t tile, chunk_size_t chunk_size) {
     return tile.x * chunk_size + tile.y;
 }
 

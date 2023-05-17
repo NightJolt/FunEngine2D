@@ -12,6 +12,9 @@ file (
 
 add_library(${LIB_NAME} ${FE2D_CORE})
 
+target_include_directories(${LIB_NAME} PUBLIC include})
+target_include_directories(${LIB_NAME} PUBLIC source})
+
 target_link_libraries(${LIB_NAME} ${SFML_LIBS})
 target_link_libraries(${LIB_NAME} ${IMGUI_SFML_LIBS})
 target_link_libraries(${LIB_NAME} ${BOX2D_LIBS})

@@ -36,9 +36,13 @@ namespace fun {
 #if defined(FE2D_SFML)
         rgb_t(sf::Color);
         sf::Color to_sf() const;
+        operator sf::Color() const;
 #endif
 
         std::string to_str() const;
+
+        static rgb_t rand();
+        static rgb_t rand_grayscale();
     };
 
     struct rgba_t {
@@ -66,6 +70,7 @@ namespace fun {
 #if defined(FE2D_SFML)
         rgba_t(sf::Color);
         sf::Color to_sf() const;
+        operator sf::Color() const;
 #endif
 
         std::string to_str() const;

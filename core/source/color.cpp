@@ -1,5 +1,7 @@
 #include "color.h"
 
+#include <_math.h>
+
 #pragma region rgb_t
 const fun::rgb_t fun::rgb_t::black = { 0, 0, 0 };
 const fun::rgb_t fun::rgb_t::white = { 255, 255, 255 };
@@ -33,10 +35,26 @@ fun::rgb_t::rgb_t(sf::Color color) : r(color.r), g(color.g), b(color.b) {}
 sf::Color fun::rgb_t::to_sf() const {
     return sf::Color(r, g, b);
 }
+
+fun::rgb_t::operator sf::Color() const {
+    return to_sf();
+}
 #endif
 
 std::string fun::rgb_t::to_str() const {
     return "rgb(" + std::to_string(r) + ", " + std::to_string(g) + ", " + std::to_string(b) + ")";
+}
+
+fun::rgb_t fun::rgb_t::rand() {
+    uint32_t val = math::random_32(0, 255 * 255 * 255);
+
+    return { (uint8_t)(val >> 16), (uint8_t)(val >> 8), (uint8_t)val };
+}
+
+fun::rgb_t fun::rgb_t::rand_grayscale() {
+    uint8_t val = math::random_32(0, 255);
+
+    return { val, val, val };
 }
 #pragma endregion
 
@@ -71,6 +89,10 @@ fun::rgba_t::rgba_t(sf::Color color) : r(color.r), g(color.g), b(color.b), a(col
 
 sf::Color fun::rgba_t::to_sf() const {
     return sf::Color(r, g, b, a);
+}
+
+fun::rgba_t::operator sf::Color() const {
+    return to_sf();
 }
 #endif
 

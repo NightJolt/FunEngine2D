@@ -17,6 +17,7 @@ namespace fun {
 #if defined(FE2D_SFML)
         vec2_t(sf::Vector2<T>);
         sf::Vector2<T> to_sf() const;
+        operator sf::Vector2<T>() const;
 #endif
 
 #if defined(FE2D_BOX2D)
@@ -102,6 +103,11 @@ fun::vec2_t<T>::vec2_t(sf::Vector2<T> sf_vec2) : x(sf_vec2.x), y(sf_vec2.y) {}
 template <class T>
 sf::Vector2<T> fun::vec2_t<T>::to_sf() const {
     return sf::Vector2 <T> (x, y);
+}
+
+template <class T>
+fun::vec2_t<T>::operator sf::Vector2<T>() const {
+    return to_sf();
 }
 #endif
 

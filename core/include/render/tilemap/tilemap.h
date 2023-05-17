@@ -4,7 +4,6 @@
 #include "defs.h"
 
 namespace fun::render {
-    template <tile_int_t W, tile_int_t H>
     class tilemap_t : public sf::Drawable {
     public:
         tilemap_t();
