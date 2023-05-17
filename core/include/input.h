@@ -10,7 +10,7 @@
 #define MAX_GAMEPAD_COUNT 8
 
 namespace fun::input {
-    void listen(bool);
+    void listen(bool, bool);
     
     bool pressed(sf::Mouse::Button);
     bool released(sf::Mouse::Button);

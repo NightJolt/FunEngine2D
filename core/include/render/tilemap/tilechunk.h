@@ -16,6 +16,8 @@ namespace fun::render {
         void set_color(tile_pos_t, rgb_t);
         rgb_t get_color(tile_pos_t);
 
+        void set_texture(tile_pos_t, vec2u_t);
+
     private:
         void draw(sf::RenderTarget&, sf::RenderStates) const override;
 
@@ -24,5 +26,6 @@ namespace fun::render {
         tile_size_t m_tile_size;
         
         primitive_t m_primitive;
+        texture_t m_texture;
     };
 }

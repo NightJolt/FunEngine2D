@@ -61,7 +61,7 @@ void fun::render::primitive_t::batch(primitive_t& primitive) {
 }
 
 void fun::render::primitive_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
-    // render_states.texture = m_texture.get_texture();
+    render_states.texture = m_texture.get_texture();
     // render_states.shader = m_shader.get_shader();
 
     render_target.draw(&m_vertices[0], m_vertices.size(), m_primitive_type, render_states);

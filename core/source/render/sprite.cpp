@@ -2,7 +2,8 @@
 #include "_math.h"
 #include "tools/debugger.h"
 
-fun::render::sprite_t::sprite_t() : m_shader(nullptr), m_update_body(true), m_update_texture(false), m_update_color(false), m_draw_mode(draw_mode_t::normal) {}
+fun::render::sprite_t::sprite_t() :
+    m_shader(nullptr), m_update_body(true), m_update_texture(false), m_update_color(false), m_draw_mode(draw_mode_t::normal), m_origin(vec2f_t { .5f, .5f }) {}
 
 void fun::render::sprite_t::bind_texture(const texture_t& texture) {
     m_texture = texture;
@@ -253,8 +254,7 @@ void fun::render::sprite_t::update_color() const {
 
 void fun::render::sprite_t::draw(sf::RenderTarget& render_target, sf::RenderStates render_states) const {
     update();
-
-    render_states.texture = m_texture.get_texture();
+    
     render_states.shader = m_shader;
 
     render_target.draw(m_primitive, render_states);

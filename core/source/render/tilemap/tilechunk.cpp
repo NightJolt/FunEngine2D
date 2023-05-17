@@ -31,6 +31,8 @@ fun::render::tilechunk_t::tilechunk_t(chunk_pos_t chunk_pos, chunk_size_t chunk_
 
 void fun::render::tilechunk_t::bind_texture(texture_t texture) {
     m_primitive.bind_texture(texture);
+
+    m_texture = texture;
 }
 
 void fun::render::tilechunk_t::set_color(tile_pos_t tile_pos, rgb_t color) {
@@ -44,6 +46,17 @@ void fun::render::tilechunk_t::set_color(tile_pos_t tile_pos, rgb_t color) {
 
 fun::rgb_t fun::render::tilechunk_t::get_color(tile_pos_t tile_pos) {
     return m_primitive.get_vertex(tile_to_index(tile_pos, m_size)).color;
+}
+
+void fun::render::tilechunk_t::set_texture(tile_pos_t tile_pos, vec2u_t texture_pos) {
+    chunk_volume_t i = tile_to_index(tile_pos, m_size) << 2;
+
+    auto subtexture = m_texture.get_subtexture(texture_pos);
+
+    m_primitive.get_vertex(i).texCoords = vec2f_t(subtexture[0], subtexture[1]);
+    m_primitive.get_vertex(i + 1).texCoords = vec2f_t(subtexture[0] + subtexture[2], subtexture[1]);
+    m_primitive.get_vertex(i + 2).texCoords = vec2f_t(subtexture[0] + subtexture[2], subtexture[1] + subtexture[3]);
+    m_primitive.get_vertex(i + 3).texCoords = vec2f_t(subtexture[0], subtexture[1] + subtexture[3]);
 }
 
 void fun::render::tilechunk_t::draw(sf::RenderTarget& target, sf::RenderStates states) const {

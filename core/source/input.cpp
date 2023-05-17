@@ -22,20 +22,13 @@ static bool _gamepad_button_released_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 static bool _gamepad_button_hold_[GAMEPAD_BUTTON_COUNT][MAX_GAMEPAD_COUNT];
 #endif
 
-void fun::input::listen(bool is_focused) {
+void fun::input::listen(bool is_keyboard_focused, bool is_mouse_focused) {
 #if defined(FE2D_MOUSE)
     for (int button = 0; button < MOUSE_BUTTON_COUNT; button++) {
         _mouse_button_pressed_[button] = false;
         _mouse_button_released_[button] = false;
 
-        bool is_button_pressed = sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button));
-        bool is_imgui_blocking = false;
-
-#if defined(FE2D_IMGUI)
-        is_imgui_blocking = ImGui::GetIO().WantCaptureMouse;
-#endif
-
-        if (is_focused && is_button_pressed && !is_imgui_blocking) {
+        if (is_mouse_focused && sf::Mouse::isButtonPressed(static_cast <sf::Mouse::Button> (button))) {
             if (!_mouse_button_hold_[button]) {
                 _mouse_button_pressed_[button] = true;
                 _mouse_button_hold_[button] = true;
@@ -57,7 +50,7 @@ void fun::input::listen(bool is_focused) {
         _keyboard_key_pressed_[key] = false;
         _keyboard_key_released_[key] = false;
 
-        if (is_focused && sf::Keyboard::isKeyPressed(static_cast <sf::Keyboard::Key> (key))) {
+        if (is_keyboard_focused && sf::Keyboard::isKeyPressed(static_cast <sf::Keyboard::Key> (key))) {
             if (!_keyboard_key_hold_[key]) {
                 _keyboard_key_pressed_[key] = true;
                 _keyboard_key_hold_[key] = true;

@@ -7,7 +7,7 @@ static std::unordered_map <std::string, sf::Shader*> shaders;
 
 const fun::str_t resources_directory =
 #if defined(RELEASE_BUILD)
-("/resources/")
+("./resources/")
 #else
 (fun::str_t(ROOT_DIRECTORY) + "/resources/")
 #endif
