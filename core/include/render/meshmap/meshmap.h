@@ -18,7 +18,7 @@ namespace fun::render {
         };
 
     public:
-        meshmap_t(texture_t texture) : m_texture(texture) {
+        explicit meshmap_t(texture_t texture) : m_texture(texture) {
             m_gridmap.set_init_chunk([](data::gridchunk_t<s_chunk_size, quad_t>* chunk, data::chunk_pos_t chunk_pos) {
                 vec2f_t position((vec2f_t)data::chunk_to_grid(chunk_pos, s_chunk_size) * s_tile_size);
 
