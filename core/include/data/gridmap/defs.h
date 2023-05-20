@@ -3,7 +3,7 @@
 #include "../../globals.h"
 #include "../../vec2.h"
 
-namespace fun::render {
+namespace fun::data {
     typedef int32_t grid_int_t;
     typedef int32_t chunk_int_t;
     typedef uint8_t tile_int_t;

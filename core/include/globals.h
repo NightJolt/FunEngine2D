@@ -130,6 +130,9 @@ namespace fun {
     typedef std::array <float32_t, 4> float32_t4;
 
     typedef std::string str_t; // to be replaced by own implementation
+
+    template <class T>
+    using fn_t = std::function <T>;
 }
 
 namespace fun {
@@ -201,9 +204,6 @@ namespace fun {
         struct curved_line_t;
         struct primitive_t;
         struct rounded_rect_t;
-
-        struct tilemap_t;
-        struct tilechunk_t;
     }
 
     namespace network {
