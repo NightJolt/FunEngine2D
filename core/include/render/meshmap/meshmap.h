@@ -6,10 +6,11 @@
 #include "../../data/gridmap/gridmap.h"
 
 namespace fun::render {
-    template <data::chunk_size_t S>
+    template <data::chunk_size_t C, data::tile_size_t T>
     class meshmap_t : public sf::Drawable {
     public:
-        static constexpr data::chunk_size_t s_chunk_size = S;
+        static constexpr data::chunk_size_t s_chunk_size = C;
+        static constexpr data::tile_size_t s_tile_size = T;
 
     private:
         struct quad_t {
@@ -17,20 +18,20 @@ namespace fun::render {
         };
 
     public:
-        meshmap_t(data::tile_size_t tile_size, texture_t texture) : m_tile_size(tile_size), m_texture(texture) {
-            m_gridmap.set_init_chunk([tile_size](data::gridchunk_t<s_chunk_size, quad_t>* chunk, data::chunk_pos_t chunk_pos) {
-                vec2f_t position(data::chunk_to_grid(chunk_pos, s_chunk_size));
+        meshmap_t(texture_t texture) : m_texture(texture) {
+            m_gridmap.set_init_chunk([](data::gridchunk_t<s_chunk_size, quad_t>* chunk, data::chunk_pos_t chunk_pos) {
+                vec2f_t position((vec2f_t)data::chunk_to_grid(chunk_pos, s_chunk_size) * s_tile_size);
 
                 for (data::tile_int_t x = 0; x < s_chunk_size; x++) {
                     for (data::tile_int_t y = 0; y < s_chunk_size; y++) {
                         auto& quad = chunk->get_data({ x, y });
 
-                        data::tile_size2d_t tile_pos = data::tile_size2d_t(x, y) * tile_size;
+                        data::tile_size2d_t tile_pos = data::tile_size2d_t(x, y) * s_tile_size;
 
-                        quad.vertices[0].position = position + tile_pos * tile_size;
-                        quad.vertices[1].position = position + (tile_pos + data::tile_size2d_t { 1.f, 0.f }) * tile_size;
-                        quad.vertices[2].position = position + (tile_pos + data::tile_size2d_t { 1.f, 1.f }) * tile_size;
-                        quad.vertices[3].position = position + (tile_pos + data::tile_size2d_t { 0.f, 1.f }) * tile_size;
+                        quad.vertices[0].position = position + tile_pos;
+                        quad.vertices[1].position = position + tile_pos + data::tile_size2d_t { s_tile_size, 0.f };
+                        quad.vertices[2].position = position + tile_pos + data::tile_size2d_t { s_tile_size, s_tile_size };
+                        quad.vertices[3].position = position + tile_pos + data::tile_size2d_t { 0.f, s_tile_size };
                     }
                 }
             });
@@ -67,7 +68,6 @@ namespace fun::render {
         }
 
         mutable data::gridmap_t<s_chunk_size, quad_t> m_gridmap;
-        data::tile_size_t m_tile_size;
         texture_t m_texture;
     };
 }
