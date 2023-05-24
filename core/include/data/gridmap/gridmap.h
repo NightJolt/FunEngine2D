@@ -26,6 +26,14 @@ namespace fun::data {
             return get_chunk(grid_to_chunk(grid_pos, S))->get_data(grid_to_tile(grid_pos, S));
         }
 
+        tile_data_t* get_data_unforced(grid_pos_t grid_pos) {
+            if (!m_gridchunks.contains(grid_to_chunk(grid_pos, S))) {
+                return nullptr;
+            }
+
+            return &get_chunk(grid_to_chunk(grid_pos, S))->get_data(grid_to_tile(grid_pos, S));
+        }
+
         tile_data_t* get_data_array(grid_pos_t grid_pos) {
             return get_chunk(grid_to_chunk(grid_pos, S))->get_data_array();
         }
