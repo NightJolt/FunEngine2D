@@ -45,6 +45,8 @@ namespace fun {
         static rgb_t rand_grayscale();
     };
 
+    typedef std::array <rgb_t, 4> rgb_t4;
+
     struct rgba_t {
         static const rgba_t black;
         static const rgba_t white;
@@ -75,4 +77,6 @@ namespace fun {
 
         std::string to_str() const;
     };
+
+    typedef std::array <rgba_t, 4> rgba_t4;
 }

@@ -1,6 +1,7 @@
 // #pragma once
 
 #include "../../globals.h"
+#include "../../color.h"
 #include "../../data/gridmap/defs.h"
 #include "../texture.h"
 #include "../../data/gridmap/gridmap.h"
@@ -46,6 +47,15 @@ namespace fun::render {
             quad.vertices[1].color = color;
             quad.vertices[2].color = color;
             quad.vertices[3].color = color;
+        }
+
+        void set_color(data::grid_pos_t grid_pos, rgb_t4 color) {
+            auto& quad = m_gridmap.get_data(grid_pos);
+
+            quad.vertices[0].color = color[0];
+            quad.vertices[1].color = color[1];
+            quad.vertices[2].color = color[2];
+            quad.vertices[3].color = color[3];
         }
 
         void set_texture(data::grid_pos_t grid_pos, vec2u_t texture_pos) {
