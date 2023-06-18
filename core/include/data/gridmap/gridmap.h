@@ -9,11 +9,12 @@ namespace fun::data {
     class gridmap_t {
     public:
         static constexpr chunk_size_t chunk_size = S;
+        typedef gridchunk_t<S, T> chunk_t;
         typedef T tile_data_t;
 
     private:
-        typedef unordered_map_vec2_t <chunk_int_t, gridchunk_t<S, T>*> gridchunk_map_t;
-        typedef fn_t<void(gridchunk_t<S, T>*, chunk_pos_t)> init_chunk_t;
+        typedef unordered_map_vec2_t <chunk_int_t, chunk_t*> gridchunk_map_t;
+        typedef fn_t<void(chunk_t*, chunk_pos_t)> init_chunk_t;
 
     public:
         ~gridmap_t() {
@@ -46,7 +47,7 @@ namespace fun::data {
             m_init_chunk = init_chunk;
         }
 
-        gridchunk_t<S, T>* get_chunk_unforced(chunk_pos_t chunk_pos) {
+        chunk_t* get_chunk_unforced(chunk_pos_t chunk_pos) {
             if (m_gridchunks.contains(chunk_pos)) {
                 return m_gridchunks[chunk_pos];
             }
@@ -54,7 +55,7 @@ namespace fun::data {
             return nullptr;
         }
 
-        gridchunk_t<S, T>* get_chunk(chunk_pos_t chunk_pos) {
+        chunk_t* get_chunk(chunk_pos_t chunk_pos) {
             if (m_gridchunks.contains(chunk_pos)) {
                 return m_gridchunks[chunk_pos];
             }

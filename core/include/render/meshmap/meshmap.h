@@ -9,18 +9,19 @@
 namespace fun::render {
     template <data::chunk_size_t C, data::tile_size_t T>
     class meshmap_t : public sf::Drawable {
-    public:
-        static constexpr data::chunk_size_t s_chunk_size = C;
-        static constexpr data::tile_size_t s_tile_size = T;
-
     private:
         struct quad_t {
             vertex_t vertices[4];
         };
 
     public:
+        static constexpr data::chunk_size_t s_chunk_size = C;
+        typedef data::gridchunk_t<s_chunk_size, quad_t> chunk_t;
+        static constexpr data::tile_size_t s_tile_size = T;
+
+    public:
         explicit meshmap_t(texture_t texture) : m_texture(texture) {
-            m_gridmap.set_init_chunk([](data::gridchunk_t<s_chunk_size, quad_t>* chunk, data::chunk_pos_t chunk_pos) {
+            m_gridmap.set_init_chunk([](chunk_t* chunk, data::chunk_pos_t chunk_pos) {
                 vec2f_t position((vec2f_t)data::chunk_to_grid(chunk_pos, s_chunk_size) * s_tile_size);
 
                 for (data::tile_int_t x = 0; x < s_chunk_size; x++) {
@@ -66,6 +67,10 @@ namespace fun::render {
             quad.vertices[1].texCoords = vec2f_t(subtexture[0] + subtexture[2], subtexture[1]);
             quad.vertices[2].texCoords = vec2f_t(subtexture[0] + subtexture[2], subtexture[1] + subtexture[3]);
             quad.vertices[3].texCoords = vec2f_t(subtexture[0], subtexture[1] + subtexture[3]);
+        }
+
+        chunk_t* get_chunk(data::chunk_pos_t chunk_pos) {
+            return m_gridmap.get_chunk(chunk_pos);
         }
 
     private:

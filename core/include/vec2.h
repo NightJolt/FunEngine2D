@@ -24,7 +24,12 @@ namespace fun {
         vec2_t(b2Vec2);
         b2Vec2 to_b2() const;
 #endif
+
+        static const vec2_t<T> zero;
     };
+
+    template <class T>
+    const vec2_t<T> vec2_t<T>::zero = vec2_t<T>(0, 0);
 
     typedef vec2_t <int32_t> vec2i_t;
     typedef vec2_t <uint32_t> vec2u_t;
