@@ -46,7 +46,14 @@ namespace fun::data {
             m_init_chunk = init_chunk;
         }
 
-    private:
+        gridchunk_t<S, T>* get_chunk_unforced(chunk_pos_t chunk_pos) {
+            if (m_gridchunks.contains(chunk_pos)) {
+                return m_gridchunks[chunk_pos];
+            }
+
+            return nullptr;
+        }
+
         gridchunk_t<S, T>* get_chunk(chunk_pos_t chunk_pos) {
             if (m_gridchunks.contains(chunk_pos)) {
                 return m_gridchunks[chunk_pos];
@@ -62,6 +69,7 @@ namespace fun::data {
             return chunk;
         }
         
+    private:
         gridchunk_map_t m_gridchunks;
         init_chunk_t m_init_chunk;
     };

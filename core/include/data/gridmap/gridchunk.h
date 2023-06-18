@@ -8,6 +8,7 @@ namespace fun::data {
     class gridchunk_t {
     public:
         static constexpr chunk_size_t chunk_size = S;
+        static constexpr chunk_volume_t chunk_volume = S * S;
         typedef T tile_data_t;
 
     public:

@@ -2,11 +2,11 @@
 
 #include <_math.h>
 
-fun::data::tile_pos_t fun::data::index_to_tile(chunk_volume_t i, chunk_size_t chunk_size) {
+fun::data::tile_pos_t fun::data::index_to_tile(tile_index_t i, chunk_size_t chunk_size) {
     return tile_pos_t { (tile_int_t)(i / chunk_size), (tile_int_t)(i % chunk_size) };
 }
 
-fun::data::chunk_volume_t fun::data::tile_to_index(tile_pos_t tile, chunk_size_t chunk_size) {
+fun::data::tile_index_t fun::data::tile_to_index(tile_pos_t tile, chunk_size_t chunk_size) {
     return tile.x * chunk_size + tile.y;
 }
 
