@@ -7,7 +7,6 @@
 namespace fun {
     struct interact_result_t {
         bool interacted;
-        vec2f_t offset;
     };
 
     enum interact_event_t {
@@ -24,8 +23,13 @@ namespace fun {
         hover_exit,
     };
 
-    typedef std::function <interact_result_t(vec2f_t, vec2f_t)> interact_fun_t;
-    typedef std::function <void(ecs::entity_t, interact_event_t)> action_fun_t;
+    struct interact_data_t {
+        interact_event_t event;
+    };
+
+    // * not passing entity because handler function will not always use it. for performance sake it can just capture it
+    typedef std::function <interact_result_t(vec2f_t world_pos, vec2f_t screen_pos)> interact_fun_t;
+    typedef std::function <void(ecs::entity_t, interact_data_t)> action_fun_t;
 
     struct interactable_t {
         explicit interactable_t(const interact_fun_t&, const action_fun_t&, layer_t = 0);
@@ -43,9 +47,6 @@ namespace fun {
         bool hover_enter;
         bool hover_hold;
         bool hover_exit;
-
-        vec2f_t mouse_left_offset;
-        vec2f_t mouse_right_offset;
 
         layer_t layer;
 

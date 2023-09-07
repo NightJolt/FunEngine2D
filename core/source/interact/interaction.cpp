@@ -20,17 +20,17 @@ void fun::interaction::update() {
 
         if (interactable.right_released) {
             interactable.right_released = false;
-            interactable.action_fun(entity_last, interact_event_t::right_released);
+            interactable.action_fun(entity_last, { interact_event_t::right_released });
         }
         
         if (interactable.left_released) {
             interactable.left_released = false;
-            interactable.action_fun(entity_last, interact_event_t::left_released);
+            interactable.action_fun(entity_last, { interact_event_t::left_released });
         }
 
         if (interactable.hover_exit) {
             interactable.hover_exit = false;
-            interactable.action_fun(entity_last, interact_event_t::hover_exit);
+            interactable.action_fun(entity_last, { interact_event_t::hover_exit });
         }
 
         entity_last = ecs::nullentity;
@@ -56,8 +56,6 @@ void fun::interaction::update() {
                     if (!interactable.left_hold) {
                         interactable.left_pressed = true;
                         interactable.left_hold = true;
-
-                        interactable.mouse_left_offset = interact_result.offset;
                     }
                 }
             }
@@ -77,8 +75,6 @@ void fun::interaction::update() {
                     if (!interactable.right_hold) {
                         interactable.right_pressed = true;
                         interactable.right_hold = true;
-
-                        interactable.mouse_right_offset = interact_result.offset;
                     }
                 }
             }
@@ -126,7 +122,7 @@ void fun::interaction::update() {
 
             if (new_entity != entity_active) {
                 interactable.hover_exit = true;
-                interactable.action_fun(entity_active, interact_event_t::hover_exit);
+                interactable.action_fun(entity_active, { interact_event_t::hover_exit });
 
                 auto& other_interactable = ecs::get_component <interactable_t> (new_entity);
                 other_interactable.hover_enter = true;
@@ -151,17 +147,17 @@ void fun::interaction::update() {
     if (entity_active != ecs::nullentity) {
         auto& interactable = ecs::get_component <interactable_t> (entity_active);
 
-        if (interactable.hover_enter) interactable.action_fun(entity_active, interact_event_t::hover_enter);
-        if (interactable.hover_hold) interactable.action_fun(entity_active, interact_event_t::hover_hold);
-        if (interactable.hover_exit) interactable.action_fun(entity_active, interact_event_t::hover_exit);
+        if (interactable.hover_enter) interactable.action_fun(entity_active, { interact_event_t::hover_enter });
+        if (interactable.hover_hold) interactable.action_fun(entity_active, { interact_event_t::hover_hold });
+        if (interactable.hover_exit) interactable.action_fun(entity_active, { interact_event_t::hover_exit });
 
-        if (interactable.left_pressed) interactable.action_fun(entity_active, interact_event_t::left_pressed);
-        if (interactable.left_hold) interactable.action_fun(entity_active, interact_event_t::left_hold);
-        if (interactable.left_released) interactable.action_fun(entity_active, interact_event_t::left_released);
+        if (interactable.left_pressed) interactable.action_fun(entity_active, { interact_event_t::left_pressed });
+        if (interactable.left_hold) interactable.action_fun(entity_active, { interact_event_t::left_hold });
+        if (interactable.left_released) interactable.action_fun(entity_active, { interact_event_t::left_released });
 
-        if (interactable.right_pressed) interactable.action_fun(entity_active, interact_event_t::right_pressed);
-        if (interactable.right_hold) interactable.action_fun(entity_active, interact_event_t::right_hold);
-        if (interactable.right_released) interactable.action_fun(entity_active, interact_event_t::right_released);
+        if (interactable.right_pressed) interactable.action_fun(entity_active, { interact_event_t::right_pressed });
+        if (interactable.right_hold) interactable.action_fun(entity_active, { interact_event_t::right_hold });
+        if (interactable.right_released) interactable.action_fun(entity_active, { interact_event_t::right_released });
     }
 }
 
@@ -202,8 +198,6 @@ void fun::interaction::display_debug_window() {
             ImGui::Text(("right hold " + std::to_string(interactable.right_hold)).c_str());
             ImGui::Text(("left hold " + std::to_string(interactable.left_hold)).c_str());
             ImGui::Text(("hover hold " + std::to_string(interactable.hover_hold)).c_str());
-            ImGui::Text(("mouse left offset " + fun::to_string(interactable.mouse_left_offset)).c_str());
-            ImGui::Text(("mouse right offset " + fun::to_string(interactable.mouse_right_offset)).c_str());
             ImGui::Text(("layer " + std::to_string(interactable.layer)).c_str());
         }
 

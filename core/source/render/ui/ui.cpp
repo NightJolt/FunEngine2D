@@ -93,7 +93,7 @@ auto fun::gui::create_button(const action_fun_t& action_fun) -> ecs::entity_t {
                 mouse_screen_pos.x <= space.right &&
                 mouse_screen_pos.y >= space.top &&
                 mouse_screen_pos.y <= space.bottom,
-                mouse_screen_pos - vec2f_t(space.left + (space.right - space.left) * .5f, space.top + (space.bottom - space.top) * .5f)
+                // mouse_screen_pos - vec2f_t(space.left + (space.right - space.left) * .5f, space.top + (space.bottom - space.top) * .5f)
             };
         },
         action_fun

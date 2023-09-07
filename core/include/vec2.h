@@ -247,10 +247,10 @@ inline void operator -=(fun::vec2_t<T>& a, const T& b) {
 
 // template <typename T>
 // inline bool operator >(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-//     return b < a;
+//     return b <= a;
 // }
 
 // template <typename T>
 // inline bool operator >=(const fun::vec2_t<T>& a, const fun::vec2_t<T>& b) {
-//     return b <= a;
+//     return b < a;
 // }
