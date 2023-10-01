@@ -1,7 +1,7 @@
 #include "render/shapes/curve.h"
 #include "_math.h"
 
-fun::render::curve_t::curve_t() : m_width(1), m_color(rgba_t::white), m_is_closed(false), m_update_body(false), m_update_color(false) {
+fun::render::curve_t::curve_t() : m_width(1), m_color(rgba::white), m_is_closed(false), m_update_body(false), m_update_color(false) {
     m_primitive.set_primitive_type(sf::PrimitiveType::TrianglesStrip);
 }
 

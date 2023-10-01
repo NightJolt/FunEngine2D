@@ -3,14 +3,7 @@
 #include <_math.h>
 
 #pragma region rgb_t
-const fun::rgb_t fun::rgb_t::black = { 0, 0, 0 };
-const fun::rgb_t fun::rgb_t::white = { 255, 255, 255 };
-const fun::rgb_t fun::rgb_t::red = { 255, 0, 0 };
-const fun::rgb_t fun::rgb_t::green = { 0, 255, 0 };
-const fun::rgb_t fun::rgb_t::blue = { 0, 0, 255 };
-
 fun::rgb_t::rgb_t() : r(0), g(0), b(0) {}
-fun::rgb_t::rgb_t(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {}
 fun::rgb_t::rgb_t(const rgba_t& rgba) : r(rgba.r), g(rgba.g), b(rgba.b) {}
 
 fun::rgb_t fun::rgb_t::invert() const {
@@ -59,12 +52,7 @@ fun::rgb_t fun::rgb_t::rand_grayscale() {
 #pragma endregion
 
 #pragma region rgba_t
-const fun::rgba_t fun::rgba_t::black = { 0, 0, 0, 255 };
-const fun::rgba_t fun::rgba_t::white = { 255, 255, 255, 255 };
-const fun::rgba_t fun::rgba_t::transparent = { 0, 0, 0, 0 };
-
 fun::rgba_t::rgba_t() : r(0), g(0), b(0), a(255) {}
-fun::rgba_t::rgba_t(uint8_t r, uint8_t g, uint8_t b, uint8_t a) : r(r), g(g), b(b), a(a) {}
 fun::rgba_t::rgba_t(const rgb_t& rgb) : r(rgb.r), g(rgb.g), b(rgb.b), a(255) {}
 fun::rgba_t::rgba_t(const rgb_t& rgb, uint8_t a) : r(rgb.r), g(rgb.g), b(rgb.b), a(a) {}
 

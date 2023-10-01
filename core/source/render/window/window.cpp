@@ -108,7 +108,7 @@ void fun::render::window_t::display(const rgb_t& bg_color, const sf::Shader* sha
     world_render.setTexture(world_buffer.getTexture());
 
     if (ui_invalidated) {
-        ui_buffer.clear(fun::rgba_t::transparent.to_sf());
+        ui_buffer.clear(fun::rgba::transparent.to_sf());
         ui_buffer.setView(ui_view);
         ui_buffer.draw(ui_queue);
         ui_buffer.display();
