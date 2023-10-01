@@ -23,20 +23,32 @@ namespace fun::data {
             }
         }
 
-        tile_data_t& get_data(grid_pos_t grid_pos) {
-            return get_chunk(grid_to_chunk(grid_pos, S))->get_data(grid_to_tile(grid_pos, S));
-        }
+        tile_data_t* get_data(grid_pos_t grid_pos) {
+            auto chunk = get_chunk(grid_to_chunk(grid_pos, S));
 
-        tile_data_t* get_data_unforced(grid_pos_t grid_pos) {
-            if (!m_gridchunks.contains(grid_to_chunk(grid_pos, S))) {
+            if (!chunk) {
                 return nullptr;
             }
 
-            return &get_chunk(grid_to_chunk(grid_pos, S))->get_data(grid_to_tile(grid_pos, S));
+            return &chunk->get_data(grid_to_tile(grid_pos, S));
+        }
+
+        tile_data_t* get_or_create_data(grid_pos_t grid_pos) {
+            return &get_or_create_chunk(grid_to_chunk(grid_pos, S))->get_data(grid_to_tile(grid_pos, S));
         }
 
         tile_data_t* get_data_array(grid_pos_t grid_pos) {
-            return get_chunk(grid_to_chunk(grid_pos, S))->get_data_array();
+            auto chunk = get_chunk(grid_to_chunk(grid_pos, S));
+
+            if (!chunk) {
+                return nullptr;
+            }
+
+            return chunk->get_data_array();
+        }
+
+        tile_data_t* get_or_create_data_array(grid_pos_t grid_pos) {
+            return get_or_create_chunk(grid_to_chunk(grid_pos, S))->get_data_array();
         }
 
         gridchunk_map_t& get_chunks() {
@@ -47,7 +59,7 @@ namespace fun::data {
             m_init_chunk = init_chunk;
         }
 
-        chunk_t* get_chunk_unforced(chunk_pos_t chunk_pos) {
+        chunk_t* get_chunk(chunk_pos_t chunk_pos) {
             if (m_gridchunks.contains(chunk_pos)) {
                 return m_gridchunks[chunk_pos];
             }
@@ -55,7 +67,7 @@ namespace fun::data {
             return nullptr;
         }
 
-        chunk_t* get_chunk(chunk_pos_t chunk_pos) {
+        chunk_t* get_or_create_chunk(chunk_pos_t chunk_pos) {
             if (m_gridchunks.contains(chunk_pos)) {
                 return m_gridchunks[chunk_pos];
             }
