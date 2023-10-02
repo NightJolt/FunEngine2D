@@ -9,7 +9,7 @@
 #include "../window/window.h"
 
 namespace fun::render {
-    template <data::chunk_size_t C, data::tile_size_t T>
+    template <data::chunk_size_t C, data::tile_size_t T, bool has_alpha = false>
     class meshmap_t : public sf::Drawable {
     private:
         struct quad_t {
@@ -20,9 +20,11 @@ namespace fun::render {
         static constexpr data::chunk_size_t s_chunk_size = C;
         typedef data::gridchunk_t<s_chunk_size, quad_t> chunk_t;
         static constexpr data::tile_size_t s_tile_size = T;
+        using color_t = typename std::conditional_t<has_alpha, rgba_t, rgb_t>;
+        using color_t4 = typename std::conditional_t<has_alpha, rgba_t4, rgb_t4>;
 
     public:
-        explicit meshmap_t(texture_t texture, fun::rgb_t fill_color) : m_texture(texture), m_default_color(fill_color) {
+        explicit meshmap_t(texture_t texture, color_t fill_color) : m_texture(texture), m_default_color(fill_color) {
             m_gridmap.set_init_chunk([fill_color](chunk_t* chunk, data::chunk_pos_t chunk_pos) {
                 vec2f_t position((vec2f_t)data::chunk_to_grid(chunk_pos, s_chunk_size) * s_tile_size);
 
@@ -48,19 +50,13 @@ namespace fun::render {
 
         ~meshmap_t() noexcept override = default;
 
-        rgb_t get_color(data::grid_pos_t grid_pos) {
+        color_t get_color(data::grid_pos_t grid_pos) {
             auto* quad = m_gridmap.get_data(grid_pos);
 
-            return quad ? rgb_t { quad->vertices[0].color } : m_default_color;
+            return quad ? color_t { quad->vertices[0].color } : m_default_color;
         }
 
-        rgb_t get_or_create_color(data::grid_pos_t grid_pos) {
-            auto* quad = m_gridmap.get_or_create_data(grid_pos);
-
-            return quad->vertices[0].color;
-        }
-
-        void set_color(data::grid_pos_t grid_pos, rgb_t color) {
+        void set_color(data::grid_pos_t grid_pos, color_t color) {
             auto* quad = m_gridmap.get_or_create_data(grid_pos);
 
             quad->vertices[0].color = color;
@@ -69,7 +65,7 @@ namespace fun::render {
             quad->vertices[3].color = color;
         }
 
-        void set_color(data::grid_pos_t grid_pos, rgb_t4 color) {
+        void set_color(data::grid_pos_t grid_pos, color_t4 color) {
             auto* quad = m_gridmap.get_data(grid_pos);
 
             quad->vertices[0].color = color[0];
@@ -96,6 +92,10 @@ namespace fun::render {
             return m_gridmap.get_or_create_chunk(chunk_pos);
         }
 
+        void clear() {
+            m_gridmap.clear();
+        }
+
     private:
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
             states.texture = m_texture.get_texture();
@@ -120,6 +120,6 @@ namespace fun::render {
 
         mutable data::gridmap_t<s_chunk_size, quad_t> m_gridmap;
         texture_t m_texture;
-        rgb_t m_default_color;
+        color_t m_default_color;
     };
 }

@@ -81,6 +81,14 @@ namespace fun::data {
 
             return chunk;
         }
+
+        void clear() {
+            for (auto& [pos, chunk] : m_gridchunks) {
+                delete chunk;
+            }
+
+            m_gridchunks.clear();
+        }
         
     private:
         gridchunk_map_t m_gridchunks;

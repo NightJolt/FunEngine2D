@@ -137,6 +137,11 @@ namespace fun::math {
     }
 
     template <class T>
+    vec2_t<T> signs(const vec2_t<T>& a) {
+        return vec2_t <T> (a.x > 0 ? 1 : -1, a.y > 0 ? 1 : -1);
+    }
+
+    template <class T>
     T clamp(T v, T a, T b) {
         return v < a ? a : v > b ? b : v;
     }
