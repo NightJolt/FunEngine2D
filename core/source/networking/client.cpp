@@ -60,6 +60,16 @@ void fun::network::client_t::send(const std::string& data) {
     server.send(outgoing_packet);
 }
 
+void fun::network::client_t::send(const uint8_t* data, size_t size) {
+    if (!check_connection()) return;
+
+    sf::Packet outgoing_packet;
+
+    outgoing_packet.append(data, size);
+
+    server.send(outgoing_packet);
+}
+
 fun::network::packet_storage_t& fun::network::client_t::get_packets() {
     return packet_storage;
 }

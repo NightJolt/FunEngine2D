@@ -14,8 +14,9 @@ namespace fun::network {
         void disconnect();
 
         void send(const std::string&);
-        void receive();
+        void send(const uint8_t*, size_t);
 
+        void receive();
         packet_storage_t& get_packets();
 
         bool check_connection();
