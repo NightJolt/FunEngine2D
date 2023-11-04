@@ -1,5 +1,7 @@
 #pragma once
 
+#include "meta.h"
+
 namespace fun {
     template <class T>
     class uptr_t {
@@ -46,7 +48,10 @@ fun::uptr_t<T>::uptr_t(T* ptr) : m_ptr(ptr) {}
 
 template <class T>
 fun::uptr_t<T>::~uptr_t() {
-    delete m_ptr;
+    if (meta::rank_v<T> == 0)
+        delete m_ptr;
+    else
+        delete[] m_ptr;
 }
 
 
@@ -67,7 +72,10 @@ T* fun::uptr_t<T>::take() {
 
 template <class T>
 void fun::uptr_t<T>::reset(T* ptr) {
-    delete m_ptr;
+    if (meta::rank_v<T> == 0)
+        delete m_ptr;
+    else
+        delete[] m_ptr;
 
     m_ptr = ptr;
 }
@@ -87,6 +95,8 @@ T* fun::uptr_t<T>::operator ->() const {
 
 template <class T>
 fun::uptr_t<T>::uptr_t(uptr_t&& other) noexcept {
+    if (this == &other) return;
+
     m_ptr = other.m_ptr;
     other.m_ptr = nullptr;
 }
@@ -94,6 +104,8 @@ fun::uptr_t<T>::uptr_t(uptr_t&& other) noexcept {
 
 template <class T>
 fun::uptr_t<T>& fun::uptr_t<T>::operator =(uptr_t&& other) noexcept {
+    if (this == &other) return *this;
+
     m_ptr = other.m_ptr;
     other.m_ptr = nullptr;
     
