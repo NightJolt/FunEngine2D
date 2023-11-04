@@ -44,6 +44,7 @@
 #include <algorithm>
 #include <tuple>
 #include <filesystem>
+#include <string_view>
 
 #include <any>
 #include <variant>
