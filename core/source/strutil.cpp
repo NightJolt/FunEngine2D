@@ -89,7 +89,7 @@ void fun::strutil::filter_empty(std::vector<std::string_view>& strs) {
         bool empty = true;
 
         for (auto c : str) {
-            empty &= c == ' ';
+            empty &= c < 33;
         }
         
         if (empty) {
