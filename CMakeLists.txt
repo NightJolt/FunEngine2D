@@ -77,6 +77,8 @@ list(APPEND CPP_DEFINITIONS ROOT_DIRECTORY="${CMAKE_SOURCE_DIR}")
 
 add_subdirectory(core)
 
+add_subdirectory(gen)
+
 if (FE2D_ENABLE_CUDA)
 	add_subdirectory(kernel)
 endif()
