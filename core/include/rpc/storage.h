@@ -54,4 +54,27 @@ namespace fun::rpc {
     private:
         std::unordered_map<key_t, oid_t> storage;
     };
+
+    class object_storage_t {
+    public:
+        object_storage_t() = default;
+        ~object_storage_t() = default;
+
+        object_storage_t(const object_storage_t&) = delete;
+        object_storage_t& operator=(const object_storage_t&) = delete;
+
+        object_storage_t(object_storage_t&& other) noexcept = delete;
+        object_storage_t& operator=(object_storage_t&& other) noexcept = delete;
+
+        void store(oid_t oid, i_hollow_t* object) {
+            objects[oid] = object;
+        }
+
+        i_hollow_t* fetch(oid_t oid) {
+            return objects[oid];
+        }
+
+    private:
+        std::unordered_map<oid_t, i_hollow_t*> objects;
+    };
 }

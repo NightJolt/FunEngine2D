@@ -3,8 +3,10 @@
 #include "../globals.h"
 
 namespace fun::rpc {
-    typedef uint64_t iid_t;
-    typedef uint64_t oid_t;
+    typedef uint64_t iid_t; // * interface id
+    typedef uint64_t oid_t; // * object id
+    typedef uint32_t mid_t; // * method id
+
     typedef uint64_t key_t;
 
     typedef uint32_t ip_t;

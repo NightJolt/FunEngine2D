@@ -1,10 +1,12 @@
 #pragma once
 
 #include "../globals.h"
+#include "../uuid.h"
 
 #include "serialize.h"
 #include "connection.h"
 #include "storage.h"
+#include "invoker.h"
 
 namespace fun::rpc {
     class rpc_t {
@@ -29,6 +31,20 @@ namespace fun::rpc {
             return local_storage;
         }
 
+        invoker_t& get_invoker() {
+            return invoker;
+        }
+
+        template <class T>
+        T* create_object() {
+            T* hollow = new T;
+
+            // object_storage.store(uuid::generate(), hollow);
+            object_storage.store(1, hollow);
+
+            return hollow;
+        }
+
         void step() {
             process_connections();
             process_packets();
@@ -49,18 +65,23 @@ namespace fun::rpc {
         void process_packet(packet_t& packet) {
             deserializer_t deserializer(packet.get_data());
 
-            uint32_t call_type = deserializer.deserialize<uint32_t>();
-            uint32_t request_type = deserializer.deserialize<uint32_t>();
-            key_t key = deserializer.deserialize<key_t>();
+            uint32_t oid = deserializer.deserialize<oid_t>();
 
-            if (request_type == 0) {
-                serializer_t serializer;
-                local_storage.serialize_object(key, serializer);
+            if (oid == 0) {
+                // uint32_t request_type = deserializer.deserialize<uint32_t>();
+                // key_t key = deserializer.deserialize<key_t>();
+
+                // serializer_t serializer;
+                // local_storage.serialize_object(key, serializer);
                  
-                auto connection = connection_provider.get_connection(packet.get_sender_addr());
-                if (connection.is_valid()) {
-                    connection.send(serializer.get_data(), serializer.get_size());
-                }
+                // auto connection = connection_provider.get_connection(packet.get_sender_addr());
+                // if (connection.is_valid()) {
+                //     connection.send(serializer.get_data(), serializer.get_size());
+                // }
+            } else {
+                i_hollow_t* hollow = object_storage.fetch(oid);
+
+                invoker.invoke(deserializer, hollow);
             }
         }
 
@@ -76,5 +97,7 @@ namespace fun::rpc {
 
         connection_provider_t connection_provider;
         local_storage_t local_storage;
+        object_storage_t object_storage;
+        invoker_t invoker;
     };
 }
