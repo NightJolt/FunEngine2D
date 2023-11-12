@@ -6,6 +6,13 @@ namespace fun::rpc {
     class serializer_t {
     public:
         serializer_t() : cursor(data) {}
+        ~serializer_t() = default;
+
+        serializer_t(const serializer_t&) = delete;
+        serializer_t& operator=(const serializer_t&) = delete;
+
+        serializer_t(serializer_t&& other) noexcept = delete;
+        serializer_t& operator=(serializer_t&& other) noexcept = delete;
 
         template <class INT_T>
         std::enable_if_t<std::is_integral_v<INT_T>> serialize(INT_T value) {

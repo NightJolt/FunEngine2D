@@ -2,35 +2,11 @@
 
 #include "../globals.h"
 
-#include "hollow.h"
 #include "serialize.h"
 #include "connection.h"
+#include "storage.h"
 
 namespace fun::rpc {
-    class remote_storage_t {
-    public:
-        remote_storage_t(addr_t addr, connection_provider_t& connection_provider) : addr(addr), connection_provider(connection_provider) {}
-
-        template <class T>
-        void request_object(key_t key) {
-            serializer_t serializer;
-
-            serializer.serialize<uint32_t>(0); // non object call
-            serializer.serialize<uint32_t>(0); // request stub
-            serializer.serialize<key_t>(key); // storage object key
-
-            auto connection = connection_provider.get_connection(addr);
-            
-            if (connection.is_valid()) {
-                connection.send(serializer.get_data(), serializer.get_size());
-            }
-        }
-
-    private:
-        addr_t addr;
-        connection_provider_t& connection_provider;
-    };
-    
     class rpc_t {
     public:
         void init(port_t port) {
@@ -47,6 +23,10 @@ namespace fun::rpc {
 
         remote_storage_t get_remote_storage(addr_t addr) {
             return remote_storage_t(addr, connection_provider);
+        }
+
+        local_storage_t& get_local_storage() {
+            return local_storage;
         }
 
         void step() {
@@ -75,12 +55,9 @@ namespace fun::rpc {
 
             if (request_type == 0) {
                 serializer_t serializer;
-                serializer.serialize<uint32_t>(0); // non object call
-                serializer.serialize<uint32_t>(1); // stub answer
-                serializer.serialize<key_t>(key); // object id
-
+                local_storage.serialize_object(key, serializer);
+                 
                 auto connection = connection_provider.get_connection(packet.get_sender_addr());
-                
                 if (connection.is_valid()) {
                     connection.send(serializer.get_data(), serializer.get_size());
                 }
@@ -98,5 +75,6 @@ namespace fun::rpc {
         }
 
         connection_provider_t connection_provider;
+        local_storage_t local_storage;
     };
 }

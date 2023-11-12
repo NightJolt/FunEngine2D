@@ -4,6 +4,7 @@
 
 namespace fun::rpc {
     typedef uint64_t iid_t;
+    typedef uint64_t oid_t;
     typedef uint64_t key_t;
 
     typedef uint32_t ip_t;
