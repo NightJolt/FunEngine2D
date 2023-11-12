@@ -4,6 +4,7 @@
 #include "../vec2.h"
 
 #include "defs.h"
+#include "packet_storage.h"
 
 namespace fun::rpc {
     struct connection_info_t {
@@ -57,9 +58,7 @@ namespace fun::rpc {
 
         void send(uint8_t* data, uint32_t size) {
             size_t sent = 0;
-            while (size != sent) {
-                socket->send(data + sent, size - sent, sent);
-            }
+            while (socket->send(data + sent, size - sent, sent) == sf::Socket::Partial) {}
         }
 
         bool is_valid() {
@@ -100,8 +99,6 @@ namespace fun::rpc {
 
                 connection.socket->setBlocking(false);
                 connections[addr] = std::move(connection);
-
-                PRINTLN("CONNECTED");
             }
 
             return connection_stub_t { connections[addr].socket.get() };
@@ -118,12 +115,46 @@ namespace fun::rpc {
                     connections[addr] = connection_t { new_connection.release() };
 
                     new_connection = std::make_unique<sf::TcpSocket>();
-
-                    PRINTLN("NEW CONNECTION");
                 } else {
                     break;
                 }
             }
+        }
+
+        void check_for_incoming_data() {
+            uint8_t data[256];
+
+            for (auto& [addr, connection] : connections) {
+                sf::TcpSocket* socket = connection.socket.get();
+                size_t received = 0;
+                bool partial = true;
+
+                while (partial) {
+                    auto result = socket->receive(data + received, sizeof(data) - received, received);
+
+                    switch(result) {
+                        case sf::Socket::Done:
+                            partial = false;
+
+                            break;
+                            
+                        case sf::Socket::Disconnected:
+                            // todo: remove connection
+
+                            partial = false;
+
+                            break;
+                    }
+                }
+
+                if (received > 0) {
+                    packet_storage.push(data, received, addr);
+                }
+            }
+        }
+
+        packet_storage_t& get_packet_storage() {
+            return packet_storage;
         }
 
     private:
@@ -135,5 +166,6 @@ namespace fun::rpc {
             decltype([](const addr_t& addr) { return hash(vec2u_t { addr.ip, addr.port }); }),
             decltype([](const addr_t& addr_l, const addr_t& addr_r) { return addr_l.ip == addr_r.ip && addr_l.port == addr_r.port; })
         > connections;
+        packet_storage_t packet_storage;
     };
 }
