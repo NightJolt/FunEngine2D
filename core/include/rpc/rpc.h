@@ -71,11 +71,9 @@ namespace fun::rpc {
 
                 if (request_type == 0) {
                     key_t key = deserializer.deserialize<key_t>();
-                    uuid::uuid_t uuid = deserializer.deserialize<uuid::uuid_t>();
 
                     serializer_t serializer;
                     local_storage.serialize_object(key, serializer);
-                    serializer.serialize<uuid::uuid_t>(uuid);
                     
                     auto connection = connection_provider.get_connection(packet.get_sender_addr());
                     if (connection.is_valid()) {

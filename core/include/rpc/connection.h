@@ -4,7 +4,7 @@
 #include "../vec2.h"
 
 #include "defs.h"
-#include "packet_storage.h"
+#include "packet.h"
 
 namespace fun::rpc {
     struct connection_info_t {

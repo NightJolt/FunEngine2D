@@ -14,12 +14,9 @@ namespace fun::rpc {
         T request_object(key_t key) {
             serializer_t serializer;
 
-            uuid::uuid_t uuid = uuid::generate();
-
             serializer.serialize<oid_t>(0); // non object call
             serializer.serialize<mid_t>(0); // request stub
             serializer.serialize<key_t>(key); // storage object key
-            serializer.serialize<uuid::uuid_t>(uuid); // uuid to identify answer
 
             auto connection = connection_provider.get_connection(addr);
             
@@ -48,15 +45,11 @@ namespace fun::rpc {
 
                         if (answer_type == 1) {
                             oid = deserializer.deserialize<oid_t>();
-                            uuid::uuid_t answer_uuid = deserializer.deserialize<uuid::uuid_t>();
+                            found = true;
 
-                            if (answer_uuid == uuid) {
-                                found = true;
+                            packet_storage.remove(packed_ind);
 
-                                packet_storage.remove(packed_ind);
-
-                                break;
-                            }
+                            break;
                         }
                     }
 
