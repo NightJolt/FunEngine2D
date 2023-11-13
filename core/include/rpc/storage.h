@@ -11,18 +11,64 @@ namespace fun::rpc {
         remote_storage_t(addr_t addr, connection_provider_t& connection_provider) : addr(addr), connection_provider(connection_provider) {}
 
         template <class T>
-        void request_object(key_t key) {
+        T request_object(key_t key) {
             serializer_t serializer;
 
-            serializer.serialize<uint32_t>(0); // non object call
-            serializer.serialize<uint32_t>(0); // request stub
+            uuid::uuid_t uuid = uuid::generate();
+
+            serializer.serialize<oid_t>(0); // non object call
+            serializer.serialize<mid_t>(0); // request stub
             serializer.serialize<key_t>(key); // storage object key
+            serializer.serialize<uuid::uuid_t>(uuid); // uuid to identify answer
 
             auto connection = connection_provider.get_connection(addr);
             
             if (connection.is_valid()) {
                 connection.send(serializer.get_data(), serializer.get_size());
             }
+
+            oid_t oid = 0;
+            uint32_t packed_ind = 0;
+            auto& packet_storage = connection_provider.get_packet_storage();
+
+            while (true) {
+                connection_provider.check_for_incoming_data();
+
+                bool found = false;
+                
+                while (packed_ind < packet_storage.get_size()) {
+                    auto& packet = packet_storage[packed_ind];
+
+                    deserializer_t deserializer(packet.get_data());
+
+                    oid_t call_type = deserializer.deserialize<oid_t>();
+
+                    if (call_type == 0) {
+                        mid_t answer_type = deserializer.deserialize<mid_t>();
+
+                        if (answer_type == 1) {
+                            oid = deserializer.deserialize<oid_t>();
+                            uuid::uuid_t answer_uuid = deserializer.deserialize<uuid::uuid_t>();
+
+                            if (answer_uuid == uuid) {
+                                found = true;
+
+                                packet_storage.remove(packed_ind);
+
+                                break;
+                            }
+                        }
+                    }
+
+                    packed_ind++;
+                }
+
+                if (found) {
+                    break;
+                }
+            }
+
+            return T(addr, oid);
         }
 
     private:
@@ -42,9 +88,9 @@ namespace fun::rpc {
         local_storage_t& operator=(local_storage_t&& other) noexcept = delete;
 
         void serialize_object(key_t key, serializer_t& serializer) {
-            serializer.serialize<uint32_t>(0); // non object call
-            serializer.serialize<uint32_t>(1); // stub answer
-            serializer.serialize<key_t>(storage[key]); // object id
+            serializer.serialize<oid_t>(0); // non object call
+            serializer.serialize<mid_t>(1); // stub answer
+            serializer.serialize<oid_t>(storage[key]); // object id
         }
 
         void store_object(key_t key, i_hollow_t* oid) {

@@ -88,14 +88,26 @@ namespace fun::rpc {
     class packet_storage_t {
     public:
         void push(uint8_t* data, uint32_t size, addr_t sender_addr) {
-            packets.emplace(data, size, sender_addr);
+            packets.emplace_back(data, size, sender_addr);
         }
 
         packet_t pop() {
             auto packet = std::move(packets.front());
-            packets.pop();
+            packets.erase(packets.begin());
 
             return packet;
+        }
+
+        void remove(uint32_t index) {
+            packets.erase(packets.begin() + index);
+        }
+
+        packet_t& operator[](uint32_t index) {
+            return packets[index];
+        }
+
+        uint32_t get_size() {
+            return packets.size();
         }
 
         bool empty() {
@@ -103,6 +115,6 @@ namespace fun::rpc {
         }
 
     private:
-        std::queue<packet_t> packets;
+        std::vector<packet_t> packets;
     };
 }

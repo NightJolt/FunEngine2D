@@ -37,12 +37,11 @@ namespace fun::rpc {
 
         template <class T>
         T* create_object() {
-            T* hollow = new T;
+            T* obj = new T;
 
-            // object_storage.store(uuid::generate(), hollow);
-            object_storage.store(1, hollow);
+            object_storage.store((oid_t)(i_hollow_t*)obj, obj);
 
-            return hollow;
+            return obj;
         }
 
         void step() {
@@ -65,19 +64,24 @@ namespace fun::rpc {
         void process_packet(packet_t& packet) {
             deserializer_t deserializer(packet.get_data());
 
-            uint32_t oid = deserializer.deserialize<oid_t>();
+            oid_t oid = deserializer.deserialize<oid_t>();
 
             if (oid == 0) {
-                // uint32_t request_type = deserializer.deserialize<uint32_t>();
-                // key_t key = deserializer.deserialize<key_t>();
+                mid_t request_type = deserializer.deserialize<mid_t>();
 
-                // serializer_t serializer;
-                // local_storage.serialize_object(key, serializer);
-                 
-                // auto connection = connection_provider.get_connection(packet.get_sender_addr());
-                // if (connection.is_valid()) {
-                //     connection.send(serializer.get_data(), serializer.get_size());
-                // }
+                if (request_type == 0) {
+                    key_t key = deserializer.deserialize<key_t>();
+                    uuid::uuid_t uuid = deserializer.deserialize<uuid::uuid_t>();
+
+                    serializer_t serializer;
+                    local_storage.serialize_object(key, serializer);
+                    serializer.serialize<uuid::uuid_t>(uuid);
+                    
+                    auto connection = connection_provider.get_connection(packet.get_sender_addr());
+                    if (connection.is_valid()) {
+                        connection.send(serializer.get_data(), serializer.get_size());
+                    }
+                }
             } else {
                 i_hollow_t* hollow = object_storage.fetch(oid);
 
