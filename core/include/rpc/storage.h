@@ -4,6 +4,7 @@
 #include "connection.h"
 #include "serialize.h"
 #include "hollow.h"
+#include "sync_call.h"
 
 namespace fun::rpc {
     class remote_storage_t {
@@ -23,43 +24,13 @@ namespace fun::rpc {
             if (connection.is_valid()) {
                 connection.send(serializer.get_data(), serializer.get_size());
             }
-
+            
             oid_t oid = 0;
-            uint32_t packed_ind = 0;
-            auto& packet_storage = connection_provider.get_packet_storage();
+            auto sync_call_data_extractor = [&oid](deserializer_t& deserializer) {
+                oid = deserializer.deserialize<oid_t>();
+            };
 
-            while (true) {
-                connection_provider.check_for_incoming_data();
-
-                bool found = false;
-                
-                while (packed_ind < packet_storage.get_size()) {
-                    auto& packet = packet_storage[packed_ind];
-
-                    deserializer_t deserializer(packet.get_data());
-
-                    oid_t call_type = deserializer.deserialize<oid_t>();
-
-                    if (call_type == 0) {
-                        mid_t answer_type = deserializer.deserialize<mid_t>();
-
-                        if (answer_type == 1) {
-                            oid = deserializer.deserialize<oid_t>();
-                            found = true;
-
-                            packet_storage.remove(packed_ind);
-
-                            break;
-                        }
-                    }
-
-                    packed_ind++;
-                }
-
-                if (found) {
-                    break;
-                }
-            }
+            wait_for_sync_call_reply(connection_provider, sync_call_data_extractor);
 
             return T(addr, oid);
         }
@@ -82,7 +53,7 @@ namespace fun::rpc {
 
         void serialize_object(key_t key, serializer_t& serializer) {
             serializer.serialize<oid_t>(0); // non object call
-            serializer.serialize<mid_t>(1); // stub answer
+            serializer.serialize<mid_t>(1); // sync call answer
             serializer.serialize<oid_t>(storage[key]); // object id
         }
 

@@ -19,6 +19,10 @@ namespace fun::rpc {
             connection_provider.quit();
         }
 
+        connection_provider_t& get_connection_provider() {
+            return connection_provider;
+        }
+
         connection_stub_t get_connection(addr_t addr) {
             return connection_provider.get_connection(addr);
         }
@@ -82,8 +86,17 @@ namespace fun::rpc {
                 }
             } else {
                 i_hollow_t* hollow = object_storage.fetch(oid);
+                serializer_t serializer;
 
-                invoker.invoke(deserializer, hollow);
+                invoker.invoke(deserializer, hollow, serializer);
+
+                if (serializer.get_size() > 0) {
+                    auto connection = connection_provider.get_connection(packet.get_sender_addr());
+                    
+                    if (connection.is_valid()) {
+                        connection.send(serializer.get_data(), serializer.get_size());
+                    }
+                }
             }
         }
 
