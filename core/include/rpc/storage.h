@@ -5,14 +5,16 @@
 #include "serialize.h"
 #include "hollow.h"
 #include "sync_call.h"
+#include "stub.h"
 
 namespace fun::rpc {
     class remote_storage_t {
     public:
-        remote_storage_t(addr_t addr, connection_provider_t& connection_provider) : addr(addr), connection_provider(connection_provider) {}
+        remote_storage_t(addr_t addr, connection_provider_t& connection_provider, stub_factory_t& stub_factory)
+            : addr(addr), connection_provider(connection_provider), stub_factory(stub_factory) {}
 
         template <class T>
-        T request_object(key_t key) {
+        stub_t<T>* request_object(key_t key) {
             serializer_t serializer;
 
             serializer.serialize<oid_t>(0); // non object call
@@ -32,12 +34,13 @@ namespace fun::rpc {
 
             wait_for_sync_call_reply(connection_provider, sync_call_data_extractor);
 
-            return T(addr, oid);
+            return (stub_t<T>*)stub_factory.create(T::iid, addr, oid, connection_provider);
         }
 
     private:
         addr_t addr;
         connection_provider_t& connection_provider;
+        stub_factory_t& stub_factory;
     };
 
     class local_storage_t {

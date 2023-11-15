@@ -7,6 +7,7 @@
 #include "connection.h"
 #include "storage.h"
 #include "invoker.h"
+#include "stub.h"
 
 namespace fun::rpc {
     class rpc_t {
@@ -23,12 +24,12 @@ namespace fun::rpc {
             return connection_provider;
         }
 
-        connection_stub_t get_connection(addr_t addr) {
-            return connection_provider.get_connection(addr);
+        stub_factory_t& get_stub_factory() {
+            return stub_factory;
         }
 
         remote_storage_t get_remote_storage(addr_t addr) {
-            return remote_storage_t(addr, connection_provider);
+            return remote_storage_t(addr, connection_provider, stub_factory);
         }
 
         local_storage_t& get_local_storage() {
@@ -92,7 +93,7 @@ namespace fun::rpc {
 
                 if (serializer.get_size() > 0) {
                     auto connection = connection_provider.get_connection(packet.get_sender_addr());
-                    
+
                     if (connection.is_valid()) {
                         connection.send(serializer.get_data(), serializer.get_size());
                     }
@@ -114,5 +115,6 @@ namespace fun::rpc {
         local_storage_t local_storage;
         object_storage_t object_storage;
         invoker_t invoker;
+        stub_factory_t stub_factory;
     };
 }
