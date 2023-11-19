@@ -144,6 +144,11 @@ namespace fun::rpc {
                             partial = false;
 
                             break;
+
+                        case sf::Socket::NotReady:
+                            partial = false;
+
+                            break;
                     }
                 }
 
