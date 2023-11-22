@@ -188,13 +188,13 @@ void impl_interface_stub(std::string& cpp, interface_t& interface) {
 }
 
 void impl_interface_stub_factory(std::string& cpp, interface_t& interface) {
-    cpp += "fun::rpc::i_hollow_t* rpc__" + interface.name + "__stub_factory(fun::rpc::addr_t owner_addr, fun::rpc::oid_t owner_oid, fun::rpc::connection_provider_t& connection_provider) {\n";
+    cpp += "inline fun::rpc::i_hollow_t* rpc__" + interface.name + "__stub_factory(fun::rpc::addr_t owner_addr, fun::rpc::oid_t owner_oid, fun::rpc::connection_provider_t& connection_provider) {\n";
     cpp += "    return new " + interface.name + "_stub_t(owner_addr, owner_oid, connection_provider);\n";
     cpp += "}\n";
 }
 
 void impl_interface_invokable_no_ret(std::string& cpp, interface_t& interface, method_t& method) {
-    cpp += "void rpc__" + interface.name + "__" + method.name + "(fun::rpc::deserializer_t& deserializer, " + interface.base_name + "* " + interface.name + "_object) {\n";
+    cpp += "inline void rpc__" + interface.name + "__" + method.name + "(fun::rpc::deserializer_t& deserializer, " + interface.base_name + "* " + interface.name + "_object) {\n";
     cpp += "    " + interface.name + "_object->" + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
@@ -210,7 +210,7 @@ void impl_interface_invokable_no_ret(std::string& cpp, interface_t& interface, m
 }
 
 void impl_interface_invokable_ret(std::string& cpp, interface_t& interface, method_t& method) {
-    cpp += "void rpc__" + interface.name + "__" + method.name + "(fun::rpc::deserializer_t& deserializer, " + interface.base_name + "* " + interface.name + "_object, fun::rpc::serializer_t& serializer) {\n";
+    cpp += "inline void rpc__" + interface.name + "__" + method.name + "(fun::rpc::deserializer_t& deserializer, " + interface.base_name + "* " + interface.name + "_object, fun::rpc::serializer_t& serializer) {\n";
     cpp += "    " + method.return_type + " ret = " + interface.name + "_object->" + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
@@ -253,7 +253,7 @@ void impl_method_invoker(std::string& cpp, interface_t& interface, method_t& met
 }
 
 void impl_interface_invoker(std::string& cpp, interface_t& interface) {
-    cpp += "void rpc__" + interface.name + "_invoker(fun::rpc::deserializer_t& deserializer, fun::rpc::i_hollow_t* object, fun::rpc::serializer_t& serializer) {\n";
+    cpp += "inline void rpc__" + interface.name + "_invoker(fun::rpc::deserializer_t& deserializer, fun::rpc::i_hollow_t* object, fun::rpc::serializer_t& serializer) {\n";
     cpp += "    fun::rpc::mid_t method_id = deserializer.deserialize<fun::rpc::mid_t>();\n";
     cpp += "    " + interface.base_name + "* " + interface.name + "_object = static_cast<" + interface.base_name + "*>(object);\n\n";
     
@@ -309,7 +309,7 @@ std::string fun::rpc::generate(std::string& rpc_file) {
     
     bool has_namespace = begin_namespace(cpp, tokens);
     
-    reg += "void register_rpc_interfaces(fun::rpc::rpc_t& rpc) {\n";
+    reg += "inline void register_rpc_interfaces(fun::rpc::rpc_t& rpc) {\n";
 
     while (is_interface(tokens)) {
         interface_t interface = get_interface(cpp, tokens);
