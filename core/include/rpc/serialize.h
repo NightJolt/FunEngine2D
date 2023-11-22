@@ -14,14 +14,14 @@ namespace fun::rpc {
 
     class serializer_t {
     public:
-        serializer_t() : cursor(data) {}
+        serializer_t();
         ~serializer_t() = default;
 
         serializer_t(const serializer_t&) = delete;
         serializer_t& operator=(const serializer_t&) = delete;
 
-        serializer_t(serializer_t&& other) noexcept = delete;
-        serializer_t& operator=(serializer_t&& other) noexcept = delete;
+        serializer_t(serializer_t&&) noexcept = delete;
+        serializer_t& operator=(serializer_t&&) noexcept = delete;
 
         template <INT_T INT>
         void serialize(INT value) {
@@ -43,13 +43,8 @@ namespace fun::rpc {
             cursor += value.size();
         }
 
-        uint8_t* get_data() {
-            return data;
-        }
-
-        uint32_t get_size() {
-            return cursor - data;
-        }
+        uint8_t* get_data();
+        uint32_t get_size();
 
     private:
         uint8_t data[256];
@@ -58,9 +53,7 @@ namespace fun::rpc {
 
     class deserializer_t {
     public:
-        deserializer_t(uint8_t* d) : data(d) {
-            cursor = d;
-        }
+        deserializer_t(uint8_t*);
 
         template <INT_T INT>
         INT deserialize() {

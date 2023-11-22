@@ -19,13 +19,8 @@ namespace fun::rpc {
 
     class stub_factory_t {
     public:
-        i_hollow_t* create(iid_t iid, addr_t owner_addr, oid_t owner_oid, connection_provider_t& connection_provider) {
-            return factories[iid](owner_addr, owner_oid, connection_provider);
-        }
-
-        void register_interface(iid_t iid, std::function<i_hollow_t*(fun::rpc::addr_t, fun::rpc::oid_t, fun::rpc::connection_provider_t&)> factory) {
-            factories[iid] = factory;
-        }
+        i_hollow_t* create(iid_t, addr_t, oid_t, connection_provider_t&);
+        void register_interface(iid_t, std::function<i_hollow_t*(fun::rpc::addr_t, fun::rpc::oid_t, fun::rpc::connection_provider_t&)>);
 
     private:
         std::unordered_map<iid_t, std::function<i_hollow_t*(fun::rpc::addr_t, fun::rpc::oid_t, fun::rpc::connection_provider_t&)>> factories;

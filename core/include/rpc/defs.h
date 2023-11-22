@@ -13,8 +13,8 @@ namespace fun::rpc {
     typedef uint16_t port_t;
 
     struct addr_t {
-        addr_t() : ip(0), port(0) {}
-        addr_t(ip_t ip, port_t port) : ip(ip), port(port) {}
+        addr_t();
+        addr_t(ip_t, port_t);
 
         ip_t ip;
         port_t port;
