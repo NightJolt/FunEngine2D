@@ -24,9 +24,9 @@ namespace fun::rpc {
         local_storage_t& get_local_storage();
         invoker_t& get_invoker();
 
-        template <class T, class... ARGS>
-        T* create_object() {
-            T* obj = new T(ARGS...);
+        template <class T, class... Args>
+        T* create_object(Args&&... args) {
+            T* obj = new T(std::forward<Args>(args)...);
 
             object_storage.store((oid_t)(i_hollow_t*)obj, obj);
 

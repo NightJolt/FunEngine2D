@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../vec2.h"
 
+#if defined(FE2D_BOX2D)
 namespace fun::physics {
     void set_simulation_scale(float);
     float get_simulation_scale();
@@ -19,3 +20,4 @@ namespace fun::physics {
 
     // void clear();
 }
+#endif

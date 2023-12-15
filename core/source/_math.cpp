@@ -8,15 +8,15 @@ static std::uniform_int_distribution <int64_t> _uniform_int64_distribution_;
 static std::uniform_real_distribution <float> _uniform_float_distribution_;
 
 int32_t fun::math::random_32(int32_t a, int32_t b) {
-    return _uniform_int32_distribution_(_engine32_, std::uniform_int <int32_t> :: param_type(a, b));
+    return _uniform_int32_distribution_(_engine32_, std::uniform_int_distribution <int32_t> :: param_type(a, b));
 }
 
 int64_t fun::math::random_64(int64_t a, int64_t b) {
-    return _uniform_int64_distribution_(_engine64_, std::uniform_int <int64_t> :: param_type(a, b));
+    return _uniform_int64_distribution_(_engine64_, std::uniform_int_distribution <int64_t> :: param_type(a, b));
 }
 
 float fun::math::random_f(float a, float b) {
-    return _uniform_float_distribution_(_engine32_, std::uniform_real <float> :: param_type(a, b));
+    return _uniform_float_distribution_(_engine32_, std::uniform_real_distribution <float> :: param_type(a, b));
 }
 
 bool fun::math::random_chance(float chance) {

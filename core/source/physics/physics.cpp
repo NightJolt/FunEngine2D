@@ -1,6 +1,7 @@
 #include "physics/physics.h"
 #include "_time.h"
 
+#if defined(FE2D_BOX2D)
 static float simulation_scale = 1;
 static b2World world = b2World(b2Vec2(0, 0));
 static float timestep = .0166f;
@@ -54,3 +55,4 @@ b2Body* fun::physics::create_body(const b2BodyDef& body_def) {
 void fun::physics::destroy_body(b2Body* body) {
     world.DestroyBody(body);
 }
+#endif

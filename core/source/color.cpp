@@ -7,7 +7,7 @@ fun::rgb_t::rgb_t() : r(0), g(0), b(0) {}
 fun::rgb_t::rgb_t(const rgba_t& rgba) : r(rgba.r), g(rgba.g), b(rgba.b) {}
 
 fun::rgb_t fun::rgb_t::invert() const {
-    return { 255u - r, 255u - g, 255u - b };
+    return { uint8_t(255u - r), (uint8_t)(255u - g), (uint8_t)(255u - b) };
 }
 
 bool fun::rgb_t::operator ==(const rgb_t& other) const {
@@ -57,7 +57,7 @@ fun::rgba_t::rgba_t(const rgb_t& rgb) : r(rgb.r), g(rgb.g), b(rgb.b), a(255) {}
 fun::rgba_t::rgba_t(const rgb_t& rgb, uint8_t a) : r(rgb.r), g(rgb.g), b(rgb.b), a(a) {}
 
 fun::rgba_t fun::rgba_t::invert() const {
-    return { 255u - r, 255u - g, 255u - b, a };
+    return { uint8_t(255u - r), uint8_t(255u - g), uint8_t(255u - b), a };
 }
 
 bool fun::rgba_t::operator ==(const rgba_t& other) const {

@@ -9,7 +9,14 @@ int main(int argc, char** argv) {
     std::filesystem::create_directories(std::filesystem::path(output_file).parent_path());
 
     std::ifstream in(rpc_file);
+    if (!in.is_open()) {
+        std::cout << "could not open in file: " << rpc_file << std::endl;
+    }
+
     std::ofstream out(output_file);
+    if (!out.is_open()) {
+        std::cout << "could not open out file: " << output_file << std::endl;
+    }
 
     std::string buff;
     std::string rpc_code;

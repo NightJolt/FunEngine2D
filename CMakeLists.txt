@@ -1,9 +1,12 @@
 if (UNIX AND NOT APPLE)
 	list(APPEND CPP_DEFINITIONS FE2D_LINUX)
+	set(FE2D_LINUX TRUE)
 elseif(WIN32)
 	list(APPEND CPP_DEFINITIONS FE2D_WINDOWS)
+	set(FE2D_WINDOWS TRUE)
 elseif(APPLE)
 	list(APPEND CPP_DEFINITIONS FE2D_APPLE)
+	set(FE2D_APPLE TRUE)
 endif()
 
 
@@ -41,9 +44,14 @@ endif()
 option(FE2D_ENABLE_SFML "enable sfml" ON)
 
 if (FE2D_ENABLE_SFML)
-	set(SFML_ROOT "${CMAKE_CURRENT_LIST_DIR}/libs/sfml")
-	set(CMAKE_MODULE_PATH "${SFML_ROOT}/lib/cmake")
-	set(SFML_STATIC_LIBRARIES TRUE)
+	if (FE2D_WINDOWS)
+		set(SFML_ROOT "${CMAKE_CURRENT_LIST_DIR}/libs/sfml/win")
+		set(CMAKE_MODULE_PATH "${SFML_ROOT}/lib/cmake")
+		set(SFML_STATIC_LIBRARIES TRUE)
+	elseif(FE2D_APPLE)
+		set(SFML_STATIC_LIBRARIES FALSE)
+	endif()
+
 	find_package(SFML COMPONENTS system window graphics network audio REQUIRED)
 	set(SFML_LIBS sfml-system sfml-window sfml-graphics sfml-network sfml-audio)
 	list(APPEND CPP_DEFINITIONS FE2D_SFML)
@@ -53,18 +61,23 @@ endif()
 option(FE2D_ENABLE_IMGUI "enable imgui" ON)
 
 if (FE2D_ENABLE_IMGUI)
-	if (FE2D_DEBUG)
-		set(ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/debug/lib/cmake/ImGui-SFML")
-	else()
-		set(ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/release/lib/cmake/ImGui-SFML")
+	if (FE2D_WINDOWS)
+		if (FE2D_DEBUG)
+			set(ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/debug/lib/cmake/ImGui-SFML")
+		else()
+			set(ImGui-SFML_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/imgui_sfml/release/lib/cmake/ImGui-SFML")
+		endif()
+	elseif(FE2D_APPLE)
+
 	endif()
+	
 	find_package(ImGui-SFML REQUIRED)
 	set(IMGUI_SFML_LIBS ImGui-SFML::ImGui-SFML)
 	list(APPEND CPP_DEFINITIONS FE2D_IMGUI)
 endif()
 
 
-option(FE2D_ENABLE_BOX2D "enable box2d" ON)
+option(FE2D_ENABLE_BOX2D "enable box2d" OFF)
 
 if (FE2D_ENABLE_BOX2D)
 	set(box2d_DIR "${CMAKE_CURRENT_LIST_DIR}/libs/box2d/lib/cmake/box2d")
@@ -73,7 +86,9 @@ if (FE2D_ENABLE_BOX2D)
 	list(APPEND CPP_DEFINITIONS FE2D_BOX2D)
 endif()
 
+
 list(APPEND CPP_DEFINITIONS ROOT_DIRECTORY="${CMAKE_SOURCE_DIR}")
+
 
 add_subdirectory(core)
 

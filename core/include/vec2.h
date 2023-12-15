@@ -55,7 +55,7 @@ namespace fun {
     
     template <class T>
     size_t hash(vec2_t <T> v) {
-        return (v.x + v.y) * (v.x + v.y + 1) >> 1 + v.x;
+        return ((v.x + v.y) * (v.x + v.y + 1) >> 1) + v.x;
     };
 
     template <class Key>
