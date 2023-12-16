@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../globals.h"
+#include "../bytes.h"
 
 namespace fun::rpc {
     template <class T>
@@ -10,7 +11,7 @@ namespace fun::rpc {
     concept INT_T = std::is_integral_v<T>;
 
     template <class T>
-    concept VEC_T = std::is_same_v<T, std::vector<uint8_t>>;
+    concept BYTES_T = std::is_same_v<T, bytes_t>;
 
     class serializer_t {
     public:
@@ -36,11 +37,11 @@ namespace fun::rpc {
             cursor += value.size();
         }
 
-        template <VEC_T>
-        void serialize(const std::vector<uint8_t>& value) {
-            serialize<uint32_t>(value.size());
-            memcpy(cursor, value.data(), value.size());
-            cursor += value.size();
+        template <BYTES_T>
+        void serialize(const bytes_t& value) {
+            serialize<uint32_t>(value.get_size());
+            value.copy_out(cursor, value.get_size());
+            cursor += value.get_size();
         }
 
         uint8_t* get_data();
@@ -72,10 +73,10 @@ namespace fun::rpc {
             return value;
         }
 
-        template <VEC_T>
-        std::vector<uint8_t> deserialize() {
+        template <BYTES_T>
+        bytes_t deserialize() {
             uint32_t size = deserialize<uint32_t>();
-            std::vector<uint8_t> value(cursor, cursor + size);
+            bytes_t value(bytes_t::create(cursor, size));
             cursor += size;
 
             return value;

@@ -2,31 +2,9 @@
 
 #include "../globals.h"
 #include "defs.h"
+#include "../bytes.h"
 
 namespace fun::rpc {
-    class bytes_t {
-    public:
-        bytes_t();
-        bytes_t(uint8_t*, uint32_t);
-
-        ~bytes_t() = default;
-
-        bytes_t(const bytes_t&) = delete;
-        bytes_t& operator=(const bytes_t&) = delete;
-
-        bytes_t(bytes_t&&) noexcept;
-        bytes_t& operator=(bytes_t&&) noexcept;
-
-        void copy_in(uint8_t*, uint32_t);
-
-        uint8_t* get_data();
-        uint32_t get_size();
-        
-    private:
-        std::unique_ptr<uint8_t[]> data;
-        uint32_t size;
-    };
-
     class packet_t {
     public:
         packet_t(uint8_t*, uint32_t, addr_t);

@@ -45,6 +45,7 @@
 #include <tuple>
 #include <filesystem>
 #include <string_view>
+#include <initializer_list>
 
 #include <any>
 #include <variant>

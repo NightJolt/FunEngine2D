@@ -10,6 +10,7 @@ void add_include_essentials(std::string& cpp) {
     cpp += "#include <FunEngine2D/core/include/globals.h>\n";
     cpp += "#include <FunEngine2D/core/include/rpc/rpc.h>\n";
     cpp += "#include <FunEngine2D/core/include/rpc/stub.h>\n";
+    cpp += "#include <FunEngine2D/core/include/bytes.h>\n";
     cpp += "\n";
 }
 
@@ -27,7 +28,7 @@ std::string rpc_to_cpp_type(const std::string& type) {
         // { "f32", "float" },
         // { "f64", "double" },
         { "str", "std::string" },
-        { "bytes", "std::vector<uint8_t>" },
+        { "bytes", "fun::bytes_t" },
     };
 
     return cpp_types[type];
@@ -103,7 +104,7 @@ interface_t get_interface(std::string& cpp, fun::strutil::tokens_iterator_t& tok
 }
 
 void def_interface_iid(std::string& cpp, const std::string& name) {
-    cpp += "    static const fun::rpc::iid_t iid = " + std::to_string(std::hash<std::string>{}(name)) + ";\n\n";
+    cpp += "    static const fun::rpc::iid_t iid = " + std::to_string(std::hash<std::string>{}(name)) + "u;\n\n";
 }
 
 void impl_method_base(std::string& cpp, method_t& method) {
