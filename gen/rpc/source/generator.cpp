@@ -29,6 +29,8 @@ std::string rpc_to_cpp_type(const std::string& type) {
         // { "f64", "double" },
         { "str", "std::string" },
         { "bytes", "fun::bytes_t" },
+        { "rgb", "fun::rgb_t" }
+
     };
 
     return cpp_types[type];

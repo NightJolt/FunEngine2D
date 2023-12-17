@@ -2,6 +2,7 @@
 
 #include "../globals.h"
 #include "../bytes.h"
+#include "../color.h"
 
 namespace fun::rpc {
     template <class T>
@@ -12,6 +13,12 @@ namespace fun::rpc {
 
     template <class T>
     concept BYTES_T = std::is_same_v<T, bytes_t>;
+
+    template <template <class...> class V, class T>
+    concept VEC_T = std::is_same_v<V<T>, std::vector<T>>;
+
+    template <class T>
+    concept COL_T = std::is_same_v<T, rgb_t> || std::is_same_v<T, rgba_t>;
 
     class serializer_t {
     public:
@@ -42,6 +49,27 @@ namespace fun::rpc {
             serialize<uint32_t>(value.get_size());
             value.copy_out(cursor, value.get_size());
             cursor += value.get_size();
+        }
+
+        template <template <class...> class V, class T>
+        requires VEC_T<V, T>
+        void serialize(const std::vector<T>& value) {
+            serialize<uint32_t>(value.size());
+
+            for (const auto& item : value) {
+                serialize<T>(item);
+            }
+        }
+
+        template <COL_T col_t>
+        void serialize(const col_t& value) {
+            serialize<uint8_t>(value.r);
+            serialize<uint8_t>(value.g);
+            serialize<uint8_t>(value.b);
+
+            if constexpr (requires { value.a; }) {
+                serialize<uint8_t>(value.a);
+            }
         }
 
         uint8_t* get_data();
@@ -78,6 +106,34 @@ namespace fun::rpc {
             uint32_t size = deserialize<uint32_t>();
             bytes_t value(bytes_t::create(cursor, size));
             cursor += size;
+
+            return value;
+        }
+
+        template <template <class...> class V, class T>
+        requires VEC_T<V, T>
+        std::vector<T> deserialize() {
+            uint32_t size = deserialize<uint32_t>();
+            std::vector<T> value;
+
+            for (uint32_t i = 0; i < size; i++) {
+                value.push_back(deserialize<T>());
+            }
+
+            return value;
+        }
+
+        template <COL_T col_t>
+        col_t deserialize() {
+            col_t value;
+            
+            value.r = deserialize<uint8_t>();
+            value.g = deserialize<uint8_t>();
+            value.b = deserialize<uint8_t>();
+
+            if constexpr (requires { value.a; }) {
+                value.a = deserialize<uint8_t>();
+            }
 
             return value;
         }
