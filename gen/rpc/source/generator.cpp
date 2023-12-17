@@ -11,10 +11,20 @@ void add_include_essentials(std::string& cpp) {
     cpp += "#include <FunEngine2D/core/include/rpc/rpc.h>\n";
     cpp += "#include <FunEngine2D/core/include/rpc/stub.h>\n";
     cpp += "#include <FunEngine2D/core/include/bytes.h>\n";
+    cpp += "#include <FunEngine2D/core/include/color.h>\n";
     cpp += "\n";
 }
 
-std::string rpc_to_cpp_type(const std::string& type) {
+struct type_t {
+    std::string type;
+    std::string template_type;
+
+    bool is_template = false;
+};
+
+type_t rpc_to_cpp_type(const std::string& rpc_type) {
+    type_t type;
+
     std::unordered_map <std::string, std::string> cpp_types = {
         { "void", "void"},
         { "i8", "int8_t" },
@@ -25,21 +35,52 @@ std::string rpc_to_cpp_type(const std::string& type) {
         { "u16", "uint16_t" },
         { "u32", "uint32_t" },
         { "u64", "uint64_t" },
-        // { "f32", "float" },
-        // { "f64", "double" },
         { "str", "std::string" },
         { "bytes", "fun::bytes_t" },
-        { "rgb", "fun::rgb_t" }
-
+        { "rgb", "fun::rgb_t" },
+        { "rgba", "fun::rgba_t" },
+        { "vec", "std::vector" },
     };
 
-    return cpp_types[type];
+    auto cpp_type = cpp_types.find(rpc_type);
+    
+    if (cpp_type != cpp_types.end()) {
+        type.type = cpp_type->second;
+
+        return type;
+    } else {
+        fun::strutil::tokens_iterator_t tokens = fun::strutil::tokenize(rpc_type, { "<", ">" });
+
+        type.type = cpp_types[std::string(tokens.current())];
+        tokens.advance();
+        tokens.advance();
+        type.template_type = cpp_types[std::string(tokens.current())];
+        type.is_template = true;
+    }
+
+    return type;
+}
+
+std::string type_to_str(const type_t& type) {
+    if (type.is_template) {
+        return type.type + "<" + type.template_type + ">";
+    } else {
+        return type.type;
+    }
+}
+
+std::string type_to_template_args(const type_t& type) {
+    if (type.is_template) {
+        return type.type + ", " + type.template_type;
+    } else {
+        return type.type;
+    }
 }
 
 struct method_t {
-    std::string return_type;
+    type_t return_type;
     std::string name;
-    std::vector<std::pair<std::string, std::string>> args;
+    std::vector<std::pair<type_t, std::string>> args;
 };
 
 struct interface_t {
@@ -70,7 +111,7 @@ method_t get_method(std::string& cpp, fun::strutil::tokens_iterator_t& tokens) {
             break;
         }
 
-        std::string type = rpc_to_cpp_type(std::string(tokens.current()));
+        type_t type = rpc_to_cpp_type(std::string(tokens.current()));
         tokens.advance();
         
         std::string name = std::string(tokens.current());
@@ -110,10 +151,10 @@ void def_interface_iid(std::string& cpp, const std::string& name) {
 }
 
 void impl_method_base(std::string& cpp, method_t& method) {
-    cpp += "    virtual " + method.return_type + " " + method.name + "(";
+    cpp += "    virtual " + type_to_str(method.return_type) + " " + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
-        cpp += method.args[i].first + " " + method.args[i].second;
+        cpp += type_to_str(method.args[i].first) + " " + method.args[i].second;
 
         if (i != method.args.size() - 1) {
             cpp += ", ";
@@ -136,19 +177,19 @@ void impl_interface_base(std::string& cpp, interface_t& interface) {
 }
 
 void impl_method_stub_ret(std::string& cpp, method_t& method) {
-    cpp += "        " + method.return_type + " ret;\n";
+    cpp += "        " + type_to_str(method.return_type) + " ret;\n";
     cpp += "        auto sync_call_data_extractor = [&ret](fun::rpc::deserializer_t& deserializer) {\n";
-    cpp += "            ret = deserializer.deserialize<" + method.return_type + ">();\n";
+    cpp += "            ret = deserializer.deserialize<" + type_to_template_args(method.return_type) + ">();\n";
     cpp += "        };\n\n";
     cpp += "        wait_for_sync_call_reply(connection_provider, sync_call_data_extractor);\n\n";
     cpp += "        return ret;\n";
 }
 
 void impl_method_stub(std::string& cpp, method_t& method, uint32_t method_id) {
-    cpp += "    " + method.return_type + " " + method.name + "(";
+    cpp += "    " + type_to_str(method.return_type) + " " + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
-        cpp += method.args[i].first + " " + method.args[i].second;
+        cpp += type_to_str(method.args[i].first) + " " + method.args[i].second;
 
         if (i != method.args.size() - 1) {
             cpp += ", ";
@@ -163,12 +204,12 @@ void impl_method_stub(std::string& cpp, method_t& method, uint32_t method_id) {
     cpp += "        serializer.serialize<fun::rpc::mid_t>(" + std::to_string(method_id) + ");\n";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
-        cpp += "        serializer.serialize<" + method.args[i].first + ">(" + method.args[i].second + ");\n";
+        cpp += "        serializer.serialize<" + type_to_template_args(method.args[i].first) + ">(" + method.args[i].second + ");\n";
     }
 
     cpp += "\n        connection_provider.get_connection(owner_addr).send(serializer.get_data(), serializer.get_size());\n";
 
-    if (method.return_type != "void") {
+    if (method.return_type.type != "void") {
         cpp += "\n";
         impl_method_stub_ret(cpp, method);
     }
@@ -201,7 +242,7 @@ void impl_interface_invokable_no_ret(std::string& cpp, interface_t& interface, m
     cpp += "    " + interface.name + "_object->" + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
-        cpp += "deserializer.deserialize<" + method.args[i].first + ">()";
+        cpp += "deserializer.deserialize<" + type_to_template_args(method.args[i].first) + ">()";
 
         if (i != method.args.size() - 1) {
             cpp += ", ";
@@ -214,10 +255,10 @@ void impl_interface_invokable_no_ret(std::string& cpp, interface_t& interface, m
 
 void impl_interface_invokable_ret(std::string& cpp, interface_t& interface, method_t& method) {
     cpp += "inline void rpc__" + interface.name + "__" + method.name + "(fun::rpc::deserializer_t& deserializer, " + interface.base_name + "* " + interface.name + "_object, fun::rpc::serializer_t& serializer) {\n";
-    cpp += "    " + method.return_type + " ret = " + interface.name + "_object->" + method.name + "(";
+    cpp += "    " + type_to_str(method.return_type) + " ret = " + interface.name + "_object->" + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
-        cpp += "deserializer.deserialize<" + method.args[i].first + ">()";
+        cpp += "deserializer.deserialize<" + type_to_template_args(method.args[i].first) + ">()";
 
         if (i != method.args.size() - 1) {
             cpp += ", ";
@@ -228,13 +269,13 @@ void impl_interface_invokable_ret(std::string& cpp, interface_t& interface, meth
     
     cpp += "    serializer.serialize<fun::rpc::oid_t>(0);\n";
     cpp += "    serializer.serialize<fun::rpc::mid_t>(1);\n";
-    cpp += "    serializer.serialize<" + method.return_type + ">(ret);\n";
+    cpp += "    serializer.serialize<" + type_to_template_args(method.return_type) + ">(ret);\n";
     cpp += "}\n\n";
 }
 
 void impl_interface_invokables(std::string& cpp, interface_t& interface) {
     for (method_t& method : interface.methods) {
-        if (method.return_type == "void") {
+        if (method.return_type.type == "void") {
             impl_interface_invokable_no_ret(cpp, interface, method);
         } else {
             impl_interface_invokable_ret(cpp, interface, method);
@@ -245,7 +286,7 @@ void impl_interface_invokables(std::string& cpp, interface_t& interface) {
 void impl_method_invoker(std::string& cpp, interface_t& interface, method_t& method, uint32_t method_id) {
     cpp += "        case " + std::to_string(method_id) + ": {\n";
 
-    if (method.return_type == "void") {
+    if (method.return_type.type == "void") {
         cpp += "            rpc__" + interface.name + "__" + method.name + "(deserializer, " + interface.name + "_object);\n";
     } else {
         cpp += "            rpc__" + interface.name + "__" + method.name + "(deserializer, " + interface.name + "_object, serializer);\n";

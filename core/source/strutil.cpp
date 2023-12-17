@@ -76,7 +76,7 @@ std::vector<std::string_view>& fun::strutil::tokens_iterator_t::get_tokens() {
     return tokens;
 }
 
-fun::strutil::tokens_iterator_t fun::strutil::tokenize(std::string& str, std::vector<const char*> delims, bool include_delims) {
+fun::strutil::tokens_iterator_t fun::strutil::tokenize(const std::string& str, std::vector<const char*> delims, bool include_delims) {
     std::vector<std::string_view> tokens;
     std::vector<delim_data_t> delims_data;
     std::string_view str_view = str;

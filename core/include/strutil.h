@@ -24,6 +24,8 @@ namespace fun::strutil {
         uint32_t index = 0;
     };
 
-    tokens_iterator_t tokenize(std::string&, std::vector<const char*>, bool = true);
+    tokens_iterator_t tokenize(const std::string&, std::vector<const char*>, bool = true);
+    tokens_iterator_t tokenize(std::string&&, std::vector<const char*>, bool = true) = delete;
+
     void filter_empty(tokens_iterator_t&);
 }
