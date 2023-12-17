@@ -6,7 +6,8 @@ fun::render::window_t::window_t(const window_data_t& data) :
     renderer(sf::VideoMode(data.size.x, data.size.y), data.name, data.style, data.settings),
     m_is_focused(true),
     m_zoom(1),
-    ui_invalidated(false)
+    ui_invalidated(false),
+    world_view_height(100)
 {
     refresh_window();
 
