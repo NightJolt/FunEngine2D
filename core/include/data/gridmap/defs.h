@@ -16,7 +16,7 @@ namespace fun::data {
     typedef vec2_t <tile_int_t> tile_pos_t;
 
     typedef tile_int_t chunk_size_t;
-    typedef float tile_size_t;
+    typedef uint32_t tile_size_t;
 
     typedef vec2_t <chunk_size_t> chunk_size2d_t;
     typedef vec2_t <tile_size_t> tile_size2d_t;

@@ -1,4 +1,4 @@
-#include <generator.h>
+#include "generator.h"
 
 int main(int argc, char** argv) {
     const char* rpc_file = argv[1];

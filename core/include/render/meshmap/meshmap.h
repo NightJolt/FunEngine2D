@@ -26,7 +26,7 @@ namespace fun::render {
     public:
         explicit meshmap_t(texture_t texture, color_t fill_color) : m_texture(texture), m_default_color(fill_color) {
             m_gridmap.set_init_chunk([fill_color](chunk_t* chunk, data::chunk_pos_t chunk_pos) {
-                vec2f_t position((vec2f_t)data::chunk_to_grid(chunk_pos, s_chunk_size) * s_tile_size);
+                vec2f_t position(data::chunk_to_grid(chunk_pos, s_chunk_size) * (data::grid_int_t)s_tile_size);
 
                 for (data::tile_int_t x = 0; x < s_chunk_size; x++) {
                     for (data::tile_int_t y = 0; y < s_chunk_size; y++) {
@@ -34,10 +34,10 @@ namespace fun::render {
 
                         data::tile_size2d_t tile_pos = data::tile_size2d_t(x, y) * s_tile_size;
 
-                        quad.vertices[0].position = position + tile_pos;
-                        quad.vertices[1].position = position + tile_pos + data::tile_size2d_t { s_tile_size, 0.f };
-                        quad.vertices[2].position = position + tile_pos + data::tile_size2d_t { s_tile_size, s_tile_size };
-                        quad.vertices[3].position = position + tile_pos + data::tile_size2d_t { 0.f, s_tile_size };
+                        quad.vertices[0].position = position + (vec2f_t)tile_pos;
+                        quad.vertices[1].position = position + (vec2f_t)tile_pos + (vec2f_t)data::tile_size2d_t { s_tile_size, 0 };
+                        quad.vertices[2].position = position + (vec2f_t)tile_pos + (vec2f_t)data::tile_size2d_t { s_tile_size, s_tile_size };
+                        quad.vertices[3].position = position + (vec2f_t)tile_pos + (vec2f_t)data::tile_size2d_t { 0, s_tile_size };
 
                         quad.vertices[0].color = fill_color;
                         quad.vertices[1].color = fill_color;
