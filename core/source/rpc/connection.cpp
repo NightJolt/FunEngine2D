@@ -16,7 +16,7 @@ fun::rpc::connection_t::~connection_t() {
     }
 }
 
-fun::rpc::connection_t::connection_t(connection_t&& other) noexcept : info(info), socket(std::exchange(other.socket, nullptr)) {}
+fun::rpc::connection_t::connection_t(connection_t&& other) noexcept : info(other.info), socket(std::exchange(other.socket, nullptr)) {}
 fun::rpc::connection_t& fun::rpc::connection_t::operator=(connection_t&& other) noexcept {
     if (this == &other) {
         return *this;
@@ -70,6 +70,12 @@ fun::rpc::connection_stub_t fun::rpc::connection_provider_t::get_connection(addr
     }
 
     return connection_stub_t { connections[addr].socket.get() };
+}
+
+bool fun::rpc::connection_provider_t::check_connection(addr_t addr) {
+    auto it = connections.find(addr);
+
+    return it != connections.end() && it->second.socket->getRemotePort() != 0;
 }
 
 void fun::rpc::connection_provider_t::check_for_incoming_connections() {

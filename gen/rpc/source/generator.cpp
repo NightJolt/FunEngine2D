@@ -20,6 +20,7 @@ struct type_t {
     std::string template_type;
 
     bool is_template = false;
+    bool copyable = false;
 };
 
 type_t rpc_to_cpp_type(const std::string& rpc_type) {
@@ -47,7 +48,9 @@ type_t rpc_to_cpp_type(const std::string& rpc_type) {
     if (cpp_type != cpp_types.end()) {
         type.type = cpp_type->second;
 
-        return type;
+        if (rpc_type != "str" || rpc_type != "bytes") {
+            type.copyable = false;
+        }
     } else {
         fun::strutil::tokens_iterator_t tokens = fun::strutil::tokenize(rpc_type, { "<", ">" });
 
@@ -75,6 +78,16 @@ std::string type_to_template_args(const type_t& type) {
     } else {
         return type.type;
     }
+}
+
+std::string type_to_func_arg(const type_t& type) {
+    auto str = type_to_str(type);
+
+    if (!type.copyable) {
+        str = "const " + str + "&";
+    }
+    
+    return str;
 }
 
 struct method_t {
@@ -154,7 +167,7 @@ void impl_method_base(std::string& cpp, method_t& method) {
     cpp += "    virtual " + type_to_str(method.return_type) + " " + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
-        cpp += type_to_str(method.args[i].first) + " " + method.args[i].second;
+        cpp += type_to_func_arg(method.args[i].first) + " " + method.args[i].second;
 
         if (i != method.args.size() - 1) {
             cpp += ", ";
@@ -189,7 +202,7 @@ void impl_method_stub(std::string& cpp, method_t& method, uint32_t method_id) {
     cpp += "    " + type_to_str(method.return_type) + " " + method.name + "(";
 
     for (uint32_t i = 0; i < method.args.size(); i++) {
-        cpp += type_to_str(method.args[i].first) + " " + method.args[i].second;
+        cpp += type_to_func_arg(method.args[i].first) + " " + method.args[i].second;
 
         if (i != method.args.size() - 1) {
             cpp += ", ";

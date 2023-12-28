@@ -11,6 +11,10 @@ namespace fun::rpc {
         stub_t(addr_t owner_addr, oid_t owner_oid, connection_provider_t& connection_provider) :
             owner_addr(owner_addr), owner_oid(owner_oid), connection_provider(connection_provider) {}
 
+        bool is_valid() {
+            return connection_provider.check_connection(owner_addr);
+        }
+
     protected:
         addr_t owner_addr;
         oid_t owner_oid;

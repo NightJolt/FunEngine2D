@@ -49,6 +49,7 @@ namespace fun::rpc {
         void quit();
 
         connection_stub_t get_connection(addr_t);
+        bool check_connection(addr_t);
 
         void check_for_incoming_connections();
         void check_for_incoming_data();
