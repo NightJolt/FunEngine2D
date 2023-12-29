@@ -6,9 +6,9 @@ fun::rpc::remote_storage_t::remote_storage_t(addr_t addr, connection_provider_t&
 fun::rpc::i_hollow_t* fun::rpc::remote_storage_t::request_unknown(iid_t iid, key_t key) {
     serializer_t serializer;
 
-    serializer.serialize<oid_t>(0); // non object call
-    serializer.serialize<mid_t>(0); // request stub
-    serializer.serialize<key_t>(key); // storage object key
+    serializer.serialize<oid_t>(call_type_t::global);
+    serializer.serialize<mid_t>(request_type_t::fetch_object);
+    serializer.serialize<key_t>(key);
 
     auto connection = connection_provider.get_connection(addr);
     
@@ -27,9 +27,9 @@ fun::rpc::i_hollow_t* fun::rpc::remote_storage_t::request_unknown(iid_t iid, key
 }
 
 void fun::rpc::local_storage_t::serialize_object(key_t key, serializer_t& serializer) {
-    serializer.serialize<oid_t>(0); // non object call
-    serializer.serialize<mid_t>(1); // sync call answer
-    serializer.serialize<oid_t>(storage[key]); // object id
+    serializer.serialize<oid_t>(call_type_t::global);
+    serializer.serialize<mid_t>(request_type_t::sync_call_reply);
+    serializer.serialize<oid_t>(storage[key]);
 }
 
 void fun::rpc::local_storage_t::store_object(key_t key, i_hollow_t* oid) {

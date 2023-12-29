@@ -49,10 +49,10 @@ void fun::rpc::rpc_t::process_packet(packet_t& packet) {
 
     oid_t oid = deserializer.deserialize<oid_t>();
 
-    if (oid == 0) {
+    if (oid == call_type_t::global) {
         mid_t request_type = deserializer.deserialize<mid_t>();
 
-        if (request_type == 0) {
+        if (request_type == request_type_t::fetch_object) {
             key_t key = deserializer.deserialize<key_t>();
 
             serializer_t serializer;

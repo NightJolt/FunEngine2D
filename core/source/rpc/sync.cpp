@@ -14,10 +14,10 @@ void fun::rpc::wait_for_sync_call_reply(connection_provider_t& connection_provid
 
             oid_t call_type = deserializer.deserialize<oid_t>();
 
-            if (call_type == 0) {
-                mid_t answer_type = deserializer.deserialize<mid_t>();
+            if (call_type == call_type_t::global) {
+                mid_t request_type = deserializer.deserialize<mid_t>();
 
-                if (answer_type == 1) {
+                if (request_type == request_type_t::sync_call_reply) {
                     sync_call_data_extractor(deserializer);
 
                     packet_storage.remove(packet_ind);
