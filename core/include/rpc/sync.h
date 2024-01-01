@@ -5,5 +5,5 @@
 #include "serialize.h"
 
 namespace fun::rpc {
-    void wait_for_sync_call_reply(connection_provider_t& connection_provider, std::function<void(deserializer_t&)> sync_call_data_extractor);
+    void wait_for_sync_call_reply(connection_provider_t&, std::function<void(deserializer_t&)>);
 }

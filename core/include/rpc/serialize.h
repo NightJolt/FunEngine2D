@@ -76,7 +76,7 @@ namespace fun::rpc {
         uint32_t get_size();
 
     private:
-        uint8_t data[256];
+        uint8_t data[2056];
         uint8_t* cursor;
     };
 

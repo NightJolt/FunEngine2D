@@ -12,9 +12,11 @@ fun::rpc::i_hollow_t* fun::rpc::remote_storage_t::request_unknown(iid_t iid, key
 
     auto connection = connection_provider.get_connection(addr);
     
-    if (connection.is_valid()) {
-        connection.send(serializer.get_data(), serializer.get_size());
+    if (!connection.is_valid()) {
+        return nullptr;
     }
+
+    connection.send(serializer.get_data(), serializer.get_size());
     
     oid_t oid = 0;
     auto sync_call_data_extractor = [&oid](deserializer_t& deserializer) {

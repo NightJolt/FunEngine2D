@@ -62,6 +62,8 @@ void fun::rpc::rpc_t::process_packet(packet_t& packet) {
             if (connection.is_valid()) {
                 connection.send(serializer.get_data(), serializer.get_size());
             }
+        } else if (request_type == request_type_t::sync_call_reply) {
+            return; // ? sync call replys should not be processed here
         }
     } else {
         i_hollow_t* hollow = object_storage.fetch(oid);

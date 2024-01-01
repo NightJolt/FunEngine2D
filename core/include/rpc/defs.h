@@ -22,6 +22,7 @@ namespace fun::rpc {
     struct addr_t {
         addr_t();
         addr_t(ip_t, port_t);
+        addr_t(const char*, const char*);
 
         ip_t ip;
         port_t port;
