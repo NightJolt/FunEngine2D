@@ -20,7 +20,7 @@ struct type_t {
     std::string template_type;
 
     bool is_template = false;
-    bool copyable = false;
+    bool copyable = true;
 };
 
 type_t rpc_to_cpp_type(const std::string& rpc_type) {
@@ -48,11 +48,15 @@ type_t rpc_to_cpp_type(const std::string& rpc_type) {
     if (cpp_type != cpp_types.end()) {
         type.type = cpp_type->second;
 
-        if (rpc_type != "str" || rpc_type != "bytes") {
+        if (rpc_type == "str" || rpc_type == "bytes") {
             type.copyable = false;
         }
     } else {
         fun::strutil::tokens_iterator_t tokens = fun::strutil::tokenize(rpc_type, { "<", ">" });
+
+        if (tokens.current() == "vec") {
+            type.copyable = false;
+        }
 
         type.type = cpp_types[std::string(tokens.current())];
         tokens.advance();
