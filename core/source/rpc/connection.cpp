@@ -96,7 +96,7 @@ void fun::rpc::connection_provider_t::check_for_incoming_connections() {
 }
 
 void fun::rpc::connection_provider_t::check_for_incoming_data() {
-    uint8_t data[256];
+    uint8_t data[max_packet_size];
 
     for (auto& [addr, connection] : connections) {
         sf::TcpSocket* socket = connection.socket.get();

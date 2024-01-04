@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../bytes.h"
 #include "../color.h"
+#include "defs.h"
 
 namespace fun::rpc {
     template <class T>
@@ -76,7 +77,7 @@ namespace fun::rpc {
         uint32_t get_size();
 
     private:
-        uint8_t data[2056];
+        uint8_t data[max_packet_size];
         uint8_t* cursor;
     };
 

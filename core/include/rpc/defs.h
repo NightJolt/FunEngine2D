@@ -19,6 +19,8 @@ namespace fun::rpc {
     typedef uint32_t ip_t;
     typedef uint16_t port_t;
 
+    constexpr int max_packet_size = 2048;
+
     struct addr_t {
         addr_t();
         addr_t(ip_t, port_t);
