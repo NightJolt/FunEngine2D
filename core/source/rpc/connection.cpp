@@ -56,7 +56,7 @@ void fun::rpc::connection_provider_t::quit() {
 }
 
 fun::rpc::connection_stub_t fun::rpc::connection_provider_t::get_connection(addr_t addr) {
-    if (!connections.contains(addr)) {
+    if (!check_connection(addr)) {
         connection_t connection { new sf::TcpSocket() };
 
         bool is_connected = connection.socket->connect(sf::IpAddress(addr.ip), addr.port) == sf::Socket::Done;
@@ -121,6 +121,14 @@ void fun::rpc::connection_provider_t::check_for_incoming_data() {
 
                 case sf::Socket::NotReady:
                     partial = false;
+
+                    break;
+
+                case sf::Socket::Partial:
+                    break;
+
+                case sf::Socket::Error:
+                    assert(false);
 
                     break;
             }
