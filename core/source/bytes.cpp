@@ -14,6 +14,10 @@ fun::bytes_t& fun::bytes_t::operator=(bytes_t&& other) noexcept {
     return *this;
 }
 
+fun::bytes_t fun::bytes_t::clone() const {
+    return create(data.get(), size);
+}
+
 uint8_t& fun::bytes_t::operator[](uint32_t index) {
     return data[index];
 }

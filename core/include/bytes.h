@@ -15,6 +15,8 @@ namespace fun {
         bytes_t(bytes_t&&) noexcept;
         bytes_t& operator=(bytes_t&&) noexcept;
 
+        bytes_t clone() const;
+
         uint8_t& operator[](uint32_t);
 
         void copy_in(uint8_t*, uint32_t, uint32_t = 0);

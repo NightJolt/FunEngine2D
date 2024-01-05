@@ -10,6 +10,7 @@ namespace fun::rpc {
     public:
         stub_t(addr_t owner_addr, oid_t owner_oid, connection_provider_t& connection_provider) :
             owner_addr(owner_addr), owner_oid(owner_oid), connection_provider(connection_provider) {}
+        virtual ~stub_t() = default;
 
         bool is_valid() {
             return connection_provider.check_connection(owner_addr);
