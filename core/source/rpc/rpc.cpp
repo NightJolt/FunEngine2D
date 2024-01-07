@@ -45,7 +45,7 @@ void fun::rpc::rpc_t::process_connections() {
 }
 
 void fun::rpc::rpc_t::process_packet(packet_t& packet) {
-    deserializer_t deserializer(packet.get_data());
+    deserializer_t deserializer(packet.get_data(), connection_provider, stub_factory);
 
     oid_t oid = deserializer.deserialize<oid_t>();
 

@@ -23,7 +23,7 @@ fun::rpc::i_hollow_t* fun::rpc::remote_storage_t::request_unknown(iid_t iid, key
         oid = deserializer.deserialize<oid_t>();
     };
 
-    wait_for_sync_call_reply(connection_provider, sync_call_data_extractor);
+    wait_for_sync_call_reply(connection_provider, stub_factory, sync_call_data_extractor);
 
     return stub_factory.create(iid, addr, oid, connection_provider);
 }

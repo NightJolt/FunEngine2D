@@ -1,6 +1,10 @@
 #include "rpc/sync.h"
 
-void fun::rpc::wait_for_sync_call_reply(connection_provider_t& connection_provider, std::function<void(deserializer_t&)> sync_call_data_extractor) {
+void fun::rpc::wait_for_sync_call_reply(
+    connection_provider_t& connection_provider,
+    stub_factory_t& stub_factory,
+    std::function<void(deserializer_t&)> sync_call_data_extractor
+) {
     uint32_t packet_ind = 0;
     auto& packet_storage = connection_provider.get_packet_storage();
 
@@ -10,7 +14,7 @@ void fun::rpc::wait_for_sync_call_reply(connection_provider_t& connection_provid
         
         while (packet_ind < packet_storage.get_size()) {
             auto& packet = packet_storage[packet_ind];
-            deserializer_t deserializer(packet.get_data());
+            deserializer_t deserializer(packet.get_data(), connection_provider, stub_factory);
 
             oid_t call_type = deserializer.deserialize<oid_t>();
 

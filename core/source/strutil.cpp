@@ -72,6 +72,14 @@ void fun::strutil::tokens_iterator_t::reset() {
     index = 0;
 }
 
+std::string_view* fun::strutil::tokens_iterator_t::begin() {
+    return &tokens[0];
+}
+
+std::string_view* fun::strutil::tokens_iterator_t::end() {
+    return &tokens[0] + tokens.size();
+}
+
 std::vector<std::string_view>& fun::strutil::tokens_iterator_t::get_tokens() {
     return tokens;
 }

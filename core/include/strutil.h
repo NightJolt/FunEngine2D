@@ -17,6 +17,9 @@ namespace fun::strutil {
         bool is_empty();
         void reset();
 
+        std::string_view* begin();
+        std::string_view* end();
+
         std::vector<std::string_view>& get_tokens();
 
     private:
