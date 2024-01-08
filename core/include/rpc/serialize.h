@@ -9,7 +9,6 @@
 #define NESTED_TEMPLATE_ARGS(TYPE, TEMPLATED_TYPE, TEMPLATED_TYPE_VARIADIC)\
     template <class TYPE, template <class...> class TEMPLATED_TYPE, template <class...> class... TEMPLATED_TYPE_VARIADIC>
 
-
 namespace fun::rpc {
     template <class, template <class...> class...>
     struct nested_t;
@@ -58,6 +57,8 @@ namespace fun::rpc {
 
     template <template <class...> class V>
     concept STUB_T = is_same_template_t<V, stub_t>::value;
+
+
 
     class serializer_t {
     public:

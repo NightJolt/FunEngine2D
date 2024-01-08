@@ -37,11 +37,3 @@ void fun::rpc::local_storage_t::serialize_object(key_t key, serializer_t& serial
 void fun::rpc::local_storage_t::store_object(key_t key, i_hollow_t* oid) {
     storage[key] = (oid_t)oid;
 }
-
-void fun::rpc::object_storage_t::store(oid_t oid, i_hollow_t* object) {
-    objects[oid] = object;
-}
-
-fun::rpc::i_hollow_t* fun::rpc::object_storage_t::fetch(oid_t oid) {
-    return objects[oid];
-}

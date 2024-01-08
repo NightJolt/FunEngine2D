@@ -24,15 +24,6 @@ namespace fun::rpc {
         local_storage_t& get_local_storage();
         invoker_t& get_invoker();
 
-        template <class T, class... Args>
-        T* create_object(Args&&... args) {
-            T* obj = new T(std::forward<Args>(args)...);
-
-            object_storage.store((oid_t)(i_hollow_t*)obj, obj);
-
-            return obj;
-        }
-
     private:
         void process_connections();
         void process_packet(packet_t&);
@@ -40,7 +31,6 @@ namespace fun::rpc {
 
         connection_provider_t connection_provider;
         local_storage_t local_storage;
-        object_storage_t object_storage;
         invoker_t invoker;
         stub_factory_t stub_factory;
     };

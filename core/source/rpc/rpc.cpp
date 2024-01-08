@@ -66,7 +66,7 @@ void fun::rpc::rpc_t::process_packet(packet_t& packet) {
             return; // ? sync call replys should not be processed here
         }
     } else {
-        i_hollow_t* hollow = object_storage.fetch(oid);
+        auto hollow = (i_hollow_t*)oid;
         serializer_t serializer;
 
         invoker.invoke(deserializer, hollow, serializer);

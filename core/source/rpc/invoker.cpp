@@ -6,6 +6,6 @@ void fun::rpc::invoker_t::invoke(deserializer_t& deserializer, i_hollow_t* objec
     invokers[iid](deserializer, object, serializer);
 }
 
-void fun::rpc::invoker_t::register_interface(iid_t iid, std::function<void(fun::rpc::deserializer_t&, fun::rpc::i_hollow_t*, serializer_t&)> invoker) {
+void fun::rpc::invoker_t::register_interface(iid_t iid, invoker_fn_t invoker) {
     invokers[iid] = invoker;
 }
