@@ -12,6 +12,6 @@ fun::rpc::i_hollow_t* fun::rpc::stub_factory_t::create(iid_t iid, addr_t owner_a
     return factories[iid](owner_addr, owner_oid, connection_provider, *this);
 }
 
-void fun::rpc::stub_factory_t::register_interface(iid_t iid, std::function<i_hollow_t*(addr_t, oid_t, connection_provider_t&, stub_factory_t& stub_factory)> factory) {
+void fun::rpc::stub_factory_t::register_interface(iid_t iid, factory_fn_t factory) {
     factories[iid] = factory;
 }

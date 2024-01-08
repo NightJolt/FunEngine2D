@@ -27,12 +27,15 @@ namespace fun::rpc {
     };
 
     class stub_factory_t {
+    private:
+        typedef std::function<i_hollow_t*(addr_t, oid_t, connection_provider_t&, stub_factory_t&)> factory_fn_t;
+
     public:
         i_hollow_t* create(iid_t, addr_t, oid_t, connection_provider_t&);
-        void register_interface(iid_t, std::function<i_hollow_t*(addr_t, oid_t, connection_provider_t&, stub_factory_t& stub_factory)>);
+        void register_interface(iid_t, factory_fn_t);
 
     private:
-        std::unordered_map<iid_t, std::function<i_hollow_t*(addr_t, oid_t, connection_provider_t&, stub_factory_t& stub_factory)>> factories;
+        std::unordered_map<iid_t, factory_fn_t> factories;
     };
     
     template <class interf_t>

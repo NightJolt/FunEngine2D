@@ -48,6 +48,8 @@ namespace fun::rpc {
         void init(port_t);
         void quit();
 
+        addr_t get_addr();
+
         connection_stub_t get_connection(addr_t);
         bool check_connection(addr_t);
 
@@ -57,6 +59,7 @@ namespace fun::rpc {
         packet_storage_t& get_packet_storage();
 
     private:
+        addr_t addr;
         sf::TcpListener connection_listener;
         std::unique_ptr<sf::TcpSocket> new_connection;
         std::unordered_map<

@@ -112,13 +112,20 @@ namespace fun::rpc {
             }
         }
 
-        NESTED_TEMPLATE_ARGS(T, P, V)
-        requires STUB_T<P>
-        void serialize(const stub_t<typename nested_t<T, V...>::type>& value) {
+        template <class T>
+        requires std::is_base_of_v<i_hollow_t, T>
+        void serialize(const T& value) {
+            addr_t owner_addr = { 1, 1 };
+            const stub_t<T>* stub = dynamic_cast<const stub_t<T>*>(&value);
+
+            if (stub) {
+                owner_addr = stub->owner_addr;
+            }
+
             serialize<iid_t>(value.iid);
-            serialize<ip_t>(value.owner_addr.ip);
-            serialize<port_t>(value.owner_addr.port);
-            serialize<oid_t>(value.owner_oid);
+            serialize<ip_t>(owner_addr.ip);
+            serialize<port_t>(owner_addr.port);
+            serialize<oid_t>((oid_t)(i_hollow_t*)&value);
         }
 
         NESTED_TEMPLATE_ARGS(T, P, V)
@@ -201,9 +208,9 @@ namespace fun::rpc {
             return value;
         }
 
-        NESTED_TEMPLATE_ARGS(T, P, V)
-        requires STUB_T<P>
-        stub_t<typename nested_t<T, V...>::type>* deserialize() {
+        template <class T>
+        requires std::is_base_of_v<i_hollow_t, T>
+        T* deserialize() {
             iid_t iid;
             addr_t addr;
             oid_t oid;
@@ -213,7 +220,7 @@ namespace fun::rpc {
             addr.port = deserialize<port_t>();
             oid = deserialize<oid_t>();
 
-            return (stub_t<typename nested_t<T, V...>::type>*)stub_factory.create(iid, addr, oid, connection_provider);
+            return (T*)stub_factory.create(iid, addr, oid, connection_provider);
         }
 
         NESTED_TEMPLATE_ARGS(T, P, V)

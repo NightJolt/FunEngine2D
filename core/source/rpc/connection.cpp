@@ -42,6 +42,9 @@ bool fun::rpc::connection_stub_t::is_valid() {
 void fun::rpc::connection_provider_t::init(port_t port) {
     assert(connection_listener.listen(port) == sf::Socket::Done);
 
+    addr.ip = sf::IpAddress::getPublicAddress().toInteger();
+    addr.port = port;
+
     connection_listener.setBlocking(false);
 
     new_connection = std::make_unique<sf::TcpSocket>();
@@ -53,6 +56,10 @@ void fun::rpc::connection_provider_t::quit() {
     }
 
     connection_listener.close();
+}
+
+fun::rpc::addr_t fun::rpc::connection_provider_t::get_addr() {
+    return addr;
 }
 
 fun::rpc::connection_stub_t fun::rpc::connection_provider_t::get_connection(addr_t addr) {
