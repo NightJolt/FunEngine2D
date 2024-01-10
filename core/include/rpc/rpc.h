@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../uuid.h"
 
+#include "interfaces.h"
 #include "serialize.h"
 #include "connection.h"
 #include "storage.h"
@@ -10,19 +11,18 @@
 #include "stub.h"
 
 namespace fun::rpc {
-    class rpc_t {
+    class rpc_t : public i_rpc_t {
     public:
-        void init(port_t port);
-        void quit();
+        void init(port_t port) override;
+        void quit() override;
 
-        void step();
-        void run();
+        void step() override;
+        void run() override;
 
-        connection_provider_t& get_connection_provider();
-        stub_factory_t& get_stub_factory();
-        remote_storage_t get_remote_storage(addr_t);
-        local_storage_t& get_local_storage();
-        invoker_t& get_invoker();
+        i_connection_provider_t& get_connection_provider() override;
+        i_stub_factory_t& get_stub_factory() override;
+        i_local_storage_t& get_local_storage() override;
+        i_invoker_t& get_invoker() override;
 
     private:
         void process_connections();

@@ -1,10 +1,13 @@
 #include "rpc/sync.h"
 
+#include "rpc/scope.h"
+
 void fun::rpc::wait_for_sync_call_reply(
-    connection_provider_t& connection_provider,
-    stub_factory_t& stub_factory,
     std::function<void(deserializer_t&)> sync_call_data_extractor
 ) {
+    i_rpc_t& rpc = get_rpc_scope();
+    i_connection_provider_t& connection_provider = rpc.get_connection_provider();
+
     uint32_t packet_ind = 0;
     auto& packet_storage = connection_provider.get_packet_storage();
 
@@ -14,7 +17,7 @@ void fun::rpc::wait_for_sync_call_reply(
         
         while (packet_ind < packet_storage.get_size()) {
             auto& packet = packet_storage[packet_ind];
-            deserializer_t deserializer(packet.get_data(), connection_provider, stub_factory);
+            deserializer_t deserializer(packet.get_data());
 
             oid_t call_type = deserializer.deserialize<oid_t>();
 

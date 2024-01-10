@@ -5,6 +5,7 @@
 #include "../color.h"
 #include "defs.h"
 #include "stub.h"
+#include "scope.h"
 
 #define NESTED_TEMPLATE_ARGS(TYPE, TEMPLATED_TYPE, TEMPLATED_TYPE_VARIADIC)\
     template <class TYPE, template <class...> class TEMPLATED_TYPE, template <class...> class... TEMPLATED_TYPE_VARIADIC>
@@ -115,7 +116,7 @@ namespace fun::rpc {
         template <class T>
         requires std::is_base_of_v<i_hollow_t, T>
         void serialize(const T& value) {
-            addr_t owner_addr = { 1, 1 };
+            addr_t owner_addr = get_rpc_scope().get_connection_provider().get_pub_addr();
             const stub_t<T>* stub = dynamic_cast<const stub_t<T>*>(&value);
 
             if (stub) {
@@ -149,9 +150,7 @@ namespace fun::rpc {
     class deserializer_t {
     public:
         deserializer_t(
-            uint8_t*,
-            fun::rpc::connection_provider_t&,
-            fun::rpc::stub_factory_t&
+            uint8_t*
         );
 
         template <INT_T INT>
@@ -220,7 +219,7 @@ namespace fun::rpc {
             addr.port = deserialize<port_t>();
             oid = deserialize<oid_t>();
 
-            return (T*)stub_factory.create(iid, addr, oid, connection_provider);
+            return (T*)get_rpc_scope().get_stub_factory().create(iid, addr, oid);
         }
 
         NESTED_TEMPLATE_ARGS(T, P, V)
@@ -238,8 +237,5 @@ namespace fun::rpc {
     private:
         uint8_t* data;
         uint8_t* cursor;
-
-        connection_provider_t& connection_provider;
-        stub_factory_t& stub_factory;
     };
 }

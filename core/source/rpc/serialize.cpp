@@ -11,12 +11,8 @@ uint32_t fun::rpc::serializer_t::get_size() {
 }
 
 fun::rpc::deserializer_t::deserializer_t(
-    uint8_t* data_ptr,
-    connection_provider_t& connection_provider,
-    stub_factory_t& stub_factory
+    uint8_t* data_ptr
 ) :
     data(data_ptr),
-    cursor(data_ptr),
-    connection_provider(connection_provider),
-    stub_factory(stub_factory)
+    cursor(data_ptr)
 {}

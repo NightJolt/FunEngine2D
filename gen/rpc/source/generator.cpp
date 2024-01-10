@@ -12,6 +12,8 @@ void add_include_essentials(std::string& cpp) {
     cpp += "#include <FunEngine2D/core/include/globals.h>\n";
     cpp += "#include <FunEngine2D/core/include/rpc/rpc.h>\n";
     cpp += "#include <FunEngine2D/core/include/rpc/stub.h>\n";
+    cpp += "#include <FunEngine2D/core/include/rpc/interfaces.h>\n";
+    cpp += "#include <FunEngine2D/core/include/rpc/scope.h>\n";
     cpp += "#include <FunEngine2D/core/include/bytes.h>\n";
     cpp += "#include <FunEngine2D/core/include/color.h>\n";
     cpp += "\n";
@@ -112,6 +114,8 @@ void impl_method_base(std::string& cpp, const method_t& method) {
 void impl_interface_base(std::string& cpp, const interface_t& interface) {
     cpp += "struct " + interface.mangled_name + " : public fun::rpc::i_hollow_t {\n";
 
+    cpp += "    virtual ~" + interface.mangled_name + "() = default;\n\n";
+
     def_interface_iid(cpp, interface.base_name);
 
     for (const method_t& method : interface.methods) {
@@ -126,7 +130,7 @@ void impl_method_stub_ret(std::string& cpp, const method_t& method) {
     cpp += "        auto sync_call_data_extractor = [&ret](fun::rpc::deserializer_t& deserializer) {\n";
     cpp += "            ret = deserializer.deserialize<" + method.type.as_template_args + ">();\n";
     cpp += "        };\n\n";
-    cpp += "        wait_for_sync_call_reply(connection_provider, stub_factory, sync_call_data_extractor);\n\n";
+    cpp += "        fun::rpc::wait_for_sync_call_reply(sync_call_data_extractor);\n\n";
     cpp += "        return ret;\n";
 }
 
@@ -142,6 +146,8 @@ void impl_method_stub(std::string& cpp, const method_t& method, uint32_t method_
     }
 
     cpp += ") override {\n";
+    cpp += "        fun::rpc::rpc_scope_lock_t lock(rpc);\n\n";
+
     cpp += "        fun::rpc::serializer_t serializer;\n\n";
 
     cpp += "        serializer.serialize<fun::rpc::oid_t>(owner_oid);\n";
@@ -152,7 +158,10 @@ void impl_method_stub(std::string& cpp, const method_t& method, uint32_t method_
         cpp += "        serializer.serialize<" + method.args[i].type.as_template_args + ">(" + method.args[i].name + ");\n";
     }
 
-    cpp += "\n        connection_provider.get_connection(owner_addr).send(serializer.get_data(), serializer.get_size());\n";
+    cpp += "\n        auto connection = rpc.get_connection_provider().get_connection(owner_addr);\n";
+    cpp += "        if (connection.is_valid()) {\n";
+    cpp += "            connection.send(serializer.get_data(), serializer.get_size());\n";
+    cpp += "        }\n";
 
     if (method.type.as_type != "void") {
         cpp += "\n";
@@ -164,8 +173,8 @@ void impl_method_stub(std::string& cpp, const method_t& method, uint32_t method_
 
 void impl_interface_stub(std::string& cpp, const interface_t& interface) {
     cpp += "struct " + interface.base_name + "_stub_t : public fun::rpc::stub_t<" + interface.mangled_name + "> {\n";
-    cpp += "    " + interface.base_name + "_stub_t(fun::rpc::addr_t owner_addr, fun::rpc::oid_t owner_oid, fun::rpc::connection_provider_t& connection_provider, fun::rpc::stub_factory_t& stub_factory) :\n";
-    cpp += "        fun::rpc::stub_t<" + interface.mangled_name + ">(owner_addr, owner_oid, connection_provider, stub_factory) {}\n";
+    cpp += "    " + interface.base_name + "_stub_t(fun::rpc::addr_t owner_addr, fun::rpc::oid_t owner_oid, fun::rpc::i_rpc_t& rpc) :\n";
+    cpp += "        fun::rpc::stub_t<" + interface.mangled_name + ">(owner_addr, owner_oid, rpc) {}\n";
 
     uint32_t method_id = 0;
     for (const method_t& method : interface.methods) {
@@ -177,8 +186,8 @@ void impl_interface_stub(std::string& cpp, const interface_t& interface) {
 }
 
 void impl_interface_stub_factory(std::string& cpp, const interface_t& interface) {
-    cpp += "inline fun::rpc::i_hollow_t* rpc__" + interface.base_name + "__stub_factory(fun::rpc::addr_t owner_addr, fun::rpc::oid_t owner_oid, fun::rpc::connection_provider_t& connection_provider, fun::rpc::stub_factory_t& stub_factory) {\n";
-    cpp += "    return new " + interface.base_name + "_stub_t(owner_addr, owner_oid, connection_provider, stub_factory);\n";
+    cpp += "inline fun::rpc::i_hollow_t* rpc__" + interface.base_name + "__stub_factory(fun::rpc::addr_t owner_addr, fun::rpc::oid_t owner_oid, fun::rpc::i_rpc_t& rpc) {\n";
+    cpp += "    return new " + interface.base_name + "_stub_t(owner_addr, owner_oid, rpc);\n";
     cpp += "}\n";
 }
 
@@ -298,7 +307,7 @@ std::string fun::rpc::generate(std::string& rpc_file) {
     
     bool has_namespace = begin_namespace(cpp, tokens);
     
-    reg += "inline void register_rpc_interfaces(fun::rpc::rpc_t& rpc) {\n";
+    reg += "inline void register_rpc_interfaces(fun::rpc::i_rpc_t& rpc) {\n";
 
     while (is_interface(tokens)) {
         interface_t interface = get_interface(tokens);

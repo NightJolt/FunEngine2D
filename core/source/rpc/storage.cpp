@@ -1,7 +1,9 @@
 #include "rpc/storage.h"
 
-fun::rpc::remote_storage_t::remote_storage_t(addr_t addr, connection_provider_t& connection_provider, stub_factory_t& stub_factory)
-    : addr(addr), connection_provider(connection_provider), stub_factory(stub_factory) {}
+#include "rpc/scope.h"
+
+fun::rpc::remote_storage_t::remote_storage_t(i_rpc_t& rpc, addr_t addr)
+    : rpc(rpc), addr(addr) {}
 
 fun::rpc::i_hollow_t* fun::rpc::remote_storage_t::request_unknown(iid_t iid, key_t key) {
     serializer_t serializer;
@@ -10,7 +12,9 @@ fun::rpc::i_hollow_t* fun::rpc::remote_storage_t::request_unknown(iid_t iid, key
     serializer.serialize<mid_t>(request_type_t::fetch_object);
     serializer.serialize<key_t>(key);
 
-    auto connection = connection_provider.get_connection(addr);
+    auto& rpc = get_rpc_scope();
+
+    auto connection = rpc.get_connection_provider().get_connection(addr);
     
     if (!connection.is_valid()) {
         return nullptr;
@@ -23,9 +27,9 @@ fun::rpc::i_hollow_t* fun::rpc::remote_storage_t::request_unknown(iid_t iid, key
         oid = deserializer.deserialize<oid_t>();
     };
 
-    wait_for_sync_call_reply(connection_provider, stub_factory, sync_call_data_extractor);
+    wait_for_sync_call_reply(sync_call_data_extractor);
 
-    return stub_factory.create(iid, addr, oid, connection_provider);
+    return rpc.get_stub_factory().create(iid, addr, oid);
 }
 
 void fun::rpc::local_storage_t::serialize_object(key_t key, serializer_t& serializer) {

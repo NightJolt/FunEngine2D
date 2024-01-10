@@ -41,7 +41,6 @@ std::vector<fun::cpp_type_element_t> rpc_to_cpp_type_elements(const fun::rpc_typ
     if (rpc_type_element.generated) {
         return {
             { "std::unique_ptr", false },
-            // { "fun::rpc::stub_t", false },
             { "i_" + rpc_type_element.type + "_t", false },
         };
     }

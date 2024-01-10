@@ -42,8 +42,11 @@ bool fun::rpc::connection_stub_t::is_valid() {
 void fun::rpc::connection_provider_t::init(port_t port) {
     assert(connection_listener.listen(port) == sf::Socket::Done);
 
-    addr.ip = sf::IpAddress::getPublicAddress().toInteger();
-    addr.port = port;
+    public_addr.ip = sf::IpAddress::getPublicAddress().toInteger();
+    public_addr.port = port;
+
+    local_addr.ip = sf::IpAddress::getLocalAddress().toInteger();
+    local_addr.port = port;
 
     connection_listener.setBlocking(false);
 
@@ -58,11 +61,19 @@ void fun::rpc::connection_provider_t::quit() {
     connection_listener.close();
 }
 
-fun::rpc::addr_t fun::rpc::connection_provider_t::get_addr() {
-    return addr;
+fun::rpc::addr_t fun::rpc::connection_provider_t::get_pub_addr() {
+    return public_addr;
+}
+
+fun::rpc::addr_t fun::rpc::connection_provider_t::get_loc_addr() {
+    return local_addr;
 }
 
 fun::rpc::connection_stub_t fun::rpc::connection_provider_t::get_connection(addr_t addr) {
+    if (addr.ip == public_addr.ip) {
+        addr.ip = local_addr.ip;
+    }
+
     if (!check_connection(addr)) {
         connection_t connection { new sf::TcpSocket() };
 

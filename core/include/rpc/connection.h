@@ -3,6 +3,7 @@
 #include "../globals.h"
 #include "../vec2.h"
 
+#include "interfaces.h"
 #include "defs.h"
 #include "packet.h"
 
@@ -43,23 +44,26 @@ namespace fun::rpc {
         sf::TcpSocket* socket;
     };
 
-    class connection_provider_t {
+    class connection_provider_t : public i_connection_provider_t {
     public:
-        void init(port_t);
-        void quit();
+        void init(port_t) override;
+        void quit() override;
 
-        addr_t get_addr();
+        addr_t get_pub_addr() override;
+        addr_t get_loc_addr() override;
 
-        connection_stub_t get_connection(addr_t);
-        bool check_connection(addr_t);
+        connection_stub_t get_connection(addr_t) override;
+        bool check_connection(addr_t) override;
 
-        void check_for_incoming_connections();
-        void check_for_incoming_data();
+        void check_for_incoming_connections() override;
+        void check_for_incoming_data() override;
 
-        packet_storage_t& get_packet_storage();
+        packet_storage_t& get_packet_storage() override;
 
     private:
-        addr_t addr;
+        addr_t public_addr;
+        addr_t local_addr;
+
         sf::TcpListener connection_listener;
         std::unique_ptr<sf::TcpSocket> new_connection;
         std::unordered_map<
