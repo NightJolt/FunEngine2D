@@ -9,9 +9,7 @@ namespace {
     std::map<size_t, rpc_scope_info_t> per_thread_rpc_scope_infos;
 
     rpc_scope_info_t& get_rpc_scope_info() {
-        auto& info = per_thread_rpc_scope_infos[std::hash<std::thread::id>{}(std::this_thread::get_id())];
-
-        return info;
+        return per_thread_rpc_scope_infos[std::hash<std::thread::id>{}(std::this_thread::get_id())];;
     }
 }
 
@@ -22,7 +20,6 @@ void fun::rpc::set_rpc_scope(i_rpc_t& rpc) {
 
     rpc_info.scope = &rpc;
     rpc_info.depth++;
-    
 }
 
 void fun::rpc::unset_rpc_scope() {
