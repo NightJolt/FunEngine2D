@@ -111,6 +111,10 @@ void impl_method_base(std::string& cpp, const method_t& method) {
     cpp += ") = 0;\n";
 }
 
+void impl_interface_ref_typedef(std::string& cpp, const interface_t& interface) {
+    cpp += "typedef fun::rpc::ref_t<" + interface.mangled_name + "> " + interface.base_name + "_ref_t;\n";
+}
+
 void impl_interface_base(std::string& cpp, const interface_t& interface) {
     cpp += "struct " + interface.mangled_name + " : public fun::rpc::i_hollow_t {\n";
 
@@ -273,6 +277,7 @@ void impl_interface_registrator(std::string& reg, const interface_t& interface) 
 
 void impl_interface(std::string& cpp, const interface_t& interface) {
     impl_interface_base(cpp, interface); cpp += "\n";
+    impl_interface_ref_typedef(cpp, interface); cpp += "\n";
     impl_interface_stub(cpp, interface); cpp += "\n";
     impl_interface_stub_factory(cpp, interface); cpp += "\n";
     impl_interface_invokables(cpp, interface);

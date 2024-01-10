@@ -31,10 +31,17 @@ namespace fun::rpc {
     private:
         std::unordered_map<iid_t, factory_fn_t> factories;
     };
-    
-    template <class interf_t>
-    using rem_ref_t = std::unique_ptr<stub_t<interf_t>>;
 
     template <class interf_t>
     using ref_t = std::unique_ptr<interf_t>;
+
+    template<class interf_t>
+    bool check_remote_object_reference(ref_t<interf_t>& obj) {
+        return static_cast<stub_t<interf_t>*>(obj.get())->is_valid();
+    }
+
+    template<class interf_t>
+    interf_t* release_stub(const ref_t<interf_t>& obj) {
+        return const_cast<ref_t<interf_t>&>(obj).release();
+    }
 }
