@@ -44,4 +44,9 @@ namespace fun::rpc {
     interf_t* release_stub(const ref_t<interf_t>& obj) {
         return const_cast<ref_t<interf_t>&>(obj).release();
     }
+
+    template<class interf_t>
+    addr_t get_stub_addr(const ref_t<interf_t>& obj) {
+        return static_cast<stub_t<interf_t>*>(obj.get())->owner_addr;
+    }
 }

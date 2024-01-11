@@ -43,10 +43,10 @@ void fun::rpc::connection_provider_t::init(port_t port) {
     assert(connection_listener.listen(port) == sf::Socket::Done);
 
     public_addr.ip = sf::IpAddress::getPublicAddress().toInteger();
-    public_addr.port = port;
+    public_addr.port = connection_listener.getLocalPort();
 
     local_addr.ip = sf::IpAddress::getLocalAddress().toInteger();
-    local_addr.port = port;
+    local_addr.port = connection_listener.getLocalPort();
 
     connection_listener.setBlocking(false);
 
