@@ -105,7 +105,7 @@ namespace fun::rpc {
 
         NESTED_TEMPLATE_ARGS(T, P, V)
         requires VEC_T<P>
-        void serialize(const std::vector<typename nested_t<T, V...>::value>& value) {
+        void serialize(const std::vector<typename nested_t<T, V...>::type>& value) {
             serialize<uint32_t>(value.size());
 
             for (const auto& item : value) {
@@ -196,9 +196,9 @@ namespace fun::rpc {
 
         NESTED_TEMPLATE_ARGS(T, P, V)
         requires VEC_T<P>
-        std::vector<typename nested_t<T, V...>::value> deserialize() {
+        std::vector<typename nested_t<T, V...>::type> deserialize() {
             uint32_t size = deserialize<uint32_t>();
-            typename nested_t<T, V...>::value value;
+            std::vector<typename nested_t<T, V...>::type> value;
 
             for (uint32_t i = 0; i < size; i++) {
                 value.push_back(deserialize<T, V...>());
